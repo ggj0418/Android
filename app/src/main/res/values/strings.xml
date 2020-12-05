@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Android</string>
+
+    <string name="kakao_native_key">5200ea60415f85ffbfe73ee1034771fc</string>
+
+    <string name="naver_client_id">AtUDGRbLBbjm5jK0AEsW</string>
+    <string name="naver_client_secret">trmBX_Cfca</string>
+    <string name="naver_client_name">모바일 마켓 결제시스템</string>
+
 </resources>
