@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Android</string>
+    <string name="signin_other_error">"error"</string>
 </resources>
