@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activites.SignUp"
+    android:orientation="vertical">
+
+    <!--수정필요-->
+    <ImageView
+        android:id="@+id/sign_image"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.0194"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0184"
+        app:layout_constraintStart_toStartOf="@id/start_guideline2"
+        app:layout_constraintTop_toTopOf="@id/top_guideline2"
+        android:src="@drawable/ic_back"
+        />
+
+    <TextView
+        android:id="@+id/signup_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/applesdgothicneob"
+        android:text="회원가입이 필요합니다."
+        android:textColor="#232328"
+        android:textSize="20sp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.508"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0316"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf="@id/top_guideline" />
+
+    <TextView
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:textSize="14sp"
+        android:fontFamily="@font/applesdgothicneom"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.1333"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0223"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf ="@id/top_guideline3"
+        android:text="비밀번호"
+        android:textColor="#4F4F53"
+        />
+    <!--수정 필요-->
+    <EditText
+        android:id="@+id/signup_pw1"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:hint="숫자,문자,특수문자 포함 (8~15자)"
+        android:textSize="15sp"
+        android:password="true"
+        android:fontFamily="@font/applesdgothicneom"
+        android:backgroundTint="#FFDD02"
+        android:textColor="#232328"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.833"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf="@id/top_guideline4"
+        android:singleLine="true"
+        android:nextFocusDown="@+id/signup_pw2"
+        />
+    <TextView
+        android:id="@+id/signup_text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/signup_pw1"
+        android:fontFamily="@font/applesdgothicneom"
+        android:textSize="11sp"/>
+
+    <TextView
+        android:id="@+id/signup_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/signup_pw2"
+        android:fontFamily="@font/applesdgothicneom"
+        android:textSize="11sp"/>
+
+
+    <TextView
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:textSize="14sp"
+        android:fontFamily="@font/applesdgothicneom"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.2"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0223"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf ="@id/top_guideline6"
+        android:text="비밀번호 확인"
+        android:textColor="#4F4F53"
+        />
+    <EditText
+        android:id="@+id/signup_pw2"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:password="true"
+        android:hint="다시 입력해 주세요"
+        android:textSize="15sp"
+        android:fontFamily="@font/applesdgothicneom"
+        android:backgroundTint="#FFDD02"
+        android:textColor="#232328"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.833"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf="@id/top_guideline7"
+        android:singleLine="true"
+        />
+
+
+    <Button
+        android:id="@+id/signup_button1"
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0658"
+        android:text="다음으로"
+        android:textSize="18sp"
+        android:fontFamily="@font/applesdgothicneob"
+        android:textColor="#7B7B7E"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/top_guideline5"
+        android:background="#ffffff" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.0833" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.0776" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.0555" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.03" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.16" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.195" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.541" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.276" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.309" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.38" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.android;
+package com.example.android.Kakao;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.android.Kakao.SessionCallback;
+import com.example.android.R;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_test);
 
         session = Session.getCurrentSession();
         session.addCallback(sessionCallback);

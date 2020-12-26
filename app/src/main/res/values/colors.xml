@@ -5,4 +5,13 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorGray">#8C8C8C</color>
     <color name="colorBlue02">#C2DCF2</color>
+    <color name="colorYellow">#FCD94B</color>
+    <color name="colorBlack">#232328</color>
+    <color name="ButtonGray">#EFEFEF</color>
+    <color name="TextGray">#A7A7A9</color>
+    <color name="colormiss">#fd3333</color>
+    <color name="TextColor1">#7B7B7E</color>
+    <color name="colorWhite">#ffffff</color>
+
+
 </resources>

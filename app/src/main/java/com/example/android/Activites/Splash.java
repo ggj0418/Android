@@ -1,10 +1,14 @@
-package com.example.android;
+package com.example.android.Activites;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.example.android.R;
+
+import com.example.android.Okhttp_Login.LoginActivity;
 
 public class Splash extends AppCompatActivity {
 
@@ -18,7 +22,7 @@ public class Splash extends AppCompatActivity {
 
     private class splashhandler implements Runnable{
         public void run(){
-            startActivity(new Intent(getApplication(), LoginActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
+            startActivity(new Intent(Splash.this, Login.class));
             Splash.this.finish(); // 로딩페이지 Activity stack에서 제거
         }
     }

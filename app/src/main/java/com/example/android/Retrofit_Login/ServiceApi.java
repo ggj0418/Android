@@ -1,4 +1,4 @@
-package com.example.android;
+package com.example.android.Retrofit_Login;
 
 import com.google.gson.JsonArray;
 
@@ -22,6 +22,10 @@ public interface ServiceApi {
                                //@Field("res_adress")String res_address,
                                //@Field("res_phone")String res_phone
                                  );
+    @POST("/product/nobrand")
+    Call<JsonArray> product(@Field("product_no")String product_no,
+                            @Field("product_name")String product_name
+                            );
 
     Call<JsonArray> getretrofitdata();
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginStart="12sp"
     android:layout_marginEnd="12sp"
-    tools:context=".MainActivity">
+    tools:context=".Kakao.MainActivity">
 
     <com.kakao.usermgmt.LoginButton
         android:id="@+id/btn_kakao_login"

@@ -1,4 +1,4 @@
-package com.example.android;
+package com.example.android.Retrofit_Login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.android.R;
 
 public class SharedPref extends AppCompatActivity {
     String LOGIN_SESSION = "login.session";

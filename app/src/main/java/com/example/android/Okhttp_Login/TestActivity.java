@@ -1,15 +1,15 @@
-package com.example.android;
+package com.example.android.Okhttp_Login;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+
+import com.example.android.R;
+
 import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static com.example.android.LoginActivity.id;
-import static com.example.android.LoginActivity.pw;
 
 public class TestActivity extends AppCompatActivity {
     private static final String TAG = "TestActivity";

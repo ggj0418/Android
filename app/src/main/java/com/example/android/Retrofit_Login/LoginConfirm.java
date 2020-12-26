@@ -1,10 +1,12 @@
-package com.example.android;
+package com.example.android.Retrofit_Login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.example.android.R;
 
 public class LoginConfirm extends AppCompatActivity {
 
