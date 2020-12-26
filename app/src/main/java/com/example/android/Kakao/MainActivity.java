@@ -3,6 +3,7 @@ package com.example.android.Kakao;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,12 +17,19 @@ import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
+import com.nhn.android.naverlogin.OAuthLogin;
+import com.nhn.android.naverlogin.OAuthLoginHandler;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button logout_button;
+    private Button kakao_logout_button, naver_login_button, naver_logout_button;
+
+    // 카카오 세션관리
     private SessionCallback sessionCallback = new SessionCallback();
     private Session session;
+
+    // 네이버 세션관리
+    private OAuthLogin mNaverLoginModule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 로그아웃
-        logout_button = findViewById(R.id.btn_custom_login_out);
-        logout_button.setOnClickListener(new View.OnClickListener() {
+        kakao_logout_button = findViewById(R.id.btn_kakao_login_out);
+        kakao_logout_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UserManagement
@@ -67,6 +75,49 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "로그아웃 되었습니다", Toast.LENGTH_LONG).show();
                             }
                         });
+            }
+        });
+
+        naver_login_button = findViewById(R.id.btn_naver_login);
+        naver_login_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNaverLoginModule = OAuthLogin.getInstance();
+                mNaverLoginModule.init(
+                        getApplicationContext(),
+                        getString(R.string.naver_client_id),
+                        getString(R.string.naver_client_secret),
+                        getString(R.string.naver_client_name)
+                );
+
+                @SuppressLint("HandlerLeak")
+                OAuthLoginHandler mNaverLoginHandler = new OAuthLoginHandler() {
+                    @Override
+                    public void run(boolean success) {
+                        if(success) {
+                            Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String errorCode = mNaverLoginModule
+                                    .getLastErrorCode(getApplicationContext())
+                                    .getCode();
+                            String errorDesc = mNaverLoginModule
+                                    .getLastErrorDesc(getApplicationContext());
+
+                            Toast.makeText(getApplicationContext(), "errorCode:" + errorCode + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                };
+
+                mNaverLoginModule.startOauthLoginActivity(MainActivity.this, mNaverLoginHandler);
+            }
+        });
+
+        naver_logout_button = findViewById(R.id.btn_naver_login_out);
+        naver_logout_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNaverLoginModule.logout(getApplicationContext());
+                Toast.makeText(getApplicationContext(), "네이버 로그아웃 되었습니다.", Toast.LENGTH_LONG).show();
             }
         });
     }
