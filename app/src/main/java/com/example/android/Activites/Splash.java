@@ -8,8 +8,6 @@ import android.os.Handler;
 
 import com.example.android.R;
 
-import com.example.android.Okhttp_Login.LoginActivity;
-
 public class Splash extends AppCompatActivity {
 
     @Override

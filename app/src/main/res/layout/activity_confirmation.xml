@@ -160,6 +160,7 @@
         android:fontFamily="@font/applesdgothicneom"
         android:backgroundTint="#FFDD02"
         android:textColor="#232328"
+        android:maxLength="5"
         android:textCursorDrawable="@drawable/cursor_color"
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent="0.833"

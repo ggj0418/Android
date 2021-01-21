@@ -35,7 +35,7 @@ public class SignUp extends AppCompatActivity {
         button.setEnabled(false);
 
         Intent intent = getIntent();
-        String email = intent.getExtras().getString("email");
+        String email = intent.getExtras().getString("email1");
 
         editText1.addTextChangedListener(new TextWatcher() {
             @Override
@@ -50,7 +50,6 @@ public class SignUp extends AppCompatActivity {
                 if(c==true){
                     textView1.setText("올바른 형식입니다.");
                     textView1.setTextColor(getResources().getColor(R.color.TextGray));
-
 
                     editText2.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -112,14 +111,13 @@ public class SignUp extends AppCompatActivity {
 
 
 
-
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                    String pw1 = editText2.getText().toString();
-                    Intent intent = new Intent(SignUp.this, Confirmation.class);
-                    intent.putExtra("email", email);
-                    intent.putExtra("pw",pw1);
-                    startActivity(intent);
+                String pw1 = editText2.getText().toString();
+                Intent intent = new Intent(SignUp.this, Confirmation.class);
+                intent.putExtra("email2",email);
+                intent.putExtra("pw",pw1);
+                startActivity(intent);
                 }
         });
 
@@ -130,7 +128,5 @@ public class SignUp extends AppCompatActivity {
                startActivity(intent);
             }
         });
-
-
     }
 }

@@ -1,19 +1,36 @@
 package com.example.android.Activites;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.android.DTOS.SignupUserinfo;
+import com.example.android.DAOS.Signup;
+import com.example.android.DAOS.get_valid_phone;
 import com.example.android.R;
+import com.example.android.Retrofit.RetrofitClient;
+import com.example.android.Services.Services;
+
+import java.io.IOException;
+import java.util.Random;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Confirmation extends AppCompatActivity {
     private static final int MILLISINFUTURE = 181*1000;
@@ -23,10 +40,16 @@ public class Confirmation extends AppCompatActivity {
     Button button1, button2;
     TextView text1, text2;
     ImageView imageView;
+    String confirm_number1 = null;
+    private final int MY_PERMISSION_REQUEST_SMS = 1001;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmation);
+
+        Intent intent = getIntent();
+        String email = intent.getExtras().getString("email2");
+        String pw = intent.getExtras().getString("pw");
 
         editText1 = findViewById(R.id.confirm_name);
         editText2 = findViewById(R.id.confirm_p_number);
@@ -41,26 +64,16 @@ public class Confirmation extends AppCompatActivity {
         text2.setVisibility(View.INVISIBLE);
         String edit1 = editText1.getText().toString();
 
-
-        Intent intent = getIntent();
-        String email = intent.getExtras().getString("email");
-        String pw = intent.getExtras().getString("pw");
+        Send_SMS send_sms = new Send_SMS();
 
         editText1.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
-               editText2.addTextChangedListener(new TextWatcher() {
+                editText2.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String edit2 = editText2.getText().toString();
@@ -83,29 +96,56 @@ public class Confirmation extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
-
+            public void afterTextChanged(Editable s) { }});
                     button1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             editText3.setVisibility(View.VISIBLE);
                             text2.setVisibility(View.VISIBLE);
-                            String edit3 = editText3.getText().toString();
-                                    countDownTimer();
-                                    countDownTimer.start();
-                            editText3.addTextChangedListener(new TextWatcher() {
+                            countDownTimer();
+                            countDownTimer.start();
+                            String phone_no = editText2.getText().toString();
+                            Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
+                            Call<ResponseBody> valid_phone = retrofitAPI2.requestphone(phone_no);
+                            valid_phone.enqueue(new Callback<ResponseBody>() {
                                 @Override
-                                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    switch (response.code()) {
+                                        case 200:
+                                            Toast.makeText(Confirmation.this, "Message sent.", Toast.LENGTH_SHORT).show();
+                                            countDownTimer();
+                                            countDownTimer.start();
+                                            try {
+                                                confirm_number1 = response.body().string();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            break;
+
+                                        case 406:
+                                            Toast.makeText(Confirmation.this, "동일한 휴대폰 번호의 회원이 이미 존재합니다.", Toast.LENGTH_SHORT).show();
+                                            break;
+
+                                        case 500:
+                                            Toast.makeText(Confirmation.this, "메세지 전송 실패", Toast.LENGTH_SHORT).show();
+                                            break;
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                                 }
+                            });
+                        }});
+
+                            editText3.addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
                                 @Override
                                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                                    if(edit3.length()>4) {
+                                    String edit3 = editText3.getText().toString();
+                                    if(edit3.equals(confirm_number1)) {
                                         button2.setEnabled(true);
                                         button2.setBackgroundColor(getResources().getColor(R.color.colorYellow));
                                         button2.setTextColor(getResources().getColor(R.color.colorBlack));
@@ -117,27 +157,64 @@ public class Confirmation extends AppCompatActivity {
                                     }
                                 }
                                 @Override
-                                public void afterTextChanged(Editable editable) {
-                                }
-                            });
-                        }
-                    });
-                }
+                                public void afterTextChanged(Editable editable) { }});  }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+            public void afterTextChanged(Editable s) { }});
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Confirmation.this, SignUp.class);
                     startActivity(intent);
-                }
-            });
+                }});
 
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                String name = editText1.getText().toString();
+                String p_number = editText2.getText().toString();
+                Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
+                SignupUserinfo signupUserinfo = new SignupUserinfo(email,name,pw,p_number);
+                Call<Signup> signupCall = retrofitAPI2.requestSignup(signupUserinfo);
+
+                signupCall.enqueue(new Callback<Signup>() {
+                    @Override
+                    public void onResponse(Call<Signup> call, Response<Signup> response) {
+                        switch (response.code()){
+                            case 200 :
+                                Toast.makeText(Confirmation.this, "OK",Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case 201 :
+                                Toast.makeText(Confirmation.this, "정상적으로 회원가입이 완료되었습니다..",Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(Confirmation.this,Login.class);
+                                startActivity(intent);
+                                break;
+
+                            case 406 :
+                                Toast.makeText(Confirmation.this,"이메일 또는 핸드폰번호가 중복되어 회원가입에 실패하였습니다.",Toast.LENGTH_LONG).show();
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Signup> call, Throwable t) {
+                        Log.e("##########","Fail",t);
+                    }
+                });
+            }
+        });
+                }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSION_REQUEST_SMS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+            else {
+                Toast.makeText(this, "Permission denied.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
     public void countDownTimer(){
         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
@@ -151,7 +228,11 @@ public class Confirmation extends AppCompatActivity {
                 }
             }
             public void onFinish() {
+                text1.setText(String.valueOf("Finish ."));
                 text1.setText(String.valueOf(""));
+                button2.setEnabled(false);
+                button2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
+                button2.setTextColor(getResources().getColor(R.color.TextGray));
             }
         };
     }
@@ -159,9 +240,11 @@ public class Confirmation extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        try{
+        try {
             countDownTimer.cancel();
-        } catch (Exception e) {}
-        countDownTimer=null;
+        } catch (Exception e) {
+        }
+        countDownTimer = null;
     }
+
 }

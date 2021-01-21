@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- android test 돌릴 때 화면 lock 풀어야 로그인 touch 가능 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
         android:hardwareAccelerated="true"
@@ -17,13 +20,21 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".Test2.Test3">
-
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".Activites.Timer_SmsTest">
         </activity>
-        <activity android:name=".Activites.Timer"></activity>
-        <activity android:name=".Test2.Test_MainActivity3"></activity>
-        <activity android:name=".Activites.Confirmation"></activity>
+        <activity android:name=".Activites.qractivity" />
+        <activity android:name=".Activites.GetPw" />
+        <activity android:name=".Activites.FindPw" >
+        </activity>
+        <activity android:name=".Activites.GetEmail" />
+        <activity android:name=".Activites.FindEmail" />
+        <activity android:name=".Test2.Test3" />
+        <activity android:name=".Activites.Send_SMS" />
+        <activity android:name=".Test2.Test_MainActivity3" />
+        <activity android:name=".Activites.Confirmation" >
+        </activity>
         <activity android:name=".Activites.SignUp" />
         <activity android:name=".Activites.Input_pw" />
         <activity android:name=".Activites.Login" />
@@ -34,20 +45,15 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_native_key" />
 
-        <activity android:name=".Retrofit_Login.LoginConfirm" />
-        <activity android:name=".Retrofit_Login.SharedPref" />
-        <activity android:name=".Retrofit_Login.ReSignUp" />
-        <activity android:name=".Retrofit_Login.Client" />
-        <activity android:name=".Retrofit_Login.ReLogin" />
         <activity android:name=".Activites.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".Okhttp_Login.LoginActivity" />
-        <activity android:name=".Okhttp_Login.TestActivity" />
+
         <activity android:name=".Google_Login.Google_Sign_in2" />
         <activity android:name=".Google_Login.Google_Sign_in3" />
         <activity android:name=".QR.ScanQR" />

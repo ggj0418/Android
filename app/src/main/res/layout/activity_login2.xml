@@ -95,6 +95,7 @@
 
         <!--guide라인 값 수정 필요, 작대기 맞는지..?-->
         <TextView
+            android:id="@+id/login_find_email"
             android:layout_width="0sp"
             android:layout_height="0sp"
             app:layout_constraintWidth_default="percent"
@@ -121,6 +122,7 @@
             android:text="ㅣ"/>
 
         <TextView
+            android:id="@+id/login_find_pw"
             android:layout_width="0sp"
             android:layout_height="0sp"
             app:layout_constraintWidth_default="percent"
