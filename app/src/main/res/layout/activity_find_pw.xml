@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/find_pw_image"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.0194"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0184"
+        app:layout_constraintStart_toStartOf="@id/start_guideline2"
+        app:layout_constraintTop_toTopOf="@id/top_guideline2"
+        android:src="@drawable/ic_back"
+        />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/applesdgothicneob"
+        android:text="비밀번호를 찾습니다."
+        android:textColor="#232328"
+        android:textSize="20sp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.508"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0316"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf="@id/top_guideline" />
+
+    <TextView
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:textSize="14sp"
+        android:fontFamily="@font/applesdgothicneom"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.1333"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0223"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf ="@id/top_guideline3"
+        android:text="이름"
+        android:textColor="#4F4F53"
+        />
+
+    <EditText
+        android:id="@+id/find_pw_name"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:hint="이름 입력"
+        android:textSize="15sp"
+        android:fontFamily="@font/applesdgothicneom"
+        android:backgroundTint="#FFDD02"
+        android:textColor="#232328"
+        android:textCursorDrawable="@drawable/cursor_color"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.833"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf="@id/top_guideline4" />
+
+    <TextView
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:textSize="14sp"
+        android:fontFamily="@font/applesdgothicneom"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent= "0.2"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0223"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf ="@id/top_guideline6"
+        android:text="휴대폰 번호"
+        android:textColor="#4F4F53"
+        />
+
+    <EditText
+        android:id="@+id/find_pw_phonenumber"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:hint="휴대폰 번호"
+        android:textSize="15sp"
+        android:fontFamily="@font/applesdgothicneom"
+        android:backgroundTint="#FFDD02"
+        android:textColor="#232328"
+        android:textCursorDrawable="@drawable/cursor_color"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.833"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf="@id/top_guideline7"
+        android:maxLength="11"
+        />
+
+    <Button
+        android:id="@+id/find_pw_button1"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.133"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0289"
+        app:layout_constraintTop_toTopOf="@id/top_guideline8"
+        app:layout_constraintStart_toStartOf="@id/start_guideline3"
+        android:fontFamily="@font/applesdgothicneom"
+        android:text="인증요청"
+        android:textSize="11sp"
+        android:paddingLeft="5sp"
+        android:paddingRight="5sp"
+        android:paddingTop="5sp"
+        android:paddingBottom="4sp"
+        android:background="#efefef"
+        android:textColor="#A7A7A9"
+        />
+
+    <Button
+        android:id="@+id/find_pw_button2"
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0658"
+        android:text="완료"
+        android:textSize="18sp"
+        android:fontFamily="@font/applesdgothicneob"
+        android:textColor="#7B7B7E"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/top_guideline5"
+        android:background="#ffffff" />
+
+    <TextView
+        android:id="@+id/find_pw_textview1"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:textSize="14sp"
+        android:fontFamily="@font/applesdgothicneom"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent= "0.13"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.021"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf ="@id/top_guideline9"
+        android:text="인증번호"
+        android:textColor="#4F4F53"
+        />
+
+    <EditText
+        android:id="@+id/find_pw_number"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:hint="인증번호 5자리 입력"
+        android:textSize="15sp"
+        android:fontFamily="@font/applesdgothicneom"
+        android:backgroundTint="#FFDD02"
+        android:textColor="#232328"
+        android:maxLength="5"
+        android:textCursorDrawable="@drawable/cursor_color"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.833"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf="@id/top_guideline10" />
+
+
+    <TextView
+        android:id="@+id/find_pw_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/start_guideline4"
+        app:layout_constraintTop_toTopOf="@id/top_guideline11"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.0833" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.0776" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.0555" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.786" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.808" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.03" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.16" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.195" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.541" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.256" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.289" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2975" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.351" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.384" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.421" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
