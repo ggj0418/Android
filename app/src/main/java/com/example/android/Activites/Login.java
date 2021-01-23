@@ -26,7 +26,6 @@ public class Login extends AppCompatActivity {
     EditText editText;
     Button button;
     TextView textView,textView2,textView3;
-    String Temporarypassword = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +38,6 @@ public class Login extends AppCompatActivity {
         textView3 = findViewById(R.id.login_find_pw);
         button.setEnabled(false);
 
-
-        Intent intent = getIntent();
-        if(Temporarypassword == null || Temporarypassword.trim().isEmpty()) {
-        }else{
-            Temporarypassword = intent.getExtras().getString("password4");
-        }
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -91,7 +84,6 @@ public class Login extends AppCompatActivity {
                                 case 200:
                                     Toast.makeText(Login.this, "이메일이 중복되지 않습니다.", Toast.LENGTH_SHORT).show();
                                   Intent intent = new Intent(Login.this, SignUp.class);
-                                  intent.putExtra("password5", Temporarypassword);
                                   intent.putExtra("email1",textemail);
                                   startActivity(intent);
                                     break;
@@ -100,7 +92,6 @@ public class Login extends AppCompatActivity {
                                     Toast.makeText(Login.this, "동일한 이메일의 회원이 이미 존재합니다..", Toast.LENGTH_LONG).show();
                                   intent = new Intent(Login.this, Input_pw.class);
                                   intent.putExtra("email1",textemail);
-                                  intent.putExtra("password5", Temporarypassword);
                                   startActivity(intent);
                                     break;
                             }

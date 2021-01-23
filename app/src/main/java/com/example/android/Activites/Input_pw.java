@@ -3,6 +3,7 @@ package com.example.android.Activites;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,7 +30,6 @@ public class Input_pw extends AppCompatActivity {
     EditText editText;
     ImageView imageview;
     TextView textView;
-    String Temporarypassword = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +43,6 @@ public class Input_pw extends AppCompatActivity {
         button1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
         button1.setTextColor(getResources().getColor(R.color.colorBlack));
 
-
-        Intent intent = getIntent();
-        if(Temporarypassword == null || Temporarypassword.trim().isEmpty()) {
-        }else{
-            Temporarypassword = intent.getExtras().getString("password5");
-        }
 
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -76,6 +70,9 @@ public class Input_pw extends AppCompatActivity {
 
                             case 428:
                                 Toast.makeText(Input_pw.this, "비밀번호를 변경해야 합니다.", Toast.LENGTH_SHORT).show();
+                                Intent intent2 = new Intent(Input_pw.this, qractivity.class);
+                                startActivity(intent2);
+                                finish();
                                 break;
 
                         }

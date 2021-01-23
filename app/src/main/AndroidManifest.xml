@@ -30,16 +30,13 @@
         </activity>
         <activity android:name=".Activites.GetEmail" />
         <activity android:name=".Activites.FindEmail" />
-        <activity android:name=".Test2.Test3" />
-        <activity android:name=".Activites.Send_SMS" />
-        <activity android:name=".Test2.Test_MainActivity3" />
+
         <activity android:name=".Activites.Confirmation" >
         </activity>
         <activity android:name=".Activites.SignUp" />
         <activity android:name=".Activites.Input_pw" />
         <activity android:name=".Activites.Login" />
-        <activity android:name=".QR.CreateQR2" />
-        <activity android:name=".QR.QRActivity2" />
+
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -54,9 +51,6 @@
 
         </activity>
 
-        <activity android:name=".Google_Login.Google_Sign_in2" />
-        <activity android:name=".Google_Login.Google_Sign_in3" />
-        <activity android:name=".QR.ScanQR" />
     </application>
 
 </manifest>
