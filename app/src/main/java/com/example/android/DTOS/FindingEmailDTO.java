@@ -2,10 +2,10 @@ package com.example.android.DTOS;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Dto_findemail {
-    Dto_findemail(){
+public class FindingEmailDTO {
+    FindingEmailDTO(){
     }
-    public Dto_findemail(String name, String phone){
+    public FindingEmailDTO(String name, String phone){
         this.name = name;
         this.phone = phone;
     }

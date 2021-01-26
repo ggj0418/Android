@@ -1,4 +1,4 @@
-package com.example.android.Activites;
+package com.example.android.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,13 +14,11 @@ import androidx.annotation.NonNull;
 import com.example.android.R;
 
 public class OptionCodeTypeDialog extends Dialog {
-
     Context context;
     CustomDialogClickListener customDialogClickListener;
     TextView negativetext,textView1,textView2;
     Button positivebutton;
     EditText edit1,edit2;
-
 
     public OptionCodeTypeDialog(@NonNull Context context, CustomDialogClickListener customDialogClickListener) {
         super(context);

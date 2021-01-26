@@ -1,6 +1,5 @@
-package com.example.android.Activites;
+package com.example.android.Activites.FindingAccount;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +16,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.android.DTOS.Dto_get_new_password;
+import com.example.android.Activites.UserAccount.SignUpActivity;
+import com.example.android.DTOS.NewPasswordDTO;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FindPw extends AppCompatActivity {
+public class FindPasswordActivity extends AppCompatActivity {
     private static final int MILLISINFUTURE = 181*1000;
     private static final int COUNT_DOWN_INTERVAL = 1000;
     private CountDownTimer countDownTimer;
@@ -103,7 +103,7 @@ public class FindPw extends AppCompatActivity {
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                         switch (response.code()) {
                                                             case 200:
-                                                                Toast.makeText(FindPw.this, "Message sent.", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(FindPasswordActivity.this, "Message sent.", Toast.LENGTH_SHORT).show();
                                                                 try {
                                                                     confirm_number2 = response.body().string();
                                                                 } catch (IOException e) {
@@ -112,7 +112,7 @@ public class FindPw extends AppCompatActivity {
                                                                 break;
 
                                                             case 500:
-                                                                Toast.makeText(FindPw.this, "메세지 전송 실패", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_SHORT).show();
                                                                 break;
                                                         }
                                                     }
@@ -148,7 +148,7 @@ public class FindPw extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FindPw.this, SignUp.class);
+                Intent intent = new Intent(FindPasswordActivity.this, SignUpActivity.class);
                 startActivity(intent);
             }});
 
@@ -159,15 +159,15 @@ public class FindPw extends AppCompatActivity {
                 String edit1 = editText1.getText().toString();
                 String edit2 = editText2.getText().toString();
                 Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
-                Dto_get_new_password userInfo = new Dto_get_new_password(edit1,edit2);
+                NewPasswordDTO userInfo = new NewPasswordDTO(edit1,edit2);
                 Call<ResponseBody> loginCall = retrofitAPI.requestnewpassword(userInfo);
                 loginCall.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         switch (response.code()) {
                             case 200:
-                                Toast.makeText(FindPw.this, "새 비밀번호 발급 후 전송 완료", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(FindPw.this, GetPw.class);
+                                Toast.makeText(FindPasswordActivity.this, "새 비밀번호 발급 후 전송 완료", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(FindPasswordActivity.this, GetPasswrodActivity.class);
                                    isSemiPassword = true;
                                 SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
                                 SharedPreferences.Editor edit = pref.edit();
@@ -178,11 +178,11 @@ public class FindPw extends AppCompatActivity {
                                 break;
 
                             case 403:
-                                Toast.makeText(FindPw.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(FindPasswordActivity.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
                                 break;
 
                             case 500:
-                                Toast.makeText(FindPw.this, "메세지 전송 실패", Toast.LENGTH_LONG).show();
+                                Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_LONG).show();
                                 break;
                         }
                     }

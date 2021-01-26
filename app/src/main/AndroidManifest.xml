@@ -22,25 +22,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activites.qractivity" />
-        <activity android:name=".Activites.GetPw" />
-        <activity android:name=".Activites.FindPw" >
+        <activity android:name=".QR.QRCodeAcitivty" />
+        <activity android:name=".Activites.FindingAccount.GetPasswrodActivity" />
+        <activity android:name=".Activites.FindingAccount.FindPasswordActivity" >
         </activity>
-        <activity android:name=".Activites.GetEmail" />
-        <activity android:name=".Activites.FindEmail" />
+        <activity android:name=".Activites.FindingAccount.GetEmailActivity" />
+        <activity android:name=".Activites.FindingAccount.FindEmailActivity" />
 
-        <activity android:name=".Activites.Confirmation" >
+        <activity android:name=".Activites.UserAccount.PhoneAuthActivity" >
         </activity>
-        <activity android:name=".Activites.SignUp" />
-        <activity android:name=".Activites.Input_pw" />
-        <activity android:name=".Activites.Login" />
+        <activity android:name=".Activites.UserAccount.SignUpActivity" />
+        <activity android:name=".Activites.UserAccount.InputPasswordAcitivty" />
+        <activity android:name=".Activites.UserAccount.LoginActivity" />
 
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_native_key" />
 
-        <activity android:name=".Activites.Splash">
+        <activity
+            android:name=".Activites.SplashActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

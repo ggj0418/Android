@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.example.android.Activites.UserAccount.LoginActivity;
 import com.example.android.R;
 
-public class Splash extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +20,8 @@ public class Splash extends AppCompatActivity {
     }
 
     private class splashhandler implements Runnable{
-        public void run(){
-            startActivity(new Intent(Splash.this, Login.class));
-            Splash.this.finish(); // 로딩페이지 Activity stack에서 제거
+        public void run() {
+            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
         }
     }
 

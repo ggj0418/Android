@@ -1,4 +1,4 @@
-package com.example.android.Activites;
+package com.example.android.Activites.FindingAccount;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +8,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.android.Activites.UserAccount.LoginActivity;
 import com.example.android.R;
 
-public class GetEmail extends AppCompatActivity {
+public class GetEmailActivity extends AppCompatActivity {
     TextView textView1,textView2,textView3;
     Button button;
     @Override
@@ -33,14 +34,14 @@ public class GetEmail extends AppCompatActivity {
         textView2.setText(email+"입니다.");
         textView3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(GetEmail.this,FindPw.class);
+                Intent intent = new Intent(GetEmailActivity.this, FindPasswordActivity.class);
                 startActivity(intent);
             }
         });
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(GetEmail.this, Login.class);
+                Intent intent = new Intent(GetEmailActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

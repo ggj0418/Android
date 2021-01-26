@@ -1,4 +1,4 @@
-package com.example.android.Activites;
+package com.example.android.Activites.UserAccount;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,16 +14,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.DAOS.get_email_confirm;
+import com.example.android.Activites.FindingAccount.FindEmailActivity;
+import com.example.android.Activites.FindingAccount.FindPasswordActivity;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     EditText editText;
     Button button;
     TextView textView,textView2,textView3;
@@ -80,21 +82,21 @@ public class Login extends AppCompatActivity {
                 public void onClick(View v) {
                     String textemail = editText.getText().toString();
                     Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
-                    Call<get_email_confirm> loginCall = retrofitAPI.requestEmail(textemail);
-                    loginCall.enqueue(new Callback<get_email_confirm>() {
+                    Call<ResponseBody> loginCall = retrofitAPI.requestEmail(textemail);
+                    loginCall.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<get_email_confirm> call, Response<get_email_confirm> response) {
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             switch (response.code()) {
                                 case 200:
-                                    Toast.makeText(Login.this, "이메일이 중복되지 않습니다.", Toast.LENGTH_SHORT).show();
-                                  Intent intent = new Intent(Login.this, SignUp.class);
+                                    Toast.makeText(LoginActivity.this, "이메일이 중복되지 않습니다.", Toast.LENGTH_SHORT).show();
+                                  Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                                   intent.putExtra("email1",textemail);
                                   startActivity(intent);
                                     break;
     
                                 case 406:
-                                    Toast.makeText(Login.this, "동일한 이메일의 회원이 이미 존재합니다..", Toast.LENGTH_LONG).show();
-                                  intent = new Intent(Login.this, Input_pw.class);
+                                    Toast.makeText(LoginActivity.this, "동일한 이메일의 회원이 이미 존재합니다..", Toast.LENGTH_LONG).show();
+                                  intent = new Intent(LoginActivity.this, InputPasswordAcitivty.class);
                                   intent.putExtra("email1",textemail);
                                   startActivity(intent);
                                     break;
@@ -102,7 +104,7 @@ public class Login extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<get_email_confirm> call, Throwable t) {
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
                             Log.e("##########", "Fail", t);
                         }
                     });
@@ -111,13 +113,13 @@ public class Login extends AppCompatActivity {
 
         textView2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Login.this, FindEmail.class);
+                Intent intent = new Intent(LoginActivity.this, FindEmailActivity.class);
                 startActivity(intent);
             }
         });
         textView3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Login.this, FindPw.class);
+                Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);
                 startActivity(intent);
             }
         });

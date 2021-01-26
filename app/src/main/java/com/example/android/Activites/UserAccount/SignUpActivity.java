@@ -1,4 +1,4 @@
- package com.example.android.Activites;
+ package com.example.android.Activites.UserAccount;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,11 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.R;
 
-public class SignUp extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
     EditText editText1,editText2;
     Button button;
     ImageView imageview;
@@ -110,7 +109,7 @@ public class SignUp extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String pw1 = editText2.getText().toString();
-                Intent intent = new Intent(SignUp.this, Confirmation.class);
+                Intent intent = new Intent(SignUpActivity.this, PhoneAuthActivity.class);
                 intent.putExtra("email2",email);
                 intent.putExtra("pw",pw1);
                 startActivity(intent);
@@ -121,7 +120,7 @@ public class SignUp extends AppCompatActivity {
         imageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Intent intent = new Intent(SignUp.this, Login.class);
+               Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                startActivity(intent);
             }
         });

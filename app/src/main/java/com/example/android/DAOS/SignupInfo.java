@@ -2,8 +2,7 @@ package com.example.android.DAOS;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Signup {
-
+public class SignupInfo {
     @SerializedName("email")
     private String email;
     @SerializedName("name")
@@ -12,12 +11,6 @@ public class Signup {
     private String password;
     @SerializedName("tel")
     private String tel;
-
-    //public Login(String accessToken, String tokenType) {
-//        this.accessToken = accessToken;
-//        this.tokenType = tokenType;
-//    }
-//    public Login() {};
 
     public String getEmail() {
         return this.email;

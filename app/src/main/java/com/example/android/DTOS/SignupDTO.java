@@ -2,27 +2,22 @@ package com.example.android.DTOS;
 
 import com.google.gson.annotations.SerializedName;
 
-public class SignupUserinfo {
-    SignupUserinfo(){
-    }
+public class SignupDTO {
+    @SerializedName("email")
+    private String email;
+    @SerializedName("password")
+    private String password;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("tel")
+    private String tel;
 
-    public SignupUserinfo(String email, String name, String password, String tel){
+    public SignupDTO(String email, String name, String password, String tel){
         this.email = email;
         this.name = name;
         this.password = password;
         this.tel = tel;
     }
-    @SerializedName("email")
-    private String email;
-
-    @SerializedName("password")
-    private String password;
-
-    @SerializedName("name")
-    private String name;
-
-    @SerializedName("tel")
-    private String tel;
 
     public String getEmail ()
     {

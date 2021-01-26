@@ -1,4 +1,4 @@
-package com.example.android.Activites;
+package com.example.android.Activites.FindingAccount;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.android.Activites.UserAccount.LoginActivity;
 import com.example.android.R;
 
-public class GetPw extends AppCompatActivity {
+public class GetPasswrodActivity extends AppCompatActivity {
     TextView textview1,textview2;
     Button button;
     ImageView imageview;
@@ -32,7 +33,7 @@ public class GetPw extends AppCompatActivity {
 
         textview2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(GetPw.this, FindEmail.class);
+                Intent intent = new Intent(GetPasswrodActivity.this, FindEmailActivity.class);
                 startActivity(intent);
             } 
         });
@@ -41,14 +42,14 @@ public class GetPw extends AppCompatActivity {
 
         imageview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(GetPw.this, FindPw.class);
+                Intent intent = new Intent(GetPasswrodActivity.this, FindPasswordActivity.class);
                 startActivity(intent);
             }
         });
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(GetPw.this, Login.class);
+                Intent intent = new Intent(GetPasswrodActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

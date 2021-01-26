@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorYellow"
     android:gravity="center"
-    tools:context=".Activites.Splash">
+    tools:context=".Activites.SplashActivity">
 
   <!--이미지 넣으면 안에 하얀부분 생김 수정 필요-->
   <TextView

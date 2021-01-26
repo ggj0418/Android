@@ -1,4 +1,4 @@
-package com.example.android.Activites;
+package com.example.android.Activites.FindingAccount;
 
 
 import android.content.Intent;
@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.android.DAOS.ResponseBody2;
-import com.example.android.DTOS.Dto_findemail;
+import com.example.android.Activites.UserAccount.LoginActivity;
+import com.example.android.DTOS.FindingEmailDTO;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
@@ -28,7 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FindEmail extends AppCompatActivity {
+public class FindEmailActivity extends AppCompatActivity {
     ImageView imageView;
     EditText editText1,editText2;
     Button button;
@@ -79,15 +79,15 @@ public class FindEmail extends AppCompatActivity {
                     String edit1 = editText1.getText().toString();
                     String edit2 = editText2.getText().toString();
                     Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
-                    Dto_findemail userInfo = new Dto_findemail(edit1,edit2);
+                    FindingEmailDTO userInfo = new FindingEmailDTO(edit1,edit2);
                     Call<ResponseBody> loginCall = retrofitAPI.requestfindemail(userInfo);
                     loginCall.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             switch (response.code()) {
                                 case 200:
-                                    Toast.makeText(FindEmail.this, "OK", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(FindEmail.this, GetEmail.class);
+                                    Toast.makeText(FindEmailActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(FindEmailActivity.this, GetEmailActivity.class);
                                     String email = null;
                                     try {
                                         email = response.body().string();
@@ -100,11 +100,11 @@ public class FindEmail extends AppCompatActivity {
                                     break;
 
                                 case 302:
-                                    Toast.makeText(FindEmail.this, "일치하는 회원이 존재합니다.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(FindEmailActivity.this, "일치하는 회원이 존재합니다.", Toast.LENGTH_LONG).show();
                                     break;
 
                                 case 403:
-                                    Toast.makeText(FindEmail.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(FindEmailActivity.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
                                     break;
                             }
                         }
@@ -121,7 +121,7 @@ public class FindEmail extends AppCompatActivity {
 
         imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(FindEmail.this, Login.class);
+                Intent intent = new Intent(FindEmailActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

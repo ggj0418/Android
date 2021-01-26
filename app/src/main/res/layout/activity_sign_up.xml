@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activites.SignUp"
+    tools:context=".Activites.UserAccount.SignUpActivity"
     android:orientation="vertical">
 
     <!--수정필요-->
