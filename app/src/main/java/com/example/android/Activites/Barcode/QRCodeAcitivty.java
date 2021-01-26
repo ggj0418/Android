@@ -1,4 +1,4 @@
-package com.example.android.QR;
+package com.example.android.Activites.Barcode;
 
 import androidx.appcompat.app.AppCompatActivity;
 

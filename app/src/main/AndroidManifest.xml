@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".QR.QRCodeAcitivty" />
+        <activity android:name=".Activites.Barcode.QRCodeAcitivty" />
         <activity android:name=".Activites.FindingAccount.GetPasswrodActivity" />
         <activity android:name=".Activites.FindingAccount.FindPasswordActivity" >
         </activity>

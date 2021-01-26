@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.example.android.DTOS.UserInfoDTO;
 import com.example.android.DAOS.LoginInfo;
-import com.example.android.QR.QRCodeAcitivty;
+import com.example.android.Activites.Barcode.QRCodeAcitivty;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
