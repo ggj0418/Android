@@ -8,7 +8,6 @@ import com.example.android.DTOS.UserInfo;
 import com.example.android.DAOS.Signup;
 import com.example.android.DAOS.get_Login;
 import com.example.android.DAOS.get_email_confirm;
-import com.example.android.DAOS.get_pw;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -44,6 +43,6 @@ public interface Services {
     Call<ResponseBody> requestnewpassword(@Body Dto_get_new_password dto_get_new_password);
 
     @POST("users/change/password")
-    Call<get_pw> requestchange(@Query("newPassword") String newPassword);
+    Call<Dto_get_new_password> requestchange(@Query("newPassword") String newPassword);
 
 }

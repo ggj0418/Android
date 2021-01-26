@@ -57,8 +57,6 @@ public class FindPw extends AppCompatActivity {
         editText3.setVisibility(View.INVISIBLE);
         text2.setVisibility(View.INVISIBLE);
 
-        Send_SMS send_sms = new Send_SMS();
-
         editText1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }

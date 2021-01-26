@@ -41,7 +41,6 @@ public class Confirmation extends AppCompatActivity {
     TextView text1, text2;
     ImageView imageView;
     String confirm_number1 = null;
-    private final int MY_PERMISSION_REQUEST_SMS = 1001;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +63,6 @@ public class Confirmation extends AppCompatActivity {
         text2.setVisibility(View.INVISIBLE);
         String edit1 = editText1.getText().toString();
 
-        Send_SMS send_sms = new Send_SMS();
 
         editText1.addTextChangedListener(new TextWatcher() {
             @Override
@@ -206,16 +204,7 @@ public class Confirmation extends AppCompatActivity {
             }
         });
                 }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == MY_PERMISSION_REQUEST_SMS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
-            else {
-                Toast.makeText(this, "Permission denied.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+
     public void countDownTimer(){
         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
             public void onTick(long millisUntilFinished) {

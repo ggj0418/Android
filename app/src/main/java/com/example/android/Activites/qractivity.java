@@ -19,13 +19,22 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.android.DAOS.get_Login;
+import com.example.android.DTOS.Dto_get_new_password;
+import com.example.android.DTOS.UserInfo;
 import com.example.android.R;
+import com.example.android.Retrofit.RetrofitClient;
+import com.example.android.Services.Services;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class qractivity extends AppCompatActivity {
 
-    View header;
-    Button button1;
     EditText editText1, editText2;
     TextView text;
     @Override
@@ -46,12 +55,41 @@ public class qractivity extends AppCompatActivity {
         if(str.equals(true)) {
             OptionCodeTypeDialog octDialog = new OptionCodeTypeDialog(this, new CustomDialogClickListener() {
                 @Override
-                public void onPositiveClick() {
-                    String edit1 = editText1.getText().toString();
-                    String edit2 = editText2.getText().toString();
-                    text.setText(edit1);
-                    Log.d("******", edit1);
+                public void onPositiveClick(String pw1,String pw2) {
+                    Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
+                    Call<Dto_get_new_password> newpassCall = retrofitAPI2.requestchange(pw1);
+                    newpassCall.enqueue(new Callback<Dto_get_new_password>() {
+                        @Override
+                        public void onResponse(Call<Dto_get_new_password> call, Response<Dto_get_new_password> response) {
+                            switch (response.code()) {
+                                case 200:
+                                    Toast.makeText(qractivity.this, "OK", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(qractivity.this,Login.class);
+                                    startActivity(intent);
+                                    finish();
+                                    break;
 
+                                case 201:
+                                    Toast.makeText(qractivity.this,"정상적으로 비밀번호를 변경, 새로운 토큰을 발급", Toast.LENGTH_LONG).show();
+                                    Intent intent2 = new Intent(qractivity.this,Login.class);
+                                    startActivity(intent2);
+                                    break;
+
+                                case 401:
+                                    Toast.makeText(qractivity.this, "토큰 만료로 인해 비밀번호 변경 불가 -> 새로운 토큰 발급", Toast.LENGTH_LONG).show();
+                                    break;
+
+                                case 403:
+                                    Toast.makeText(qractivity.this, "일치하는 회원이 존재하지 않아 비밀번호 변경에 실패하였습니다.", Toast.LENGTH_LONG).show();
+                                    break;
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Dto_get_new_password> call, Throwable t) {
+                            Log.e("##########","Fail",t);
+                        }
+                    });
                 }
 
                 @Override
@@ -60,6 +98,7 @@ public class qractivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
             Display display = getWindowManager().getDefaultDisplay();  // in Activity
             Point size = new Point();
             display.getRealSize(size); // or getSize(size)

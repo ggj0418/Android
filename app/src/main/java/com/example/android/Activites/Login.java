@@ -3,6 +3,7 @@ package com.example.android.Activites;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,6 +39,9 @@ public class Login extends AppCompatActivity {
         textView3 = findViewById(R.id.login_find_pw);
         button.setEnabled(false);
 
+        SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
+        Boolean str = pref.getBoolean("semipassword",false);
+        Log.d("*********",str.toString());
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override

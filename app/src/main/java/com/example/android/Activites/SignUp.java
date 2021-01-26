@@ -104,12 +104,8 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
 
-
-
             }
         });
-
-
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -118,6 +114,7 @@ public class SignUp extends AppCompatActivity {
                 intent.putExtra("email2",email);
                 intent.putExtra("pw",pw1);
                 startActivity(intent);
+
                 }
         });
 

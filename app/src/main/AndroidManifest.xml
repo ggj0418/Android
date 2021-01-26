@@ -22,8 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activites.Timer_SmsTest">
-        </activity>
         <activity android:name=".Activites.qractivity" />
         <activity android:name=".Activites.GetPw" />
         <activity android:name=".Activites.FindPw" >
