@@ -99,11 +99,11 @@ public class FindEmailActivity extends AppCompatActivity {
                                     startActivity(intent);
                                     break;
 
-                                case 302:
-                                    Toast.makeText(FindEmailActivity.this, "일치하는 회원이 존재합니다.", Toast.LENGTH_LONG).show();
+                                case 400:
+                                    Toast.makeText(FindEmailActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
                                     break;
 
-                                case 403:
+                                case 404:
                                     Toast.makeText(FindEmailActivity.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
                                     break;
                             }
@@ -117,7 +117,6 @@ public class FindEmailActivity extends AppCompatActivity {
 
                 }
             });
-
 
         imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

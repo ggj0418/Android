@@ -54,14 +54,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String email = editText.getText().toString();
                 String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
-                Boolean b = email.matches(regex);
-                if (b == true) {
+                boolean b = email.matches(regex);
+                if (b) {
                     textView.setText("올바른 형식입니다.");
                     textView.setTextColor(getResources().getColor(R.color.TextGray));
                     button.setEnabled(true);
                     button.setBackgroundColor(getResources().getColor(R.color.colorYellow));
                     button.setTextColor(getResources().getColor(R.color.colorBlack));
-                } else if (b == false) {
+                } else {
                     textView.setText("올바르지 않은 형식입니다.");
                     textView.setTextColor(getResources().getColor(R.color.colormiss));
                     button.setEnabled(false);
@@ -88,15 +88,19 @@ public class LoginActivity extends AppCompatActivity {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             switch (response.code()) {
                                 case 200:
-                                    Toast.makeText(LoginActivity.this, "이메일이 중복되지 않습니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this,  "이메일이 중복되지 않습니다.", Toast.LENGTH_SHORT).show();
                                   Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                                   intent.putExtra("email1",textemail);
                                   startActivity(intent);
                                     break;
+
+                                case 400:
+                                    Toast.makeText(LoginActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
+                                    break;
     
-                                case 406:
-                                    Toast.makeText(LoginActivity.this, "동일한 이메일의 회원이 이미 존재합니다..", Toast.LENGTH_LONG).show();
-                                  intent = new Intent(LoginActivity.this, InputPasswordAcitivty.class);
+                                case 403:
+                                    Toast.makeText(LoginActivity.this, "동일한 이메일의 회원이 이미 존재합니다.", Toast.LENGTH_LONG).show();
+                                  intent = new Intent(LoginActivity.this, InputPasswordActivity.class);
                                   intent.putExtra("email1",textemail);
                                   startActivity(intent);
                                     break;

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.DTOS.SignupDTO;
-import com.example.android.DAOS.SignupInfo;
+import com.example.android.DTOS.SignupMessageDTO;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
@@ -107,7 +107,8 @@ public class PhoneAuthActivity extends AppCompatActivity {
                         countDownTimer.start();
                         String phone_no = editText2.getText().toString();
                         Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
-                        Call<ResponseBody> valid_phone = retrofitAPI2.requestphone(phone_no);
+                        SignupMessageDTO signupMessageDTO = new SignupMessageDTO(phone_no);
+                        Call<ResponseBody> valid_phone = retrofitAPI2.requestphone(signupMessageDTO);
                         valid_phone.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -123,7 +124,11 @@ public class PhoneAuthActivity extends AppCompatActivity {
                                         }
                                         break;
 
-                                    case 406:
+                                    case 400:
+                                        Toast.makeText(PhoneAuthActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_SHORT).show();
+                                        break;
+
+                                    case 403:
                                         Toast.makeText(PhoneAuthActivity.this, "동일한 휴대폰 번호의 회원이 이미 존재합니다.", Toast.LENGTH_SHORT).show();
                                         break;
 
@@ -186,11 +191,11 @@ public class PhoneAuthActivity extends AppCompatActivity {
                 String p_number = editText2.getText().toString();
                 Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
                 SignupDTO signupUserinfo = new SignupDTO(email, name, pw, p_number);
-                Call<SignupInfo> signupCall = retrofitAPI2.requestSignup(signupUserinfo);
+                Call<SignupDTO> signupCall = retrofitAPI2.requestSignup(signupUserinfo);
 
-                signupCall.enqueue(new Callback<SignupInfo>() {
+                signupCall.enqueue(new Callback<SignupDTO>() {
                     @Override
-                    public void onResponse(Call<SignupInfo> call, Response<SignupInfo> response) {
+                    public void onResponse(Call<SignupDTO> call, Response<SignupDTO> response) {
                         switch (response.code()) {
                             case 200:
                                 Toast.makeText(PhoneAuthActivity.this, "OK", Toast.LENGTH_SHORT).show();
@@ -209,7 +214,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<SignupInfo> call, Throwable t) {
+                    public void onFailure(Call<SignupDTO> call, Throwable t) {
                         Log.e("##########", "Fail", t);
                     }
                 });
@@ -247,5 +252,4 @@ public class PhoneAuthActivity extends AppCompatActivity {
         }
         countDownTimer = null;
     }
-
 }
