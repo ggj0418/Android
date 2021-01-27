@@ -3,17 +3,15 @@ package com.example.android.DTOS;
 import com.google.gson.annotations.SerializedName;
 
 public class FindingEmailDTO {
-    FindingEmailDTO(){
-    }
+    @SerializedName("name")
+    private String name;
+    @SerializedName("phone")
+    private String phone;
+
     public FindingEmailDTO(String name, String phone){
         this.name = name;
         this.phone = phone;
     }
-    @SerializedName("name")
-    private String name;
-
-    @SerializedName("phone")
-    private String phone;
 
     public String getName ()
     {

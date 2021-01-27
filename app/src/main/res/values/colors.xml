@@ -13,5 +13,6 @@
     <color name="TextColor1">#7B7B7E</color>
     <color name="colorWhite">#ffffff</color>
 
-
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
 </resources>

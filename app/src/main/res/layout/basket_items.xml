@@ -1,0 +1,118 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="122.5sp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+    
+    <LinearLayout
+        android:layout_width="0sp"
+        android:layout_weight="2"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/basket_item_imageview"
+            android:layout_width="58sp"
+            android:layout_height="58sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="21sp"/>
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="18sp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/basket_item_plus_button"
+                android:layout_width="18sp"
+                android:layout_height="18sp"
+                android:background="#EAEAEA"
+                android:textSize="12sp"
+                android:text="@string/minus"/>
+
+            <TextView
+                android:id="@+id/basket_item_count_textview"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="25sp"
+                android:layout_height="18sp"
+                android:text="1"/>
+
+            <Button
+                android:id="@+id/basket_item_minus_button"
+                android:layout_width="18sp"
+                android:layout_height="18sp"
+                android:background="#EAEAEA"
+                android:textSize="12sp"
+                android:text="@string/plus"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="21sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0sp"
+        android:layout_weight="4"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/basket_item_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="21sp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="치즈크림케잌"/>
+
+        <TextView
+            android:id="@+id/basket_item_subname_textview"
+            android:layout_marginTop="5sp"
+            android:layout_width="wrap_content"
+            android:layout_height="15sp"
+            android:textSize="12sp"
+            android:text="냉동식품 / N193"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0sp"
+        android:layout_weight="4"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/basket_item_delete_textview"
+            android:textColor="#FD3333"
+            android:textStyle="bold"
+            android:layout_gravity="end"
+            android:layout_width="48sp"
+            android:layout_height="15sp"
+            android:textSize="12sp"
+            android:text="@string/delete"
+            />
+
+        <TextView
+            android:id="@+id/basket_item_price_textview"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="57sp"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="27sp"
+            android:textSize="22sp"
+            android:text="22,000원"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -61,6 +61,7 @@
         android:backgroundTint="#FFDD02"
         android:textColor="#232328"
         android:hint="이메일 입력"
+        android:inputType="textEmailAddress"
         android:textSize="15sp"
         android:textCursorDrawable="@drawable/cursor_color"
         />

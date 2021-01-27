@@ -28,7 +28,8 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     EditText editText;
     Button button;
-    TextView textView,textView2,textView3;
+    TextView textView, textView2, textView3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         button.setEnabled(false);
 
         SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
-        Boolean str = pref.getBoolean("semipassword",false);
-        Log.d("*********",str.toString());
+        Boolean str = pref.getBoolean("semipassword", false);
+        Log.d("*********", str.toString());
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -54,21 +55,21 @@ public class LoginActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String email = editText.getText().toString();
                 String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
-                Boolean b = email.matches(regex);
-                if (b == true) {
+                boolean b = email.matches(regex);
+                if (b) {
                     textView.setText("올바른 형식입니다.");
                     textView.setTextColor(getResources().getColor(R.color.TextGray));
                     button.setEnabled(true);
                     button.setBackgroundColor(getResources().getColor(R.color.colorYellow));
                     button.setTextColor(getResources().getColor(R.color.colorBlack));
-                } else if (b == false) {
+                } else {
                     textView.setText("올바르지 않은 형식입니다.");
                     textView.setTextColor(getResources().getColor(R.color.colormiss));
                     button.setEnabled(false);
                     button.setBackgroundColor(getResources().getColor(R.color.colorWhite));
                     button.setTextColor(getResources().getColor(R.color.TextColor1));
                 }
-                if (email.equals("") || email == null) {
+                if (email.equals("")) {
                     textView.setText("");
                 }
             }
@@ -78,38 +79,37 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    String textemail = editText.getText().toString();
-                    Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
-                    Call<ResponseBody> loginCall = retrofitAPI.requestEmail(textemail);
-                    loginCall.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            switch (response.code()) {
-                                case 200:
-                                    Toast.makeText(LoginActivity.this, "이메일이 중복되지 않습니다.", Toast.LENGTH_SHORT).show();
-                                  Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                                  intent.putExtra("email1",textemail);
-                                  startActivity(intent);
-                                    break;
-    
-                                case 406:
-                                    Toast.makeText(LoginActivity.this, "동일한 이메일의 회원이 이미 존재합니다..", Toast.LENGTH_LONG).show();
-                                  intent = new Intent(LoginActivity.this, InputPasswordAcitivty.class);
-                                  intent.putExtra("email1",textemail);
-                                  startActivity(intent);
-                                    break;
-                            }
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String textemail = editText.getText().toString();
+                Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
+                Call<ResponseBody> loginCall = retrofitAPI.requestEmail(textemail);
+                loginCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        switch (response.code()) {
+                            case 200:
+                                Toast.makeText(LoginActivity.this, "이메일이 중복되지 않습니다.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                                intent.putExtra("email1", textemail);
+                                startActivity(intent);
+                                break;
+                            case 406:
+                                Toast.makeText(LoginActivity.this, "동일한 이메일의 회원이 이미 존재합니다..", Toast.LENGTH_LONG).show();
+                                intent = new Intent(LoginActivity.this, InputPasswordAcitivty.class);
+                                intent.putExtra("email1", textemail);
+                                startActivity(intent);
+                                break;
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Log.e("##########", "Fail", t);
-                        }
-                    });
-                }
-            });
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e("##########", "Fail", t);
+                    }
+                });
+            }
+        });
 
         textView2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -123,5 +123,5 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        }
+    }
 }

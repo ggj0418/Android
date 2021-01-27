@@ -30,8 +30,9 @@ import retrofit2.Response;
 
 public class FindEmailActivity extends AppCompatActivity {
     ImageView imageView;
-    EditText editText1,editText2;
+    EditText editText1, editText2;
     Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,13 +57,13 @@ public class FindEmailActivity extends AppCompatActivity {
                     button.setBackgroundColor(getResources().getColor(R.color.colorYellow));
                     button.setTextColor(getResources().getColor(R.color.colorBlack));
                     button.setEnabled(true);
-                }
-                if (edit2.length() <= 10) {
+                } else {
                     button.setEnabled(false);
                     button.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
                     button.setTextColor(getResources().getColor(R.color.TextGray));
                 }
-                if(edit1.equals("")||edit1 == null){
+
+                if (edit1.equals("") || edit1 == null) {
                     button.setEnabled(false);
                     button.setBackgroundColor(getResources().getColor(R.color.colorWhite));
                     button.setTextColor(getResources().getColor(R.color.TextColor1));
@@ -74,49 +75,49 @@ public class FindEmailActivity extends AppCompatActivity {
 
             }
         });
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    String edit1 = editText1.getText().toString();
-                    String edit2 = editText2.getText().toString();
-                    Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
-                    FindingEmailDTO userInfo = new FindingEmailDTO(edit1,edit2);
-                    Call<ResponseBody> loginCall = retrofitAPI.requestfindemail(userInfo);
-                    loginCall.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            switch (response.code()) {
-                                case 200:
-                                    Toast.makeText(FindEmailActivity.this, "OK", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(FindEmailActivity.this, GetEmailActivity.class);
-                                    String email = null;
-                                    try {
-                                        email = response.body().string();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    intent.putExtra("name", edit1);
-                                    intent.putExtra("find_email", email);
-                                    startActivity(intent);
-                                    break;
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String edit1 = editText1.getText().toString();
+                String edit2 = editText2.getText().toString();
+                Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
+                FindingEmailDTO userInfo = new FindingEmailDTO(edit1, edit2);
+                Call<ResponseBody> loginCall = retrofitAPI.requestfindemail(userInfo);
+                loginCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        switch (response.code()) {
+                            case 200:
+                                Toast.makeText(FindEmailActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(FindEmailActivity.this, GetEmailActivity.class);
+                                String email = null;
+                                try {
+                                    email = response.body().string();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                intent.putExtra("name", edit1);
+                                intent.putExtra("find_email", email);
+                                startActivity(intent);
+                                break;
 
-                                case 302:
-                                    Toast.makeText(FindEmailActivity.this, "일치하는 회원이 존재합니다.", Toast.LENGTH_LONG).show();
-                                    break;
+                            case 302:
+                                Toast.makeText(FindEmailActivity.this, "일치하는 회원이 존재합니다.", Toast.LENGTH_LONG).show();
+                                break;
 
-                                case 403:
-                                    Toast.makeText(FindEmailActivity.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
-                                    break;
-                            }
+                            case 403:
+                                Toast.makeText(FindEmailActivity.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                                break;
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Log.e("##########", "Fail", t);
-                        }
-                    });
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e("##########", "Fail", t);
+                    }
+                });
 
-                }
-            });
+            }
+        });
 
 
         imageView.setOnClickListener(new View.OnClickListener() {
