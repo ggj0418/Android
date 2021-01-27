@@ -57,7 +57,7 @@ public class InputPasswordActivity extends AppCompatActivity {
                 String textpw = editText.getText().toString();
                 Intent intent = getIntent();
                 String email = intent.getExtras().getString("email1");
-                Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
+                Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
                 UserInfoDTO userInfo = new UserInfoDTO(email, textpw);
                 Call<UserInfoDTO> signinCall = retrofitAPI2.requestSignin(userInfo);
                 signinCall.enqueue(new Callback<UserInfoDTO>() {
@@ -85,7 +85,7 @@ public class InputPasswordActivity extends AppCompatActivity {
                                 OptionCodeTypeDialog octDialog = new OptionCodeTypeDialog(InputPasswordActivity.this, new CustomDialogClickListener() {
                                     @Override
                                     public void onPositiveClick(String pw1, String pw2) {
-                                        Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
+                                        Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
                                         ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO(pw1);
                                         Call<ChangePasswordDTO> newpassCall = retrofitAPI2.requestchange(changePasswordDTO);
 

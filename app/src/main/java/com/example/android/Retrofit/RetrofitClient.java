@@ -13,30 +13,53 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static Retrofit retrofit = null;
-    static Request request;
-    public static Retrofit getRetrofit() {
+    public static Retrofit getRetrofit(String accessToken) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .connectTimeout(2, TimeUnit.MINUTES)
-                .readTimeout(50, TimeUnit.SECONDS)
-                .writeTimeout(50, TimeUnit.SECONDS)
-                .addInterceptor(new SupportInterceptor())
-                .build();
+        OkHttpClient client = null;
 
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
+        if(accessToken != null) {
+            AuthenticationInterceptor authenticationInterceptor = new AuthenticationInterceptor("Bearer " + accessToken);
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://52.78.123.79:80")
-             // .addConverterFactory(new NullOnEmptyConverterFactory())
-                .addConverterFactory(GsonConverterFactory.create(gson))
+            client = new OkHttpClient.Builder()
+                    .addInterceptor(interceptor)
+                    .addInterceptor(authenticationInterceptor)
+                    .addInterceptor(new SupportInterceptor())
+                    .build();
+        } else {
+            client = new OkHttpClient.Builder()
+                    .addInterceptor(interceptor)
+                    .addInterceptor(new SupportInterceptor())
+                    .build();
+        }
+
+        return new Retrofit.Builder()
+                .baseUrl("http://52.78.123.79:80/")
+                .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
-
-        return retrofit;
     }
 }
+
+//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        OkHttpClient client = new OkHttpClient.Builder()
+//                .addInterceptor(interceptor)
+//                .connectTimeout(2, TimeUnit.MINUTES)
+//                .readTimeout(50, TimeUnit.SECONDS)
+//                .writeTimeout(50, TimeUnit.SECONDS)
+//                .addInterceptor(new SupportInterceptor())
+//                .build();
+//
+//        Gson gson = new GsonBuilder()
+//                .setLenient()
+//                .create();
+//
+//        retrofit = new Retrofit.Builder()
+//                .baseUrl("http://52.78.123.79:80")
+//             // .addConverterFactory(new NullOnEmptyConverterFactory())
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .client(client)
+//                .build();
+//
+//        return retrofit;

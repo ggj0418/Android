@@ -104,7 +104,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                         countDownTimer();
                         countDownTimer.start();
                         String phone_no = editText2.getText().toString();
-                        Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
+                        Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
                         FindingPasswordDTO findingPasswordDTO = new FindingPasswordDTO(phone_no);
                         Call<ResponseBody> valid_phone = retrofitAPI2.requestfindpassword(findingPasswordDTO);
                         valid_phone.enqueue(new Callback<ResponseBody>() {
@@ -181,7 +181,7 @@ public class FindPasswordActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String edit1 = editText1.getText().toString();
                 String edit2 = editText2.getText().toString();
-                Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
+                Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
                 NewPasswordDTO userInfo = new NewPasswordDTO(edit1, edit2);
                 Call<ResponseBody> loginCall = retrofitAPI.requestnewpassword(userInfo);
                 loginCall.enqueue(new Callback<ResponseBody>() {

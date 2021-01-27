@@ -1,5 +1,7 @@
 package com.example.android.Retrofit;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import okhttp3.Authenticator;
@@ -9,7 +11,7 @@ import okhttp3.Response;
 import okhttp3.Route;
 
 public class SupportInterceptor implements Interceptor {
-
+    @NotNull
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();

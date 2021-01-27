@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
         boolean str = pref.getBoolean("semipassword", false);
-        Log.d("*********", str.toString());
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -82,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String textemail = editText.getText().toString();
-                Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
+                Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
                 Call<ResponseBody> loginCall = retrofitAPI.requestEmail(textemail);
                 loginCall.enqueue(new Callback<ResponseBody>() {
                     @Override

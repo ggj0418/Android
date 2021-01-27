@@ -79,7 +79,7 @@ public class FindEmailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String edit1 = editText1.getText().toString();
                 String edit2 = editText2.getText().toString();
-                Services retrofitAPI = RetrofitClient.getRetrofit().create(Services.class);
+                Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
                 FindingEmailDTO userInfo = new FindingEmailDTO(edit1, edit2);
                 Call<ResponseBody> loginCall = retrofitAPI.requestfindemail(userInfo);
                 loginCall.enqueue(new Callback<ResponseBody>() {

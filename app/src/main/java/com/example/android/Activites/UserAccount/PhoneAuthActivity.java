@@ -106,7 +106,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
                         countDownTimer();
                         countDownTimer.start();
                         String phone_no = editText2.getText().toString();
-                        Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
+                        Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
                         SignupMessageDTO signupMessageDTO = new SignupMessageDTO(phone_no);
                         Call<ResponseBody> valid_phone = retrofitAPI2.requestphone(signupMessageDTO);
                         valid_phone.enqueue(new Callback<ResponseBody>() {
@@ -189,7 +189,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = editText1.getText().toString();
                 String p_number = editText2.getText().toString();
-                Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
+                Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
                 SignupDTO signupUserinfo = new SignupDTO(email, name, pw, p_number);
                 Call<SignupDTO> signupCall = retrofitAPI2.requestSignup(signupUserinfo);
 
