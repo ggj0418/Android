@@ -32,6 +32,7 @@ public class GetEmailActivity extends AppCompatActivity {
 
         textView1.setText(name+"님의 이메일은");
         textView2.setText(email+"입니다.");
+
         textView3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(GetEmailActivity.this, FindPasswordActivity.class);

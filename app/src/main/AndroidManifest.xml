@@ -24,19 +24,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activites.Barcode.QRCodeAcitivty" />
-        <activity android:name=".Activites.FindingAccount.GetPasswrodActivity" />
-        <activity android:name=".Activites.FindingAccount.FindPasswordActivity" >
+        <activity android:name=".Dialog.CustomNotiActivity"
+                  android:theme="@android:style/Theme.Dialog"
+                  android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".Activites.FindingAccount.GetPasswrodActivity" />
+        <activity android:name=".Activites.FindingAccount.FindPasswordActivity"></activity>
         <activity android:name=".Activites.FindingAccount.GetEmailActivity" />
         <activity android:name=".Activites.FindingAccount.FindEmailActivity" />
-
-        <activity android:name=".Activites.UserAccount.PhoneAuthActivity" >
-        </activity>
+        <activity android:name=".Activites.UserAccount.PhoneAuthActivity"></activity>
         <activity android:name=".Activites.UserAccount.SignUpActivity" />
-        <activity android:name=".Activites.UserAccount.InputPasswordAcitivty" />
+        <activity android:name=".Activites.UserAccount.InputPasswordActivity" />
         <activity android:name=".Activites.UserAccount.LoginActivity" />
-
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -50,9 +49,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
     </application>
 
 </manifest>

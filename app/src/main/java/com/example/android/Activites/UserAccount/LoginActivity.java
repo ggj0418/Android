@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         button.setEnabled(false);
 
         SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
-        Boolean str = pref.getBoolean("semipassword", false);
+        boolean str = pref.getBoolean("semipassword", false);
         Log.d("*********", str.toString());
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -94,9 +94,12 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("email1", textemail);
                                 startActivity(intent);
                                 break;
-                            case 406:
-                                Toast.makeText(LoginActivity.this, "동일한 이메일의 회원이 이미 존재합니다..", Toast.LENGTH_LONG).show();
-                                intent = new Intent(LoginActivity.this, InputPasswordAcitivty.class);
+                            case 400:
+                                Toast.makeText(LoginActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
+                                break;
+                            case 403:
+                                Toast.makeText(LoginActivity.this, "동일한 이메일의 회원이 이미 존재합니다.", Toast.LENGTH_LONG).show();
+                                intent = new Intent(LoginActivity.this, InputPasswordActivity.class);
                                 intent.putExtra("email1", textemail);
                                 startActivity(intent);
                                 break;
