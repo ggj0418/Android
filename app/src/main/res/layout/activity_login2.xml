@@ -63,7 +63,6 @@
         android:hint="이메일 입력"
         android:inputType="textEmailAddress"
         android:textSize="15sp"
-        android:inputType="textEmailAddress"
         android:textCursorDrawable="@drawable/cursor_color"
         />
     <TextView

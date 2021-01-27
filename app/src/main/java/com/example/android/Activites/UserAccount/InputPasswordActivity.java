@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.Activites.Barcode.QRCodeAcitivty;
 import com.example.android.DTOS.ChangePasswordDTO;
 import com.example.android.DTOS.NewPasswordDTO;
 import com.example.android.DTOS.UserInfoDTO;
@@ -25,6 +26,7 @@ import com.example.android.Dialog.OptionCodeTypeDialog;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
+import com.example.android.Utils.Preference.PreferenceManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,8 +51,8 @@ public class InputPasswordActivity extends AppCompatActivity {
         button1.setTextColor(getResources().getColor(R.color.colorBlack));
 
         SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
-        Boolean str = pref.getBoolean("semipassword", false);
-        Log.d("*********", str.toString());
+        boolean str = pref.getBoolean("semipassword", false);
+        Log.d("*********", Boolean.toString(str));
 
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -66,7 +68,7 @@ public class InputPasswordActivity extends AppCompatActivity {
                         switch (response.code()) {
                             case 200:
                                 Toast.makeText(InputPasswordActivity.this, "정상적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(InputPasswordActivity.this, InputPasswordActivity.class);
+                                Intent intent = new Intent(InputPasswordActivity.this, QRCodeAcitivty.class);
                                 startActivity(intent);
                                 finish();
                                 break;
