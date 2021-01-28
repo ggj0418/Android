@@ -39,6 +39,7 @@ import com.example.android.Utils.Camera.CameraSourcePreview;
 import com.example.android.Utils.Camera.GraphicOverlay;
 import com.example.android.Utils.Preference.PreferenceManager;
 import com.example.android.Utils.RecyclerView.MyCartAdapter;
+import com.example.android.Utils.RecyclerView.RecyclerViewMethod;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -94,6 +95,7 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
     private MyCartAdapter myCartAdapter;
 
     private Services retrofitAPI2;
+    private RecyclerViewMethod recyclerViewMethod;
     /**
      * Initializes the UI and creates the detector pipeline.
      */
@@ -132,88 +134,90 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        showCartList();
+        recyclerViewMethod = new RecyclerViewMethod(getApplicationContext(), cartItemList, myCartAdapter);
+//        showCartList();
+        recyclerViewMethod.showCartList();
     }
 
-    private void setCartItem(int productCode) {
-        HashMap<String, Integer> map = new HashMap<>();
-        map.put("productCode", productCode);
+//    private void setCartItem(int productCode) {
+//        HashMap<String, Integer> map = new HashMap<>();
+//        map.put("productCode", productCode);
+//
+//        Call<ResponseBody> setCartItemCall = retrofitAPI2.setCartItem(map);
+//        setCartItemCall.enqueue(new Callback<ResponseBody>() {
+//            @EverythingIsNonNull
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                switch (response.code()) {
+//                    case 200:
+//                        Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 201:
+//                        Toast.makeText(getApplicationContext(), "정상적으로 장바구니에 상품이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+//                        showCartList();
+//                        myCartAdapter.notifyDataSetChanged();
+//                        break;
+//                    case 400:
+//                        Toast.makeText(getApplicationContext(), "유효한 입력이 아닙니다. 혹은 재고 부족으로 인해 상품을 담을 수 없습니다.", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 401:
+//                        Toast.makeText(getApplicationContext(), "토큰 만료", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 403:
+//                        Toast.makeText(getApplicationContext(), "유저만 접근 가능", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 404:
+//                        Toast.makeText(getApplicationContext(), "해당 제품이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    default:
+//                        Toast.makeText(getApplicationContext(), "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
+//                        break;
+//                }
+//            }
+//
+//            @EverythingIsNonNull
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Toast.makeText(getApplicationContext(), "통신 에러입니다", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
-        Call<ResponseBody> setCartItemCall = retrofitAPI2.setCartItem(map);
-        setCartItemCall.enqueue(new Callback<ResponseBody>() {
-            @EverythingIsNonNull
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                switch (response.code()) {
-                    case 200:
-                        Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 201:
-                        Toast.makeText(getApplicationContext(), "정상적으로 장바구니에 상품이 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                        showCartList();
-                        myCartAdapter.notifyDataSetChanged();
-                        break;
-                    case 400:
-                        Toast.makeText(getApplicationContext(), "유효한 입력이 아닙니다. 혹은 재고 부족으로 인해 상품을 담을 수 없습니다.", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 401:
-                        Toast.makeText(getApplicationContext(), "토큰 만료", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 403:
-                        Toast.makeText(getApplicationContext(), "유저만 접근 가능", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 404:
-                        Toast.makeText(getApplicationContext(), "해당 제품이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Toast.makeText(getApplicationContext(), "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-
-            @EverythingIsNonNull
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "통신 에러입니다", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void showCartList() {
-        Call<List<CartItemDTO>> getCartListCall = retrofitAPI2.getCartList();
-        getCartListCall.enqueue(new Callback<List<CartItemDTO>>() {
-            @EverythingIsNonNull
-            @Override
-            public void onResponse(Call<List<CartItemDTO>> call, Response<List<CartItemDTO>> response) {
-                switch (response.code()) {
-                    case 200:
-                        Toast.makeText(getApplicationContext(), "장바구니 리스트업 성공", Toast.LENGTH_SHORT).show();
-                        cartItemList.clear();
-                        cartItemList.addAll(response.body());
-                        myCartAdapter.notifyDataSetChanged();
-                        break;
-                    case 401:
-                        Toast.makeText(getApplicationContext(), "토큰 만료", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 403:
-                        Toast.makeText(getApplicationContext(), "유저만 접근 가능", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 404:
-                        Toast.makeText(getApplicationContext(), "해당 유저의 장바구니가 존재하지 않습니다", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Toast.makeText(getApplicationContext(), "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-
-            @EverythingIsNonNull
-            @Override
-            public void onFailure(Call<List<CartItemDTO>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "통신 에러입니다", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    public void showCartList() {
+//        Call<List<CartItemDTO>> getCartListCall = retrofitAPI2.getCartList();
+//        getCartListCall.enqueue(new Callback<List<CartItemDTO>>() {
+//            @EverythingIsNonNull
+//            @Override
+//            public void onResponse(Call<List<CartItemDTO>> call, Response<List<CartItemDTO>> response) {
+//                switch (response.code()) {
+//                    case 200:
+//                        Toast.makeText(getApplicationContext(), "장바구니 리스트업 성공", Toast.LENGTH_SHORT).show();
+//                        cartItemList.clear();
+//                        cartItemList.addAll(response.body());
+//                        myCartAdapter.notifyDataSetChanged();
+//                        break;
+//                    case 401:
+//                        Toast.makeText(getApplicationContext(), "토큰 만료", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 403:
+//                        Toast.makeText(getApplicationContext(), "유저만 접근 가능", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 404:
+//                        Toast.makeText(getApplicationContext(), "해당 유저의 장바구니가 존재하지 않습니다", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    default:
+//                        Toast.makeText(getApplicationContext(), "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
+//                        break;
+//                }
+//            }
+//
+//            @EverythingIsNonNull
+//            @Override
+//            public void onFailure(Call<List<CartItemDTO>> call, Throwable t) {
+//                Toast.makeText(getApplicationContext(), "통신 에러입니다", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     /**
      * Handles the requesting of the camera permission.  This includes
@@ -540,8 +544,9 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
             public void run() {
                 vibrator.vibrate(100);
                 mPreview.stop();
-                setCartItem(11111);
-                Toast.makeText(getApplicationContext(), barcode.displayValue, Toast.LENGTH_LONG).show();
+                recyclerViewMethod.setCartItem(11111);
+//                setCartItem(11111);
+//                Toast.makeText(getApplicationContext(), barcode.displayValue, Toast.LENGTH_LONG).show();
                 startCameraSource();
             }
         });
@@ -560,73 +565,3 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
         }
     }
 }
-
-//    SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
-//    Boolean str = pref.getBoolean("semipassword",false);
-//        Log.d("*********",str.toString());
-//
-//    LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//    View view = inflater.inflate(R.layout.option_codetype_dialog, null);
-//
-//    editText1 = view.findViewById(R.id.dia_pw1);
-//    editText2 = view.findViewById(R.id.dia_pw2);
-//    text = findViewById(R.id.qr_test);
-//        if(str.equals(true)) {
-//        OptionCodeTypeDialog octDialog = new OptionCodeTypeDialog(this, new CustomDialogClickListener() {
-//            @Override
-//            public void onPositiveClick(String pw1,String pw2) {
-//                Services retrofitAPI2 = RetrofitClient.getRetrofit().create(Services.class);
-//                Call<NewPasswordDTO> newpassCall = retrofitAPI2.requestchange(pw1);
-//                newpassCall.enqueue(new Callback<NewPasswordDTO>() {
-//                    @Override
-//                    public void onResponse(Call<NewPasswordDTO> call, Response<NewPasswordDTO> response) {
-//                        switch (response.code()) {
-//                            case 200:
-//                                Toast.makeText(QRCodeAcitivty.this, "OK", Toast.LENGTH_SHORT).show();
-//                                Intent intent = new Intent(QRCodeAcitivty.this, LoginActivity.class);
-//                                startActivity(intent);
-//                                finish();
-//                                break;
-//
-//                            case 201:
-//                                Toast.makeText(QRCodeAcitivty.this,"정상적으로 비밀번호를 변경, 새로운 토큰을 발급", Toast.LENGTH_LONG).show();
-//                                Intent intent2 = new Intent(QRCodeAcitivty.this, LoginActivity.class);
-//                                startActivity(intent2);
-//                                break;
-//
-//                            case 401:
-//                                Toast.makeText(QRCodeAcitivty.this, "토큰 만료로 인해 비밀번호 변경 불가 -> 새로운 토큰 발급", Toast.LENGTH_LONG).show();
-//                                break;
-//
-//                            case 403:
-//                                Toast.makeText(QRCodeAcitivty.this, "일치하는 회원이 존재하지 않아 비밀번호 변경에 실패하였습니다.", Toast.LENGTH_LONG).show();
-//                                break;
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<NewPasswordDTO> call, Throwable t) {
-//                        Log.e("##########","Fail",t);
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onNegativeClick() {
-//                Intent intent = new Intent(QRCodeAcitivty.this, LoginActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        Display display = getWindowManager().getDefaultDisplay();  // in Activity
-//        Point size = new Point();
-//        display.getRealSize(size); // or getSize(size)
-//        int width = (int) (size.x * 0.9444f);
-//        int height = (int) (size.y * 0.46f);
-//        octDialog.setCanceledOnTouchOutside(true);
-//        octDialog.setCancelable(true);
-//
-//        octDialog.show();
-//        Window window = octDialog.getWindow();
-//        window.setLayout(width, height);
-//    }

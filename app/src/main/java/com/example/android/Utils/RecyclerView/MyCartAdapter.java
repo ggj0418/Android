@@ -19,7 +19,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.BasketViewHolder> {
-    private final Context mContext;
+    public final Context mContext;
     private final List<CartItemDTO> cartItemList;
     private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
@@ -61,12 +61,12 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.BasketView
     }
 
     // findViewById 쓰는 곳
-    public static class BasketViewHolder extends RecyclerView.ViewHolder {
-//        protected ImageView imgUrl;
+    public class BasketViewHolder extends RecyclerView.ViewHolder {
+        //        protected ImageView imgUrl;
         protected TextView name;
         protected TextView categoryName;
         protected TextView count;
-//        protected TextView categoryAndLocation;
+        //        protected TextView categoryAndLocation;
         protected TextView delete;
         protected TextView price;
 

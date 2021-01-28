@@ -29,7 +29,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/basket_item_plus_button"
+                android:id="@+id/basket_item_minus_button"
                 android:layout_width="18sp"
                 android:layout_height="18sp"
                 android:background="#EAEAEA"
@@ -45,7 +45,7 @@
                 android:text="1"/>
 
             <Button
-                android:id="@+id/basket_item_minus_button"
+                android:id="@+id/basket_item_plus_button"
                 android:layout_width="18sp"
                 android:layout_height="18sp"
                 android:background="#EAEAEA"
