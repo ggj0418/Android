@@ -15,24 +15,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.android.DTOS.CartItemDTO;
 import com.example.android.R;
 
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.util.List;
 
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.BasketViewHolder> {
-    public final Context mContext;
+    private final Context mContext;
     private final List<CartItemDTO> cartItemList;
+    private final CartClickListener cartClickListener;
+
     private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-    public MyCartAdapter(Context mContext, List<CartItemDTO> cartItemList) {
+    public MyCartAdapter(Context mContext, List<CartItemDTO> cartItemList, CartClickListener cartClickListener) {
         this.mContext = mContext;
         this.cartItemList = cartItemList;
+        this.cartClickListener = cartClickListener;
     }
 
     @NonNull
     @Override
     public BasketViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.basket_items, parent, false);
-        return new BasketViewHolder(view);
+        return new BasketViewHolder(view, cartClickListener);
     }
 
     // 여기가 실제로 값을 뷰에 적용시키는 단계
@@ -61,7 +65,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.BasketView
     }
 
     // findViewById 쓰는 곳
-    public class BasketViewHolder extends RecyclerView.ViewHolder {
+    public static class BasketViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         //        protected ImageView imgUrl;
         protected TextView name;
         protected TextView categoryName;
@@ -73,8 +77,12 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.BasketView
         protected Button plus;
         protected Button minus;
 
-        public BasketViewHolder(@NonNull View itemView) {
+        protected WeakReference<CartClickListener> listenerWeakReference;
+
+        public BasketViewHolder(@NonNull View itemView, CartClickListener cartClickListener) {
             super(itemView);
+
+            this.listenerWeakReference = new WeakReference<>(cartClickListener);
 
 //            this.imgUrl = (ImageView) itemView.findViewById(R.id.basket_item_imageview);
             this.name = (TextView) itemView.findViewById(R.id.basket_item_name_textview);
@@ -87,9 +95,30 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.BasketView
             this.plus = (Button) itemView.findViewById(R.id.basket_item_plus_button);
             this.minus = (Button) itemView.findViewById(R.id.basket_item_minus_button);
 
-            this.plus.setOnClickListener(view -> Log.d("MyBasketAdapter", "상품 개수가 1개 추가되었습니다"));
-            this.minus.setOnClickListener(view -> Log.d("MyBasketAdapter", "상품 개수가 1개 감소하였습니다"));
-            this.delete.setOnClickListener(view -> Log.d("MyBasketAdapter", "해당 상품이 제외되었습니다"));
+            this.itemView.setOnClickListener(this);
+            this.delete.setOnClickListener(this);
+            this.plus.setOnClickListener(this);
+            this.minus.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            String value;
+
+            if(view.getId() == this.delete.getId()) {
+                value = "delete";
+//                Log.d("MyBasketAdapter", "해당 상품이 제외되었습니다");
+            } else if(view.getId() == this.plus.getId()) {
+                value = "plus";
+//                Log.d("MyBasketAdapter", "상품 개수가 1개 추가되었습니다");
+            } else if(view.getId() == this.minus.getId()) {
+                value = "minus";
+//                Log.d("MyBasketAdapter", "상품 개수가 1개 감소하였습니다");
+            } else {
+                value = "item";
+            }
+
+            listenerWeakReference.get().onPositionClicked(getAdapterPosition(), value);
         }
     }
 }

@@ -38,6 +38,7 @@ import com.example.android.Utils.Camera.CameraSource;
 import com.example.android.Utils.Camera.CameraSourcePreview;
 import com.example.android.Utils.Camera.GraphicOverlay;
 import com.example.android.Utils.Preference.PreferenceManager;
+import com.example.android.Utils.RecyclerView.CartClickListener;
 import com.example.android.Utils.RecyclerView.MyCartAdapter;
 import com.example.android.Utils.RecyclerView.RecyclerViewMethod;
 import com.google.android.gms.common.ConnectionResult;
@@ -119,7 +120,12 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        myCartAdapter = new MyCartAdapter(getApplicationContext(), cartItemList);
+        myCartAdapter = new MyCartAdapter(getApplicationContext(), cartItemList, new CartClickListener() {
+            @Override
+            public void onPositionClicked(int position, String value) {
+                Log.d("MyBasketAdapter", value);
+            }
+        });
         recyclerView.setAdapter(myCartAdapter);
 
         // Check for the camera permission before accessing the camera.  If the
