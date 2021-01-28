@@ -38,7 +38,7 @@ import com.example.android.Utils.Camera.CameraSource;
 import com.example.android.Utils.Camera.CameraSourcePreview;
 import com.example.android.Utils.Camera.GraphicOverlay;
 import com.example.android.Utils.Preference.PreferenceManager;
-import com.example.android.Utils.RecyclerView.MyBasketAdapter;
+import com.example.android.Utils.RecyclerView.MyCartAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -52,7 +52,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -92,7 +91,7 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
     // android component
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private RecyclerView recyclerView;
-    private MyBasketAdapter myBasketAdapter;
+    private MyCartAdapter myCartAdapter;
 
     private Services retrofitAPI2;
     /**
@@ -118,8 +117,8 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        myBasketAdapter = new MyBasketAdapter(getApplicationContext(), cartItemList);
-        recyclerView.setAdapter(myBasketAdapter);
+        myCartAdapter = new MyCartAdapter(getApplicationContext(), cartItemList);
+        recyclerView.setAdapter(myCartAdapter);
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -152,7 +151,7 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
                     case 201:
                         Toast.makeText(getApplicationContext(), "정상적으로 장바구니에 상품이 추가되었습니다.", Toast.LENGTH_SHORT).show();
                         showCartList();
-                        myBasketAdapter.notifyDataSetChanged();
+                        myCartAdapter.notifyDataSetChanged();
                         break;
                     case 400:
                         Toast.makeText(getApplicationContext(), "유효한 입력이 아닙니다. 혹은 재고 부족으로 인해 상품을 담을 수 없습니다.", Toast.LENGTH_SHORT).show();
@@ -191,7 +190,7 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
                         Toast.makeText(getApplicationContext(), "장바구니 리스트업 성공", Toast.LENGTH_SHORT).show();
                         cartItemList.clear();
                         cartItemList.addAll(response.body());
-                        myBasketAdapter.notifyDataSetChanged();
+                        myCartAdapter.notifyDataSetChanged();
                         break;
                     case 401:
                         Toast.makeText(getApplicationContext(), "토큰 만료", Toast.LENGTH_SHORT).show();

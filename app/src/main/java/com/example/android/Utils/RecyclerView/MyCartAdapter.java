@@ -7,25 +7,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.android.DTOS.CartItemDTO;
 import com.example.android.R;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class MyBasketAdapter extends RecyclerView.Adapter<MyBasketAdapter.BasketViewHolder> {
+public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.BasketViewHolder> {
     private final Context mContext;
     private final List<CartItemDTO> cartItemList;
     private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-    public MyBasketAdapter(Context mContext, List<CartItemDTO> cartItemList) {
+    public MyCartAdapter(Context mContext, List<CartItemDTO> cartItemList) {
         this.mContext = mContext;
         this.cartItemList = cartItemList;
     }
