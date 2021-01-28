@@ -1,5 +1,7 @@
 package com.example.android.Services;
 
+import com.example.android.DTOS.AccessTokenDTO;
+import com.example.android.DTOS.CartItemDTO;
 import com.example.android.DTOS.ChangePasswordDTO;
 import com.example.android.DTOS.FindingEmailDTO;
 import com.example.android.DTOS.FindingPasswordDTO;
@@ -8,18 +10,23 @@ import com.example.android.DTOS.SignupDTO;
 import com.example.android.DTOS.SignupMessageDTO;
 import com.example.android.DTOS.UserInfoDTO;
 
+import java.util.HashMap;
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Services {
 
     @POST("users/signin")
-    Call<UserInfoDTO> requestSignin(@Body UserInfoDTO userInfo);
+    Call<AccessTokenDTO> requestSignin(@Body UserInfoDTO userInfo);
 
 
     @GET("users/signup")
@@ -48,4 +55,11 @@ public interface Services {
 
     @POST("users/change/password")
     Call<ChangePasswordDTO> requestchange(@Body ChangePasswordDTO changePasswordDTO);
+
+
+    @GET("carts/list")
+    Call<List<CartItemDTO>> getCartList();
+
+    @POST("carts")
+    Call<ResponseBody> setCartItem(@Body HashMap<String, Integer> map);
 }

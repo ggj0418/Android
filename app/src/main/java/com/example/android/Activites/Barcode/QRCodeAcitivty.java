@@ -27,14 +27,17 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.android.DTOS.CartItemDTO;
 import com.example.android.R;
+import com.example.android.Retrofit.RetrofitClient;
+import com.example.android.Services.Services;
 import com.example.android.Utils.Barcode.BarcodeGraphic;
 import com.example.android.Utils.Barcode.BarcodeGraphicTracker;
 import com.example.android.Utils.Barcode.BarcodeTrackerFactory;
 import com.example.android.Utils.Camera.CameraSource;
 import com.example.android.Utils.Camera.CameraSourcePreview;
 import com.example.android.Utils.Camera.GraphicOverlay;
-import com.example.android.Utils.RecyclerView.BasketItem;
+import com.example.android.Utils.Preference.PreferenceManager;
 import com.example.android.Utils.RecyclerView.MyBasketAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -47,12 +50,22 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicTracker.BarcodeUpdateListener {
-    private List<BasketItem> basketItemList = new ArrayList<>();
+    private List<CartItemDTO> cartItemList = new ArrayList<>();
 
     private static final String TAG = "Barcode-reader";
+
+    private long backKeyPressedTime = 0;
 
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
@@ -80,6 +93,8 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private RecyclerView recyclerView;
     private MyBasketAdapter myBasketAdapter;
+
+    private Services retrofitAPI2;
     /**
      * Initializes the UI and creates the detector pipeline.
      */
@@ -89,6 +104,8 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
 //        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);     // 타이틀바 제거
         setContentView(R.layout.activity_qr_activity);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);     // 상태바 제거
+
+        retrofitAPI2 = RetrofitClient.getRetrofit(PreferenceManager.getString(getApplicationContext(), "accessToken")).create(Services.class);
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -101,12 +118,8 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        myBasketAdapter = new MyBasketAdapter(getApplicationContext(), basketItemList);
+        myBasketAdapter = new MyBasketAdapter(getApplicationContext(), cartItemList);
         recyclerView.setAdapter(myBasketAdapter);
-
-        // read parameters from the intent used to launch the activity.
-//        boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
-//        boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -119,6 +132,88 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
 
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
+
+        showCartList();
+    }
+
+    private void setCartItem(int productCode) {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("productCode", productCode);
+
+        Call<ResponseBody> setCartItemCall = retrofitAPI2.setCartItem(map);
+        setCartItemCall.enqueue(new Callback<ResponseBody>() {
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                switch (response.code()) {
+                    case 200:
+                        Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 201:
+                        Toast.makeText(getApplicationContext(), "정상적으로 장바구니에 상품이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                        showCartList();
+                        myBasketAdapter.notifyDataSetChanged();
+                        break;
+                    case 400:
+                        Toast.makeText(getApplicationContext(), "유효한 입력이 아닙니다. 혹은 재고 부족으로 인해 상품을 담을 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 401:
+                        Toast.makeText(getApplicationContext(), "토큰 만료", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 403:
+                        Toast.makeText(getApplicationContext(), "유저만 접근 가능", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 404:
+                        Toast.makeText(getApplicationContext(), "해당 제품이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(getApplicationContext(), "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "통신 에러입니다", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showCartList() {
+        Call<List<CartItemDTO>> getCartListCall = retrofitAPI2.getCartList();
+        getCartListCall.enqueue(new Callback<List<CartItemDTO>>() {
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<List<CartItemDTO>> call, Response<List<CartItemDTO>> response) {
+                switch (response.code()) {
+                    case 200:
+                        Toast.makeText(getApplicationContext(), "장바구니 리스트업 성공", Toast.LENGTH_SHORT).show();
+                        cartItemList.clear();
+                        cartItemList.addAll(response.body());
+                        myBasketAdapter.notifyDataSetChanged();
+                        break;
+                    case 401:
+                        Toast.makeText(getApplicationContext(), "토큰 만료", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 403:
+                        Toast.makeText(getApplicationContext(), "유저만 접근 가능", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 404:
+                        Toast.makeText(getApplicationContext(), "해당 유저의 장바구니가 존재하지 않습니다", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(getApplicationContext(), "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<List<CartItemDTO>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "통신 에러입니다", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -446,12 +541,24 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
             public void run() {
                 vibrator.vibrate(100);
                 mPreview.stop();
+                setCartItem(11111);
                 Toast.makeText(getApplicationContext(), barcode.displayValue, Toast.LENGTH_LONG).show();
                 startCameraSource();
             }
         });
         //do something with barcode data returned
         // TODO 바코드가 캡처되면 여기에서 바코드 코드로 서버에서 상품 정보를 얻어온 다음 ,recyclerview에 뿌려주기
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+//            return;
+        } else {
+            this.finishAffinity();
+        }
     }
 }
 

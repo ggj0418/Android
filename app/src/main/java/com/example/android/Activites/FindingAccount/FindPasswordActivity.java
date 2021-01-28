@@ -1,5 +1,6 @@
 package com.example.android.Activites.FindingAccount;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.example.android.DTOS.SignupMessageDTO;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
+import com.example.android.Utils.Preference.PreferenceManager;
 
 import java.io.IOException;
 
@@ -30,6 +32,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class FindPasswordActivity extends AppCompatActivity {
     private static final int MILLISINFUTURE = 181 * 1000;
@@ -177,6 +180,7 @@ public class FindPasswordActivity extends AppCompatActivity {
 
 
         button2.setOnClickListener(new View.OnClickListener() {
+            @EverythingIsNonNull
             @Override
             public void onClick(View view) {
                 String edit1 = editText1.getText().toString();
@@ -192,10 +196,11 @@ public class FindPasswordActivity extends AppCompatActivity {
                                 Toast.makeText(FindPasswordActivity.this, "새 비밀번호 발급 후 전송 완료", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(FindPasswordActivity.this, GetPasswrodActivity.class);
                                 isSemiPassword = true;
-                                SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
-                                SharedPreferences.Editor edit = pref.edit();
-                                edit.putBoolean("semipassword", isSemiPassword);
-                                edit.apply();
+                                PreferenceManager.setBoolean(getApplicationContext(), "semipassword", isSemiPassword);
+//                                SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
+//                                SharedPreferences.Editor edit = pref.edit();
+//                                edit.putBoolean("semipassword", isSemiPassword);
+//                                edit.apply();
                                 intent.putExtra("name3", edit1);
                                 startActivity(intent);
                                 break;
@@ -226,6 +231,7 @@ public class FindPasswordActivity extends AppCompatActivity {
 
     public void countDownTimer() {
         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
+            @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
                 long emailAuthCount = millisUntilFinished / 1000;
                 if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) {//초가 10보다 크면 그냥 출력
@@ -236,7 +242,7 @@ public class FindPasswordActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                text1.setText(String.valueOf(""));
+                text1.setText("");
                 button2.setEnabled(false);
                 button2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
                 button2.setTextColor(getResources().getColor(R.color.TextGray));
@@ -250,6 +256,7 @@ public class FindPasswordActivity extends AppCompatActivity {
         try {
             countDownTimer.cancel();
         } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
         }
         countDownTimer = null;
     }

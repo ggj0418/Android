@@ -2,6 +2,8 @@ package com.example.android.DTOS;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
 public class UserInfoDTO {
     @SerializedName("email")
     private String email;
@@ -33,10 +35,10 @@ public class UserInfoDTO {
         this.password = password;
     }
 
+    @NotNull
     @Override
     public String toString()
     {
-        return "ClassPojo [name = "+email+", pass = "+password+"]";
+        return "ClassPojo [name = " + email + ", pass = " + password + "]";
     }
-
 }

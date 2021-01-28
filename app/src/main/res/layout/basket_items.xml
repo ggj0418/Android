@@ -13,6 +13,7 @@
 
         <ImageView
             android:layout_gravity="center"
+            android:background="@drawable/naver_logo"
             android:id="@+id/basket_item_imageview"
             android:layout_width="58sp"
             android:layout_height="58sp"/>

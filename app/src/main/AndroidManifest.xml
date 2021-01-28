@@ -33,8 +33,9 @@
         <activity
             android:name=".Dialog.CustomNotiActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Dialog">
-        </activity>
+            android:theme="@android:style/Theme.Dialog"/>
+
+        <activity android:name=".Activites.Barcode.QRCodeAcitivty"/>
 
         <activity android:name=".Activites.FindingAccount.GetPasswrodActivity" />
         <activity android:name=".Activites.FindingAccount.FindPasswordActivity" />
@@ -48,6 +49,7 @@
 
         <activity
             android:name=".Activites.SplashActivity"
+            android:theme="@style/SplashTheme"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

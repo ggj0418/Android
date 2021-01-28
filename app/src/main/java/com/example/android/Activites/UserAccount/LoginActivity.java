@@ -42,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         textView3 = findViewById(R.id.login_find_pw);
         button.setEnabled(false);
 
-        SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
-        boolean str = pref.getBoolean("semipassword", false);
+//        SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
+//        boolean str = pref.getBoolean("semipassword", false);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
