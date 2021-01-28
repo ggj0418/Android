@@ -57,6 +57,10 @@ public interface Services {
     Call<ChangePasswordDTO> requestchange(@Body ChangePasswordDTO changePasswordDTO);
 
 
+    @POST("test/token")
+    Call<ResponseBody> verifyToken();
+
+
     @GET("carts/list")
     Call<List<CartItemDTO>> getCartList();
 
