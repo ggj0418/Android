@@ -82,7 +82,6 @@ public class RecyclerViewMethod {
                     case 201:
                         Toast.makeText(mContext, "정상적으로 장바구니에 상품이 추가되었습니다.", Toast.LENGTH_SHORT).show();
                         showCartList();
-                        myCartAdapter.notifyDataSetChanged();
                         break;
                     case 400:
                         Toast.makeText(mContext, "유효한 입력이 아닙니다. 혹은 재고 부족으로 인해 상품을 담을 수 없습니다.", Toast.LENGTH_SHORT).show();
