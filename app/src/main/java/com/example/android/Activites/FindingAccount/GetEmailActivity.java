@@ -27,6 +27,7 @@ public class GetEmailActivity extends AppCompatActivity {
         onBtnEvent();
     }
 
+    @SuppressLint("SetTextI18n")
     private void  setting(){
         binding.getEmailButton.setBackgroundColor(getResources().getColor(R.color.colorYellow));
         binding.getEmailButton.setTextColor(getResources().getColor(R.color.colorBlack));

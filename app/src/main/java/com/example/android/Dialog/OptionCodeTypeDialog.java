@@ -47,8 +47,8 @@ public class OptionCodeTypeDialog extends Dialog {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String Signup_pw = edit1.getText().toString();
                 String regex = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&]).{8,15}.$";
-                Boolean c = Signup_pw.matches(regex);
-                if(c==true){
+                boolean c = Signup_pw.matches(regex);
+                if(c){
                     textView1.setText("올바른 형식입니다.");
                     textView1.setTextColor(context.getResources().getColor(R.color.TextGray));
 
@@ -61,7 +61,7 @@ public class OptionCodeTypeDialog extends Dialog {
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
                             String Signup_pw1 = edit1.getText().toString();
                             String Signup_pw2 = edit2.getText().toString();
-                            if(Signup_pw2.equals(Signup_pw1)&&Signup_pw2!=null){
+                            if(Signup_pw2.equals(Signup_pw1)){
                                 textView2.setText("비밀번호가 일치합니다");
                                 textView2.setTextColor(context.getResources().getColor(R.color.TextGray));
                                 positivebutton.setEnabled(true);
@@ -76,11 +76,11 @@ public class OptionCodeTypeDialog extends Dialog {
                                 positivebutton.setBackgroundColor(context.getResources().getColor(R.color.colorWhite));
                                 positivebutton.setTextColor(context.getResources().getColor(R.color.TextColor1));
                             }
-                            if(Signup_pw2.equals("")||Signup_pw2 == null){
+                            if(Signup_pw2.equals("")){
                                 textView2.setText("");
                                 positivebutton.setEnabled(false);
                             }
-                            if(Signup_pw1.equals("")||Signup_pw1 == null){
+                            if(Signup_pw1.equals("")){
                                 textView2.setText("");
                                 positivebutton.setEnabled(false);
                             }
@@ -92,11 +92,11 @@ public class OptionCodeTypeDialog extends Dialog {
                         }
                     });
                 }
-                else if(c==false){
+                else if(!c){
                     textView1.setText("올바르지 않은 형식입니다.");
                     textView1.setTextColor(context.getResources().getColor(R.color.colormiss));
                 }
-                if (Signup_pw.equals("")||Signup_pw == null){
+                if (Signup_pw.equals("")){
                     textView1.setText("");
                 }
             }

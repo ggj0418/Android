@@ -22,16 +22,19 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        settings();
         onBtnEvent();
         textEvent();
+
+    }
+    private void settings(){
         binding.signupButton1.setEnabled(false);
         binding.signupPw2.setEnabled(false);
     }
 
     private String firstGetIntent() {
         Intent intent = getIntent();
-        String email = intent.getExtras().getString("email1");
-        return email;
+        return intent.getExtras().getString("email1");
     }
 
     void onBtnEvent() {
@@ -52,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String Signup_pw = binding.signupPw1.getText().toString();
             String regex = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&]).{8,15}.$";
-            Boolean c = Signup_pw.matches(regex);
+            boolean c = Signup_pw.matches(regex);
             if (c) {
                 binding.signupText1.setText("올바른 형식입니다.");
                 binding.signupText1.setTextColor(getResources().getColor(R.color.TextGray));
@@ -82,11 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
             if (isCheck) {
                 String Signup_pw1 = binding.signupPw1.getText().toString();
                 String Signup_pw2 = binding.signupPw2.getText().toString();
-                if (Signup_pw2.equals(Signup_pw1)) {
-                    changeText(true);
-                } else {
-                    changeText(false);
-                }
+                changeText(Signup_pw2.equals(Signup_pw1));
                 if (Signup_pw2.equals("")) {
                     binding.signupText2.setText("");
                     binding.signupButton1.setEnabled(false);
@@ -103,13 +102,13 @@ public class SignUpActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {}};
 
     void changeText(Boolean check) {
-        if (check==true){
+        if (check){
             binding.signupText2.setText("비밀번호가 일치합니다");
             binding.signupText2.setTextColor(getResources().getColor(R.color.TextGray));
             binding.signupButton1.setEnabled(true);
             binding.signupButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
             binding.signupButton1.setTextColor(getResources().getColor(R.color.colorBlack));
-        } else if(check==false){
+        } else {
             binding.signupText2.setText("비밀번호가 일치하지 않습니다.");
             binding.signupText2.setTextColor(getResources().getColor(R.color.colormiss));
             binding.signupButton1.setEnabled(false);

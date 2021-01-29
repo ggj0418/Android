@@ -24,6 +24,8 @@ import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
 import com.example.android.databinding.ActivityFindEmailBinding;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
@@ -97,7 +99,7 @@ public class FindEmailActivity extends AppCompatActivity {
                     Call<ResponseBody> loginCall = retrofitAPI.requestfindemail(userInfo);
                     loginCall.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
                             switch (response.code()) {
                                 case 200:
                                     Toast.makeText(FindEmailActivity.this, "OK", Toast.LENGTH_SHORT).show();
@@ -124,7 +126,7 @@ public class FindEmailActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
                             Log.e("##########", "Fail", t);
                         }
                     });

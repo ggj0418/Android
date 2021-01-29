@@ -25,6 +25,8 @@ import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
 import com.example.android.databinding.ActivityPhoneauthBinding;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
@@ -59,7 +61,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
         binding.confirmName.addTextChangedListener(textWatcher03);
     }
 
-    private TextWatcher textWatcher01 = new TextWatcher() {
+    private final TextWatcher textWatcher01 = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -85,7 +87,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
         }
     };
 
-    private TextWatcher textWatcher02 = new TextWatcher() {
+    private final TextWatcher textWatcher02 = new TextWatcher() {
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -117,7 +119,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
         }
     };
 
-    private TextWatcher textWatcher03 = new TextWatcher() {
+    private final TextWatcher textWatcher03 = new TextWatcher() {
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -157,7 +159,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
         binding.confirmImage.setOnClickListener(onClickListener);
     }
 
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
+    private final View.OnClickListener onClickListener = new View.OnClickListener() {
         @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View v) {
@@ -173,13 +175,14 @@ public class PhoneAuthActivity extends AppCompatActivity {
                     Call<ResponseBody> valid_phone = retrofitAPI2.requestphone(signupMessageDTO);
                     valid_phone.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
                             switch (response.code()) {
                                 case 200:
                                     Toast.makeText(PhoneAuthActivity.this, "Message sent.", Toast.LENGTH_SHORT).show();
                                     countDownTimer();
                                     countDownTimer.start();
                                     try {
+                                        assert response.body() != null;
                                         confirm_number1 = response.body().string();
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -201,7 +204,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
 
                         }
                     });
@@ -219,7 +222,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
 
                     signupCall.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
                             switch (response.code()) {
                                 case 200:
                                     Toast.makeText(PhoneAuthActivity.this, "OK", Toast.LENGTH_SHORT).show();
@@ -238,7 +241,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
                             Log.e("##########", "Fail", t);
                         }
                     });
@@ -254,6 +257,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
 
     public void countDownTimer() {
         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
+            @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
                 long emailAuthCount = millisUntilFinished / 1000;
                 if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) {//초가 10보다 크면 그냥 출력
@@ -278,7 +282,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
         super.onDestroy();
         try {
             countDownTimer.cancel();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         countDownTimer = null;
     }

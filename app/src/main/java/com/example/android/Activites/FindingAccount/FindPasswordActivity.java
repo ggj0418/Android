@@ -27,6 +27,8 @@ import com.example.android.Services.Services;
 import com.example.android.Utils.Preference.PreferenceManager;
 import com.example.android.databinding.ActivityFindPwBinding;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
@@ -55,11 +57,12 @@ public class FindPasswordActivity extends AppCompatActivity {
     }
 
 
-    private void settings(){
+    private void settings() {
         binding.findPwButton1.setEnabled(false);
         binding.findPwNumber.setVisibility(View.INVISIBLE);
         binding.findPwTextview1.setVisibility(View.INVISIBLE);
     }
+
     private void textEvent() {
         binding.findPwName.addTextChangedListener(textWatcher01);
         binding.findPwPhonenumber.addTextChangedListener(textWatcher02);
@@ -81,8 +84,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                 binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
                 binding.findPwButton1.setTextColor(getResources().getColor(R.color.TextGray));
 
-            }
-            else {
+            } else {
                 binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
                 binding.findPwButton1.setTextColor(getResources().getColor(R.color.colorBlack));
                 binding.findPwButton1.setEnabled(true);
@@ -108,8 +110,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                 binding.findPwButton1.setEnabled(false);
                 binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
                 binding.findPwButton1.setTextColor(getResources().getColor(R.color.TextGray));
-            }
-            else {
+            } else {
                 binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
                 binding.findPwButton1.setTextColor(getResources().getColor(R.color.colorBlack));
                 binding.findPwButton1.setEnabled(true);
@@ -154,7 +155,7 @@ public class FindPasswordActivity extends AppCompatActivity {
     }
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
-
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -169,7 +170,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                     Call<ResponseBody> valid_phone = retrofitAPI2.requestfindpassword(findingPasswordDTO);
                     valid_phone.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
                             switch (response.code()) {
                                 case 200:
                                     Toast.makeText(FindPasswordActivity.this, "전송된 인증번호 반환", Toast.LENGTH_SHORT).show();
@@ -191,7 +192,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
                         }
                     });
                     break;
@@ -203,7 +204,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                     Call<ResponseBody> loginCall = retrofitAPI.requestnewpassword(userInfo);
                     loginCall.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
                             switch (response.code()) {
                                 case 200:
                                     Toast.makeText(FindPasswordActivity.this, "새 비밀번호 발급 후 전송 완료", Toast.LENGTH_LONG).show();
@@ -233,7 +234,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
                             Log.e("##########", "Fail", t);
                         }
                     });

@@ -29,6 +29,7 @@ public class GetPasswrodActivity extends AppCompatActivity {
         onBtnEvent();
     }
 
+    @SuppressLint("SetTextI18n")
     private void setting(){
         binding.getPwButton.setBackgroundColor(getResources().getColor(R.color.colorYellow));
         binding.getPwButton.setTextColor(getResources().getColor(R.color.colorBlack));
@@ -36,10 +37,12 @@ public class GetPasswrodActivity extends AppCompatActivity {
         String name = intent.getExtras().getString("name3");
         binding.getPwText1.setText(name + "님의 핸드폰으로 임시 비밀번호를 발송했습니다.");
     }
+
     private void onBtnEvent() {
         binding.getPwButton.setOnClickListener(onClickListener);
         binding.getPwBack.setOnClickListener(onClickListener);
     }
+
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
 
         @SuppressLint("NonConstantResourceId")
