@@ -108,4 +108,118 @@ public class RecyclerViewMethod {
             }
         });
     }
+
+    public void deleteCartItem(int productNo) {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("productNo", productNo);
+
+        Call<ResponseBody> setCartItemCall = retrofitAPI2.setCartItem(map);
+        setCartItemCall.enqueue(new Callback<ResponseBody>() {
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                switch (response.code()) {
+                    case 200:
+                        Toast.makeText(mContext, "OK", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 204:
+                        Toast.makeText(mContext, "정상적으로 장바구니의 상품이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                        showCartList();
+                        break;
+                    case 401:
+                        Toast.makeText(mContext, "토큰 만료", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 403:
+                        Toast.makeText(mContext, "유저만 접근 가능", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 404:
+                        Toast.makeText(mContext, "해당 제품이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(mContext, "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(mContext, "통신 에러입니다", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void addCartItemCount(int productNo) {
+        Call<ResponseBody> addCartItemCountCall = retrofitAPI2.addCartItemCount(productNo);
+        addCartItemCountCall.enqueue(new Callback<ResponseBody>() {
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                switch (response.code()) {
+                    case 200:
+                        Toast.makeText(mContext, "OK", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 201:
+                        Toast.makeText(mContext, "정상적으로 장바구니의 상품 개수가 증가되었습니다.", Toast.LENGTH_SHORT).show();
+                        showCartList();
+                        break;
+                    case 401:
+                        Toast.makeText(mContext, "토큰 만료", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 403:
+                        Toast.makeText(mContext, "유저만 접근 가능", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 404:
+                        Toast.makeText(mContext, "해당 제품이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(mContext, "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(mContext, "통신 에러입니다", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void subCartItemCount(int productNo) {
+        Call<ResponseBody> subCartItemCountCall = retrofitAPI2.subCartItemCount(productNo);
+        subCartItemCountCall.enqueue(new Callback<ResponseBody>() {
+            @EverythingIsNonNull
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                switch (response.code()) {
+                    case 200:
+                        Toast.makeText(mContext, "OK", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 201:
+                        Toast.makeText(mContext, "정상적으로 장바구니의 상품 개수가 감소되었습니다.", Toast.LENGTH_SHORT).show();
+                        showCartList();
+                        break;
+                    case 401:
+                        Toast.makeText(mContext, "토큰 만료", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 403:
+                        Toast.makeText(mContext, "유저만 접근 가능", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 404:
+                        Toast.makeText(mContext, "해당 제품이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(mContext, "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(mContext, "통신 에러입니다", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
