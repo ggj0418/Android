@@ -1,0 +1,981 @@
+Index: app/src/main/java/com/example/android/Activites/UserAccount/InputPasswordActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.android.Activites.UserAccount;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.graphics.Point;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.Display;\r\nimport android.view.View;\r\nimport android.view.Window;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.android.DTOS.ChangePasswordDTO;\r\nimport com.example.android.DTOS.NewPasswordDTO;\r\nimport com.example.android.DTOS.UserInfoDTO;\r\n\r\nimport com.example.android.Dialog.CustomDialogClickListener;\r\nimport com.example.android.Dialog.OptionCodeTypeDialog;\r\nimport com.example.android.R;\r\nimport com.example.android.Retrofit.RetrofitClient;\r\nimport com.example.android.Services.Services;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\n\r\npublic class InputPasswordActivity extends AppCompatActivity {\r\n    Button button1;\r\n    EditText editText;\r\n    ImageView imageview;\r\n    TextView textView;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_input_pw);\r\n\r\n        editText = findViewById(R.id.login_pw);\r\n        button1 = findViewById(R.id.login_button2);\r\n        imageview = findViewById(R.id.input_pw_back);\r\n        textView = findViewById(R.id.login_text5);\r\n        button1.setBackgroundColor(getResources().getColor(R.color.colorYellow));\r\n        button1.setTextColor(getResources().getColor(R.color.colorBlack));\r\n\r\n        SharedPreferences pref = getSharedPreferences(\"key\", MODE_PRIVATE);\r\n        Boolean str = pref.getBoolean(\"semipassword\", false);\r\n        Log.d(\"*********\", str.toString());\r\n\r\n        button1.setOnClickListener(new View.OnClickListener() {\r\n            public void onClick(View v) {\r\n                String textpw = editText.getText().toString();\r\n                Intent intent = getIntent();\r\n                String email = intent.getExtras().getString(\"email1\");\r\n                Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);\r\n                UserInfoDTO userInfo = new UserInfoDTO(email, textpw);\r\n                Call<UserInfoDTO> signinCall = retrofitAPI2.requestSignin(userInfo);\r\n                signinCall.enqueue(new Callback<UserInfoDTO>() {\r\n                    @Override\r\n                    public void onResponse(Call<UserInfoDTO> call, Response<UserInfoDTO> response) {\r\n                        switch (response.code()) {\r\n                            case 200:\r\n                                Toast.makeText(InputPasswordActivity.this, \"정상적으로 로그인 되었습니다.\", Toast.LENGTH_SHORT).show();\r\n                                Intent intent = new Intent(InputPasswordActivity.this, InputPasswordActivity.class);\r\n                                startActivity(intent);\r\n                                finish();\r\n                                break;\r\n\r\n                            case 400:\r\n                                Toast.makeText(InputPasswordActivity.this, \"유효한 입력값이 아닙니다..\", Toast.LENGTH_LONG).show();\r\n                                break;\r\n\r\n                            case 401:\r\n                                Toast.makeText(InputPasswordActivity.this, \"아이디 또는 비밀번호가 일치하지 않습니다.\", Toast.LENGTH_LONG).show();\r\n                                break;\r\n\r\n                            case 428:\r\n                                Toast.makeText(InputPasswordActivity.this, \"비밀번호를 변경해야 합니다.\", Toast.LENGTH_SHORT).show();\r\n\r\n                                OptionCodeTypeDialog octDialog = new OptionCodeTypeDialog(InputPasswordActivity.this, new CustomDialogClickListener() {\r\n                                    @Override\r\n                                    public void onPositiveClick(String pw1, String pw2) {\r\n                                        Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);\r\n                                        ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO(pw1);\r\n                                        Call<ChangePasswordDTO> newpassCall = retrofitAPI2.requestchange(changePasswordDTO);\r\n\r\n                                        newpassCall.enqueue(new Callback<ChangePasswordDTO>() {\r\n                                            @Override\r\n                                            public void onResponse(Call<ChangePasswordDTO> call, Response<ChangePasswordDTO> response) {\r\n                                                switch (response.code()) {\r\n                                                    case 200:\r\n                                                        Toast.makeText(InputPasswordActivity.this, \"OK\", Toast.LENGTH_SHORT).show();\r\n                                                        Intent intent = new Intent(InputPasswordActivity.this, LoginActivity.class);\r\n                                                        startActivity(intent);\r\n                                                        finish();\r\n                                                        break;\r\n\r\n                                                    case 201:\r\n                                                        Toast.makeText(InputPasswordActivity.this, \"정상적으로 비밀번호를 변경, 새로운 토큰을 발급\", Toast.LENGTH_LONG).show();\r\n                                                        Intent intent2 = new Intent(InputPasswordActivity.this, LoginActivity.class);\r\n                                                        startActivity(intent2);\r\n                                                        break;\r\n\r\n                                                    case 400:\r\n                                                        Toast.makeText(InputPasswordActivity.this, \"유효한 입력값이 아닙니다.\", Toast.LENGTH_LONG).show();\r\n                                                        break;\r\n\r\n                                                    case 401:\r\n                                                        Toast.makeText(InputPasswordActivity.this, \"토큰 만료로 인해 비밀번호 변경 불가 -> 새로운 토큰 발급\", Toast.LENGTH_LONG).show();\r\n                                                        break;\r\n\r\n                                                    case 403:\r\n                                                        Toast.makeText(InputPasswordActivity.this, \"유저만 접근 가능\", Toast.LENGTH_LONG).show();\r\n                                                        break;\r\n                                                }\r\n                                            }\r\n                                            @Override\r\n                                            public void onFailure(Call<ChangePasswordDTO> call, Throwable t) {\r\n                                                Log.e(\"##########\", \"Fail\", t);\r\n                                            }\r\n                                        });\r\n                                    }\r\n                                    @Override\r\n                                    public void onNegativeClick() {\r\n                                        Intent intent = new Intent(InputPasswordActivity.this, LoginActivity.class);\r\n                                        startActivity(intent);\r\n                                    }\r\n                                });\r\n\r\n                                Display display = getWindowManager().getDefaultDisplay();  // in Activity\r\n                                Point size = new Point();\r\n                                display.getRealSize(size); // or getSize(size)\r\n                                int width = (int) (size.x * 0.9444f);\r\n                                int height = (int) (size.y * 0.46f);\r\n                                octDialog.setCanceledOnTouchOutside(true);\r\n                                octDialog.setCancelable(true);\r\n\r\n                                octDialog.show();\r\n                                Window window = octDialog.getWindow();\r\n                                window.setLayout(width, height);\r\n                                break;\r\n                        }\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(Call<UserInfoDTO> call, Throwable t) {\r\n                        Log.e(\"##########\", \"Fail\", t);\r\n                    }\r\n                });\r\n            }\r\n        });\r\n\r\n            imageview.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View view) {\r\n                    startActivity(new Intent(InputPasswordActivity.this, LoginActivity.class));\r\n                }\r\n            });\r\n        }\r\n    }\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/android/Activites/UserAccount/InputPasswordActivity.java	(revision 30ed851b8d1938372083c7bd38ee84586e99bc65)
++++ app/src/main/java/com/example/android/Activites/UserAccount/InputPasswordActivity.java	(date 1611902441205)
+@@ -2,6 +2,7 @@
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+ 
++import android.annotation.SuppressLint;
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+ import android.graphics.Point;
+@@ -16,6 +17,7 @@
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
++import com.example.android.Activites.Barcode.QRCodeAcitivty;
+ import com.example.android.DTOS.ChangePasswordDTO;
+ import com.example.android.DTOS.NewPasswordDTO;
+ import com.example.android.DTOS.UserInfoDTO;
+@@ -25,141 +27,158 @@
+ import com.example.android.R;
+ import com.example.android.Retrofit.RetrofitClient;
+ import com.example.android.Services.Services;
++import com.example.android.databinding.ActivityInputPwBinding;
++
++import org.jetbrains.annotations.NotNull;
++
++import java.io.IOException;
+ 
+ import retrofit2.Call;
+ import retrofit2.Callback;
+ import retrofit2.Response;
+ 
+ public class InputPasswordActivity extends AppCompatActivity {
+-    Button button1;
+-    EditText editText;
+-    ImageView imageview;
+-    TextView textView;
+-
++    private UserInfoDTO accesstoken = null;
++    private ActivityInputPwBinding binding;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_input_pw);
++        binding = ActivityInputPwBinding.inflate(getLayoutInflater());
++        View view = binding.getRoot();
++        setContentView(view);
+ 
+-        editText = findViewById(R.id.login_pw);
+-        button1 = findViewById(R.id.login_button2);
+-        imageview = findViewById(R.id.input_pw_back);
+-        textView = findViewById(R.id.login_text5);
+-        button1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+-        button1.setTextColor(getResources().getColor(R.color.colorBlack));
++        settings();
++        onBtnEvent();
+ 
++    }
++    private void settings(){
++        binding.loginButton2.setBackgroundColor(getResources().getColor(R.color.colorYellow));
++        binding.loginButton2.setTextColor(getResources().getColor(R.color.colorBlack));
+         SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
+-        Boolean str = pref.getBoolean("semipassword", false);
+-        Log.d("*********", str.toString());
++        boolean str = pref.getBoolean("semipassword", false);
++        Log.d("*********", Boolean.toString(str));
++    }
+ 
+-        button1.setOnClickListener(new View.OnClickListener() {
+-            public void onClick(View v) {
+-                String textpw = editText.getText().toString();
+-                Intent intent = getIntent();
+-                String email = intent.getExtras().getString("email1");
+-                Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
+-                UserInfoDTO userInfo = new UserInfoDTO(email, textpw);
+-                Call<UserInfoDTO> signinCall = retrofitAPI2.requestSignin(userInfo);
+-                signinCall.enqueue(new Callback<UserInfoDTO>() {
+-                    @Override
+-                    public void onResponse(Call<UserInfoDTO> call, Response<UserInfoDTO> response) {
+-                        switch (response.code()) {
+-                            case 200:
+-                                Toast.makeText(InputPasswordActivity.this, "정상적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+-                                Intent intent = new Intent(InputPasswordActivity.this, InputPasswordActivity.class);
+-                                startActivity(intent);
+-                                finish();
+-                                break;
++    private void onBtnEvent(){
++        binding.loginButton2.setOnClickListener(onClickListener);
++        binding.inputPwBack.setOnClickListener(onClickListener);
++    }
++
++    private final View.OnClickListener onClickListener = new View.OnClickListener() {
++        @SuppressLint("NonConstantResourceId")
++        @Override
++        public void onClick(View v) {
++            switch (v.getId()){
++                case R.id.login_button2:
++                    String textpw = binding.loginPw.getText().toString();
++                    Intent intent = getIntent();
++                    String email = intent.getExtras().getString("email1");
++                    Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
++                    UserInfoDTO userInfo = new UserInfoDTO(email, textpw);
++                    Call<UserInfoDTO> signinCall = retrofitAPI2.requestSignin(userInfo);
++                    signinCall.enqueue(new Callback<UserInfoDTO>() {
++                        @Override
++                        public void onResponse(@NotNull Call<UserInfoDTO> call, @NotNull Response<UserInfoDTO> response) {
++                            switch (response.code()) {
++                                case 200:
++                                    Toast.makeText(InputPasswordActivity.this, "정상적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
++                                    Intent intent = new Intent(InputPasswordActivity.this, QRCodeAcitivty.class);
++                                    startActivity(intent);
++                                    accesstoken = response.body();
++                                    assert accesstoken != null;
++                                    Log.d("accesstoken",accesstoken.toString());
++                                    finish();
++                                    break;
+ 
+-                            case 400:
+-                                Toast.makeText(InputPasswordActivity.this, "유효한 입력값이 아닙니다..", Toast.LENGTH_LONG).show();
+-                                break;
++                                case 400:
++                                    Toast.makeText(InputPasswordActivity.this, "유효한 입력값이 아닙니다..", Toast.LENGTH_LONG).show();
++                                    break;
+ 
+-                            case 401:
+-                                Toast.makeText(InputPasswordActivity.this, "아이디 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+-                                break;
++                                case 401:
++                                    Toast.makeText(InputPasswordActivity.this, "아이디 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
++                                    break;
+ 
+-                            case 428:
+-                                Toast.makeText(InputPasswordActivity.this, "비밀번호를 변경해야 합니다.", Toast.LENGTH_SHORT).show();
++                                case 428:
++                                    Toast.makeText(InputPasswordActivity.this, "비밀번호를 변경해야 합니다.", Toast.LENGTH_SHORT).show();
+ 
+-                                OptionCodeTypeDialog octDialog = new OptionCodeTypeDialog(InputPasswordActivity.this, new CustomDialogClickListener() {
+-                                    @Override
+-                                    public void onPositiveClick(String pw1, String pw2) {
+-                                        Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
+-                                        ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO(pw1);
+-                                        Call<ChangePasswordDTO> newpassCall = retrofitAPI2.requestchange(changePasswordDTO);
++                                    OptionCodeTypeDialog octDialog = new OptionCodeTypeDialog(InputPasswordActivity.this, new CustomDialogClickListener() {
++                                        @Override
++                                        public void onPositiveClick(String pw1, String pw2) {
++                                            Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
++                                            ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO(pw1);
++                                            Call<ChangePasswordDTO> newpassCall = retrofitAPI2.requestchange(changePasswordDTO);
+ 
+-                                        newpassCall.enqueue(new Callback<ChangePasswordDTO>() {
+-                                            @Override
+-                                            public void onResponse(Call<ChangePasswordDTO> call, Response<ChangePasswordDTO> response) {
+-                                                switch (response.code()) {
+-                                                    case 200:
+-                                                        Toast.makeText(InputPasswordActivity.this, "OK", Toast.LENGTH_SHORT).show();
+-                                                        Intent intent = new Intent(InputPasswordActivity.this, LoginActivity.class);
+-                                                        startActivity(intent);
+-                                                        finish();
+-                                                        break;
++                                            newpassCall.enqueue(new Callback<ChangePasswordDTO>() {
++                                                @Override
++                                                public void onResponse(@NotNull Call<ChangePasswordDTO> call, @NotNull Response<ChangePasswordDTO> response) {
++                                                    switch (response.code()) {
++                                                        case 200:
++                                                            Toast.makeText(InputPasswordActivity.this, "OK", Toast.LENGTH_SHORT).show();
++                                                            Intent intent = new Intent(InputPasswordActivity.this, LoginActivity.class);
++                                                            startActivity(intent);
++                                                            finish();
++                                                            break;
+ 
+-                                                    case 201:
+-                                                        Toast.makeText(InputPasswordActivity.this, "정상적으로 비밀번호를 변경, 새로운 토큰을 발급", Toast.LENGTH_LONG).show();
+-                                                        Intent intent2 = new Intent(InputPasswordActivity.this, LoginActivity.class);
+-                                                        startActivity(intent2);
+-                                                        break;
++                                                        case 201:
++                                                            Toast.makeText(InputPasswordActivity.this, "정상적으로 비밀번호를 변경, 새로운 토큰을 발급", Toast.LENGTH_LONG).show();
++                                                            Intent intent2 = new Intent(InputPasswordActivity.this, LoginActivity.class);
++                                                            startActivity(intent2);
++                                                            break;
+ 
+-                                                    case 400:
+-                                                        Toast.makeText(InputPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
+-                                                        break;
++                                                        case 400:
++                                                            Toast.makeText(InputPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
++                                                            break;
+ 
+-                                                    case 401:
+-                                                        Toast.makeText(InputPasswordActivity.this, "토큰 만료로 인해 비밀번호 변경 불가 -> 새로운 토큰 발급", Toast.LENGTH_LONG).show();
+-                                                        break;
++                                                        case 401:
++                                                            Toast.makeText(InputPasswordActivity.this, "토큰 만료로 인해 비밀번호 변경 불가 -> 새로운 토큰 발급", Toast.LENGTH_LONG).show();
++                                                            break;
+ 
+-                                                    case 403:
+-                                                        Toast.makeText(InputPasswordActivity.this, "유저만 접근 가능", Toast.LENGTH_LONG).show();
+-                                                        break;
+-                                                }
+-                                            }
+-                                            @Override
+-                                            public void onFailure(Call<ChangePasswordDTO> call, Throwable t) {
+-                                                Log.e("##########", "Fail", t);
+-                                            }
+-                                        });
+-                                    }
+-                                    @Override
+-                                    public void onNegativeClick() {
+-                                        Intent intent = new Intent(InputPasswordActivity.this, LoginActivity.class);
+-                                        startActivity(intent);
+-                                    }
+-                                });
++                                                        case 403:
++                                                            Toast.makeText(InputPasswordActivity.this, "유저만 접근 가능", Toast.LENGTH_LONG).show();
++                                                            break;
++                                                    }
++                                                }
++
++                                                @Override
++                                                public void onFailure(@NotNull Call<ChangePasswordDTO> call, Throwable t) {
++                                                    Log.e("##########", "Fail", t);
++                                                }
++                                            });
++                                        }
++
++                                        @Override
++                                        public void onNegativeClick() {
++                                            Intent intent = new Intent(InputPasswordActivity.this, LoginActivity.class);
++                                            startActivity(intent);
++                                        }
++                                    });
+ 
+-                                Display display = getWindowManager().getDefaultDisplay();  // in Activity
+-                                Point size = new Point();
+-                                display.getRealSize(size); // or getSize(size)
+-                                int width = (int) (size.x * 0.9444f);
+-                                int height = (int) (size.y * 0.46f);
+-                                octDialog.setCanceledOnTouchOutside(true);
+-                                octDialog.setCancelable(true);
++                                    Display display = getWindowManager().getDefaultDisplay();  // in Activity
++                                    Point size = new Point();
++                                    display.getRealSize(size); // or getSize(size)
++                                    int width = (int) (size.x * 0.9444f);
++                                    int height = (int) (size.y * 0.46f);
++                                    octDialog.setCanceledOnTouchOutside(true);
++                                    octDialog.setCancelable(true);
+ 
+-                                octDialog.show();
+-                                Window window = octDialog.getWindow();
+-                                window.setLayout(width, height);
+-                                break;
+-                        }
+-                    }
++                                    octDialog.show();
++                                    Window window = octDialog.getWindow();
++                                    window.setLayout(width, height);
++                                    break;
++                            }
++                        }
+ 
+-                    @Override
+-                    public void onFailure(Call<UserInfoDTO> call, Throwable t) {
+-                        Log.e("##########", "Fail", t);
+-                    }
+-                });
+-            }
+-        });
+-
+-            imageview.setOnClickListener(new View.OnClickListener() {
+-                @Override
+-                public void onClick(View view) {
++                        @Override
++                        public void onFailure(@NotNull Call<UserInfoDTO> call, Throwable t) {
++                            Log.e("##########", "Fail", t);
++                        }
++                    });
++                    break;
++                case R.id.input_pw_back :
+                     startActivity(new Intent(InputPasswordActivity.this, LoginActivity.class));
+-                }
+-            });
++                    break;
++
++            }
+         }
+-    }
++    };
++}
+Index: app/src/main/java/com/example/android/Activites/UserAccount/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.android.Activites.UserAccount;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.text.Editable;\r\nimport android.text.TextWatcher;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.android.Activites.FindingAccount.FindEmailActivity;\r\nimport com.example.android.Activites.FindingAccount.FindPasswordActivity;\r\nimport com.example.android.R;\r\nimport com.example.android.Retrofit.RetrofitClient;\r\nimport com.example.android.Services.Services;\r\n\r\nimport okhttp3.ResponseBody;\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\n\r\npublic class LoginActivity extends AppCompatActivity {\r\n    EditText editText;\r\n    Button button;\r\n    TextView textView, textView2, textView3;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_login2);\r\n\r\n        editText = findViewById(R.id.login_edit1);\r\n        button = findViewById(R.id.login_button1);\r\n        textView = findViewById(R.id.login_text2);\r\n        textView2 = findViewById(R.id.login_find_email);\r\n        textView3 = findViewById(R.id.login_find_pw);\r\n        button.setEnabled(false);\r\n\r\n        SharedPreferences pref = getSharedPreferences(\"key\", MODE_PRIVATE);\r\n        boolean str = pref.getBoolean(\"semipassword\", false);\r\n\r\n        editText.addTextChangedListener(new TextWatcher() {\r\n            @Override\r\n            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n            }\r\n\r\n            @Override\r\n            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n                String email = editText.getText().toString();\r\n                String regex = \"^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\\\w+\\\\.)+\\\\w+$\";\r\n                boolean b = email.matches(regex);\r\n                if (b) {\r\n                    textView.setText(\"올바른 형식입니다.\");\r\n                    textView.setTextColor(getResources().getColor(R.color.TextGray));\r\n                    button.setEnabled(true);\r\n                    button.setBackgroundColor(getResources().getColor(R.color.colorYellow));\r\n                    button.setTextColor(getResources().getColor(R.color.colorBlack));\r\n                } else {\r\n                    textView.setText(\"올바르지 않은 형식입니다.\");\r\n                    textView.setTextColor(getResources().getColor(R.color.colormiss));\r\n                    button.setEnabled(false);\r\n                    button.setBackgroundColor(getResources().getColor(R.color.colorWhite));\r\n                    button.setTextColor(getResources().getColor(R.color.TextColor1));\r\n                }\r\n                if (email.equals(\"\")) {\r\n                    textView.setText(\"\");\r\n                }\r\n            }\r\n\r\n            @Override\r\n            public void afterTextChanged(Editable editable) {\r\n            }\r\n        });\r\n\r\n        button.setOnClickListener(new View.OnClickListener() {\r\n            public void onClick(View v) {\r\n                String textemail = editText.getText().toString();\r\n                Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);\r\n                Call<ResponseBody> loginCall = retrofitAPI.requestEmail(textemail);\r\n                loginCall.enqueue(new Callback<ResponseBody>() {\r\n                    @Override\r\n                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {\r\n                        switch (response.code()) {\r\n                            case 200:\r\n                                Toast.makeText(LoginActivity.this, \"이메일이 중복되지 않습니다.\", Toast.LENGTH_SHORT).show();\r\n                                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);\r\n                                intent.putExtra(\"email1\", textemail);\r\n                                startActivity(intent);\r\n                                break;\r\n                            case 400:\r\n                                Toast.makeText(LoginActivity.this, \"유효한 입력값이 아닙니다.\", Toast.LENGTH_LONG).show();\r\n                                break;\r\n                            case 403:\r\n                                Toast.makeText(LoginActivity.this, \"동일한 이메일의 회원이 이미 존재합니다.\", Toast.LENGTH_LONG).show();\r\n                                intent = new Intent(LoginActivity.this, InputPasswordActivity.class);\r\n                                intent.putExtra(\"email1\", textemail);\r\n                                startActivity(intent);\r\n                                break;\r\n                        }\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(Call<ResponseBody> call, Throwable t) {\r\n                        Log.e(\"##########\", \"Fail\", t);\r\n                    }\r\n                });\r\n            }\r\n        });\r\n\r\n        textView2.setOnClickListener(new View.OnClickListener() {\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(LoginActivity.this, FindEmailActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n        textView3.setOnClickListener(new View.OnClickListener() {\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/android/Activites/UserAccount/LoginActivity.java	(revision 30ed851b8d1938372083c7bd38ee84586e99bc65)
++++ app/src/main/java/com/example/android/Activites/UserAccount/LoginActivity.java	(date 1611901917179)
+@@ -2,6 +2,7 @@
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+ 
++import android.annotation.SuppressLint;
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+ import android.os.Bundle;
+@@ -19,6 +20,8 @@
+ import com.example.android.R;
+ import com.example.android.Retrofit.RetrofitClient;
+ import com.example.android.Services.Services;
++import com.example.android.databinding.ActivityLogin2Binding;
++import com.example.android.databinding.ActivityMainTestBinding;
+ 
+ import okhttp3.ResponseBody;
+ import retrofit2.Call;
+@@ -26,104 +29,119 @@
+ import retrofit2.Response;
+ 
+ public class LoginActivity extends AppCompatActivity {
+-    EditText editText;
+-    Button button;
+-    TextView textView, textView2, textView3;
++    private ActivityLogin2Binding binding;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_login2);
++        binding = ActivityLogin2Binding.inflate(getLayoutInflater());
++        View view = binding.getRoot();
++        setContentView(view);
++        onBtnEvent();
++        textEvent();
++        binding.loginButton1.setEnabled(false);
++    }
+ 
+-        editText = findViewById(R.id.login_edit1);
+-        button = findViewById(R.id.login_button1);
+-        textView = findViewById(R.id.login_text2);
+-        textView2 = findViewById(R.id.login_find_email);
+-        textView3 = findViewById(R.id.login_find_pw);
+-        button.setEnabled(false);
++    private void textEvent() {binding.loginEdit1.addTextChangedListener(textWatcher01); }
+ 
+-        SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
+-        boolean str = pref.getBoolean("semipassword", false);
+-
+-        editText.addTextChangedListener(new TextWatcher() {
+-            @Override
+-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+-            }
++    private final TextWatcher textWatcher01 = new TextWatcher() {
++        @Override
++        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+ 
+-            @Override
+-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+-                String email = editText.getText().toString();
+-                String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+-                boolean b = email.matches(regex);
+-                if (b) {
+-                    textView.setText("올바른 형식입니다.");
+-                    textView.setTextColor(getResources().getColor(R.color.TextGray));
+-                    button.setEnabled(true);
+-                    button.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+-                    button.setTextColor(getResources().getColor(R.color.colorBlack));
+-                } else {
+-                    textView.setText("올바르지 않은 형식입니다.");
+-                    textView.setTextColor(getResources().getColor(R.color.colormiss));
+-                    button.setEnabled(false);
+-                    button.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+-                    button.setTextColor(getResources().getColor(R.color.TextColor1));
+-                }
+-                if (email.equals("")) {
+-                    textView.setText("");
+-                }
+-            }
++        @Override
++        public void onTextChanged(CharSequence s, int start, int before, int count) {
++            String email = binding.loginEdit1.getText().toString();
++            String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
++            boolean b = email.matches(regex);
++            if (b) {
++                changeText(b);
++            } else {
++                changeText(false);
++            }
++            if (email.equals("")) {
++                binding.loginText2.setText("");
++            }
++        }
++
++        @Override
++        public void afterTextChanged(Editable s) {
++        }
++    };
+ 
+-            @Override
+-            public void afterTextChanged(Editable editable) {
+-            }
+-        });
+-
+-        button.setOnClickListener(new View.OnClickListener() {
+-            public void onClick(View v) {
+-                String textemail = editText.getText().toString();
+-                Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
+-                Call<ResponseBody> loginCall = retrofitAPI.requestEmail(textemail);
+-                loginCall.enqueue(new Callback<ResponseBody>() {
+-                    @Override
+-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+-                        switch (response.code()) {
+-                            case 200:
+-                                Toast.makeText(LoginActivity.this, "이메일이 중복되지 않습니다.", Toast.LENGTH_SHORT).show();
+-                                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+-                                intent.putExtra("email1", textemail);
+-                                startActivity(intent);
+-                                break;
+-                            case 400:
+-                                Toast.makeText(LoginActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
+-                                break;
+-                            case 403:
+-                                Toast.makeText(LoginActivity.this, "동일한 이메일의 회원이 이미 존재합니다.", Toast.LENGTH_LONG).show();
+-                                intent = new Intent(LoginActivity.this, InputPasswordActivity.class);
+-                                intent.putExtra("email1", textemail);
+-                                startActivity(intent);
+-                                break;
+-                        }
+-                    }
++    private void changeText(Boolean check) {
++        if (check) {
++            binding.loginText2.setText("올바른 형식입니다.");
++            binding.loginText2.setTextColor(getResources().getColor(R.color.TextGray));
++            binding.loginButton1.setEnabled(check);
++            binding.loginButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
++            binding.loginButton1.setTextColor(getResources().getColor(R.color.colorBlack));
++        } else {
++            binding.loginText2.setText("올바르지 않은 형식입니다.");
++            binding.loginText2.setTextColor(getResources().getColor(R.color.colormiss));
++            binding.loginButton1.setEnabled(false);
++            binding.loginButton1.setBackgroundColor(getResources().getColor(R.color.colorWhite));
++            binding.loginButton1.setTextColor(getResources().getColor(R.color.TextColor1));
++        }
++    }
++
++    private void onBtnEvent() {
++        binding.loginButton1.setOnClickListener(onClickListener);
++        binding.loginFindEmail.setOnClickListener(onClickListener);
++        binding.loginFindPw.setOnClickListener(onClickListener);
++    }
++
++    private final View.OnClickListener onClickListener = new View.OnClickListener() {
++        @SuppressLint("NonConstantResourceId")
++        @Override
++        public void onClick(View v) {
++            switch (v.getId()) {
++                case R.id.login_find_email:
++                    Intent intent = new Intent(LoginActivity.this, FindEmailActivity.class);
++                    startActivity(intent);
++                    break;
++
++                case R.id.login_find_pw:
++                    Intent intent2 = new Intent(LoginActivity.this, FindPasswordActivity.class);
++                    startActivity(intent2);
++                    break;
++
++                case R.id.login_button1:
++                    String textemail = binding.loginEdit1.getText().toString();
++                    Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
++                    Call<ResponseBody> loginCall = retrofitAPI.requestEmail(textemail);
++                    loginCall.enqueue(new Callback<ResponseBody>() {
++                        @Override
++                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
++                            switch (response.code()) {
++                                case 200:
++                                    Toast.makeText(LoginActivity.this, "이메일이 중복되지 않습니다.", Toast.LENGTH_SHORT).show();
++                                    Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
++                                    intent.putExtra("email1", textemail);
++                                    startActivity(intent);
++                                    break;
++                                case 400:
++                                    Toast.makeText(LoginActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
++                                    break;
++                                case 403:
++                                    Toast.makeText(LoginActivity.this, "동일한 이메일의 회원이 이미 존재합니다.", Toast.LENGTH_LONG).show();
++                                    intent = new Intent(LoginActivity.this, InputPasswordActivity.class);
++                                    intent.putExtra("email1", textemail);
++                                    startActivity(intent);
++                                    break;
++                            }
++                        }
+ 
+-                    @Override
+-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+-                        Log.e("##########", "Fail", t);
+-                    }
+-                });
+-            }
+-        });
+-
+-        textView2.setOnClickListener(new View.OnClickListener() {
+-            public void onClick(View v) {
+-                Intent intent = new Intent(LoginActivity.this, FindEmailActivity.class);
+-                startActivity(intent);
++                        @Override
++                        public void onFailure(Call<ResponseBody> call, Throwable t) {
++                            Log.e("##########", "Fail", t);
++                        }
++                    });
++                    break;
++                }
+             }
+-        });
+-        textView3.setOnClickListener(new View.OnClickListener() {
+-            public void onClick(View v) {
+-                Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);
+-                startActivity(intent);
+-            }
+-        });
+-    }
++    };
+ }
++
++
++
++
+Index: app/src/main/java/com/example/android/Activites/FindingAccount/FindPasswordActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.android.Activites.FindingAccount;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.os.CountDownTimer;\r\nimport android.text.Editable;\r\nimport android.text.TextWatcher;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.example.android.Activites.UserAccount.SignUpActivity;\r\nimport com.example.android.DTOS.FindingPasswordDTO;\r\nimport com.example.android.DTOS.NewPasswordDTO;\r\nimport com.example.android.DTOS.SignupMessageDTO;\r\nimport com.example.android.R;\r\nimport com.example.android.Retrofit.RetrofitClient;\r\nimport com.example.android.Services.Services;\r\n\r\nimport java.io.IOException;\r\n\r\nimport okhttp3.ResponseBody;\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\n\r\npublic class FindPasswordActivity extends AppCompatActivity {\r\n    private static final int MILLISINFUTURE = 181 * 1000;\r\n    private static final int COUNT_DOWN_INTERVAL = 1000;\r\n    private CountDownTimer countDownTimer;\r\n    EditText editText1, editText2, editText3;\r\n    Button button1, button2;\r\n    TextView text1, text2;\r\n    ImageView imageView;\r\n    String confirm_number2 = null;\r\n    Boolean isSemiPassword = false;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_find_pw);\r\n\r\n        editText1 = findViewById(R.id.find_pw_name);\r\n        editText2 = findViewById(R.id.find_pw_phonenumber);\r\n        editText3 = findViewById(R.id.find_pw_number);\r\n        button1 = findViewById(R.id.find_pw_button1);\r\n        button2 = findViewById(R.id.find_pw_button2);\r\n        text1 = findViewById(R.id.find_pw_timer);\r\n        text2 = findViewById(R.id.find_pw_textview1);\r\n        imageView = findViewById(R.id.find_pw_image);\r\n        button2.setEnabled(false);\r\n        editText3.setVisibility(View.INVISIBLE);\r\n        text2.setVisibility(View.INVISIBLE);\r\n\r\n        editText1.addTextChangedListener(new TextWatcher() {\r\n            @Override\r\n            public void beforeTextChanged(CharSequence s, int start, int count, int after) {\r\n            }\r\n\r\n            @Override\r\n            public void onTextChanged(CharSequence s, int start, int before, int count) {\r\n                editText2.addTextChangedListener(new TextWatcher() {\r\n                    @Override\r\n                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n                    }\r\n\r\n                    @Override\r\n                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n                        String edit2 = editText2.getText().toString();\r\n                        String edit1 = editText1.getText().toString();\r\n                        if (edit2.length() > 10) {\r\n                            button1.setBackgroundColor(getResources().getColor(R.color.colorYellow));\r\n                            button1.setTextColor(getResources().getColor(R.color.colorBlack));\r\n                            button1.setEnabled(true);\r\n                        }\r\n                        if (edit2.length() <= 10) {\r\n                            button1.setEnabled(false);\r\n                            button1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));\r\n                            button1.setTextColor(getResources().getColor(R.color.TextGray));\r\n                        }\r\n                        if (edit1.equals(\"\") || edit1 == null) {\r\n                            button1.setEnabled(false);\r\n                            button1.setBackgroundColor(getResources().getColor(R.color.colorWhite));\r\n                            button1.setTextColor(getResources().getColor(R.color.TextColor1));\r\n                        }\r\n                    }\r\n\r\n                    @Override\r\n                    public void afterTextChanged(Editable s) {\r\n                    }\r\n                });\r\n                button1.setOnClickListener(new View.OnClickListener() {\r\n                    @Override\r\n                    public void onClick(View view) {\r\n                        editText3.setVisibility(View.VISIBLE);\r\n                        text2.setVisibility(View.VISIBLE);\r\n                        countDownTimer();\r\n                        countDownTimer.start();\r\n                        String phone_no = editText2.getText().toString();\r\n                        Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);\r\n                        FindingPasswordDTO findingPasswordDTO = new FindingPasswordDTO(phone_no);\r\n                        Call<ResponseBody> valid_phone = retrofitAPI2.requestfindpassword(findingPasswordDTO);\r\n                        valid_phone.enqueue(new Callback<ResponseBody>() {\r\n                            @Override\r\n                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {\r\n                                switch (response.code()) {\r\n                                    case 200:\r\n                                        Toast.makeText(FindPasswordActivity.this, \"전송된 인증번호 반환\", Toast.LENGTH_SHORT).show();\r\n                                        try {\r\n                                            confirm_number2 = response.body().string();\r\n                                        } catch (IOException e) {\r\n                                            e.printStackTrace();\r\n                                        }\r\n                                        break;\r\n\r\n                                    case 400:\r\n                                        Toast.makeText(FindPasswordActivity.this, \"유효한 입력값이 아닙니다.\", Toast.LENGTH_SHORT).show();\r\n                                        break;\r\n\r\n                                    case 500:\r\n                                        Toast.makeText(FindPasswordActivity.this, \"메세지 전송 실패\", Toast.LENGTH_SHORT).show();\r\n                                        break;\r\n                                }\r\n                            }\r\n\r\n                            @Override\r\n                            public void onFailure(Call<ResponseBody> call, Throwable t) {\r\n                            }\r\n                        });\r\n\r\n                        editText3.addTextChangedListener(new TextWatcher() {\r\n                            @Override\r\n                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n                            }\r\n\r\n                            @Override\r\n                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n                                String edit3 = editText3.getText().toString();\r\n                                if (edit3.equals(confirm_number2)) {\r\n                                    button2.setEnabled(true);\r\n                                    button2.setBackgroundColor(getResources().getColor(R.color.colorYellow));\r\n                                    button2.setTextColor(getResources().getColor(R.color.colorBlack));\r\n                                } else {\r\n                                    button2.setEnabled(false);\r\n                                    button2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));\r\n                                    button2.setTextColor(getResources().getColor(R.color.TextGray));\r\n                                }\r\n                            }\r\n\r\n                            @Override\r\n                            public void afterTextChanged(Editable editable) {\r\n                            }\r\n                        });\r\n                    }\r\n                });\r\n            }\r\n\r\n            @Override\r\n            public void afterTextChanged(Editable s) {\r\n            }\r\n        });\r\n\r\n        imageView.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Intent intent = new Intent(FindPasswordActivity.this, SignUpActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n\r\n        button2.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                String edit1 = editText1.getText().toString();\r\n                String edit2 = editText2.getText().toString();\r\n                Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);\r\n                NewPasswordDTO userInfo = new NewPasswordDTO(edit1, edit2);\r\n                Call<ResponseBody> loginCall = retrofitAPI.requestnewpassword(userInfo);\r\n                loginCall.enqueue(new Callback<ResponseBody>() {\r\n                    @Override\r\n                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {\r\n                        switch (response.code()) {\r\n                            case 200:\r\n                                Toast.makeText(FindPasswordActivity.this, \"새 비밀번호 발급 후 전송 완료\", Toast.LENGTH_LONG).show();\r\n                                Intent intent = new Intent(FindPasswordActivity.this, GetPasswrodActivity.class);\r\n                                isSemiPassword = true;\r\n                                SharedPreferences pref = getSharedPreferences(\"key\", MODE_PRIVATE);\r\n                                SharedPreferences.Editor edit = pref.edit();\r\n                                edit.putBoolean(\"semipassword\", isSemiPassword);\r\n                                edit.apply();\r\n                                intent.putExtra(\"name3\", edit1);\r\n                                startActivity(intent);\r\n                                break;\r\n\r\n                            case 400:\r\n                                Toast.makeText(FindPasswordActivity.this, \"유효한 입력값이 아닙니다.\", Toast.LENGTH_LONG).show();\r\n                                break;\r\n\r\n                            case 404:\r\n                                Toast.makeText(FindPasswordActivity.this, \"일치하는 회원이 존재하지 않습니다.\", Toast.LENGTH_LONG).show();\r\n                                break;\r\n\r\n                            case 500:\r\n                                Toast.makeText(FindPasswordActivity.this, \"메세지 전송 실패\", Toast.LENGTH_LONG).show();\r\n                                break;\r\n                        }\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(Call<ResponseBody> call, Throwable t) {\r\n                        Log.e(\"##########\", \"Fail\", t);\r\n                    }\r\n                });\r\n\r\n            }\r\n        });\r\n    }\r\n\r\n    public void countDownTimer() {\r\n        countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {\r\n            public void onTick(long millisUntilFinished) {\r\n                long emailAuthCount = millisUntilFinished / 1000;\r\n                if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) {//초가 10보다 크면 그냥 출력\r\n                    text1.setText((emailAuthCount / 60) + \" : \" + (emailAuthCount - ((emailAuthCount / 60) * 60)));\r\n                } else { //초가 10보다 작으면 앞에 '0' 붙여서 같이 출력. ex) 02,03,04...\r\n                    text1.setText((emailAuthCount / 60) + \" : 0\" + (emailAuthCount - ((emailAuthCount / 60) * 60)));\r\n                }\r\n            }\r\n\r\n            public void onFinish() {\r\n                text1.setText(String.valueOf(\"\"));\r\n                button2.setEnabled(false);\r\n                button2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));\r\n                button2.setTextColor(getResources().getColor(R.color.TextGray));\r\n            }\r\n        };\r\n    }\r\n\r\n    @Override\r\n    public void onDestroy() {\r\n        super.onDestroy();\r\n        try {\r\n            countDownTimer.cancel();\r\n        } catch (Exception e) {\r\n        }\r\n        countDownTimer = null;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/android/Activites/FindingAccount/FindPasswordActivity.java	(revision 30ed851b8d1938372083c7bd38ee84586e99bc65)
++++ app/src/main/java/com/example/android/Activites/FindingAccount/FindPasswordActivity.java	(date 1611901917273)
+@@ -23,6 +23,7 @@
+ import com.example.android.R;
+ import com.example.android.Retrofit.RetrofitClient;
+ import com.example.android.Services.Services;
++import com.example.android.databinding.ActivityFindPwBinding;
+ 
+ import java.io.IOException;
+ 
+@@ -35,211 +36,227 @@
+     private static final int MILLISINFUTURE = 181 * 1000;
+     private static final int COUNT_DOWN_INTERVAL = 1000;
+     private CountDownTimer countDownTimer;
+-    EditText editText1, editText2, editText3;
+-    Button button1, button2;
+-    TextView text1, text2;
+-    ImageView imageView;
+     String confirm_number2 = null;
+     Boolean isSemiPassword = false;
++    private ActivityFindPwBinding binding;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
++        binding = ActivityFindPwBinding.inflate(getLayoutInflater());
++        View view = binding.getRoot();
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_find_pw);
++        setContentView(view);
+ 
+-        editText1 = findViewById(R.id.find_pw_name);
+-        editText2 = findViewById(R.id.find_pw_phonenumber);
+-        editText3 = findViewById(R.id.find_pw_number);
+-        button1 = findViewById(R.id.find_pw_button1);
+-        button2 = findViewById(R.id.find_pw_button2);
+-        text1 = findViewById(R.id.find_pw_timer);
+-        text2 = findViewById(R.id.find_pw_textview1);
+-        imageView = findViewById(R.id.find_pw_image);
+-        button2.setEnabled(false);
+-        editText3.setVisibility(View.INVISIBLE);
+-        text2.setVisibility(View.INVISIBLE);
++        binding.findPwButton2.setEnabled(false);
++        binding.findPwNumber.setVisibility(View.INVISIBLE);
++        binding.findPwTextview1.setVisibility(View.INVISIBLE);
++        textEvent();
++        onBtnEvent();
++    }
+ 
+-        editText1.addTextChangedListener(new TextWatcher() {
+-            @Override
+-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+-            }
++    private void textEvent() {
++        binding.findPwNumber.addTextChangedListener(textWatcher01);
++        binding.findPwPhonenumber.addTextChangedListener(textWatcher02);
++        binding.findPwName.addTextChangedListener(textWatcher03);
++    }
++
++    private final TextWatcher textWatcher01 = new TextWatcher() {
++        @Override
++        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
++        }
+ 
+-            @Override
+-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+-                editText2.addTextChangedListener(new TextWatcher() {
+-                    @Override
+-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+-                    }
++        @Override
++        public void onTextChanged(CharSequence s, int start, int before, int count) {
++            String edit3 = binding.findPwNumber.getText().toString();
++
++            if (edit3.equals(confirm_number2)) {
++                binding.findPwButton2.setEnabled(true);
++                binding.findPwButton2.setBackgroundColor(getResources().getColor(R.color.colorYellow));
++                binding.findPwButton2.setTextColor(getResources().getColor(R.color.colorBlack));
++            } else {
++                binding.findPwButton2.setEnabled(false);
++                binding.findPwButton2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
++                binding.findPwButton2.setTextColor(getResources().getColor(R.color.TextGray));
++            }
++        }
++
++        @Override
++        public void afterTextChanged(Editable s) {
++        }
++    };
++    private final TextWatcher textWatcher02 = new TextWatcher() {
++
++        @Override
++        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
++
++        }
+ 
+-                    @Override
+-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+-                        String edit2 = editText2.getText().toString();
+-                        String edit1 = editText1.getText().toString();
+-                        if (edit2.length() > 10) {
+-                            button1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+-                            button1.setTextColor(getResources().getColor(R.color.colorBlack));
+-                            button1.setEnabled(true);
+-                        }
+-                        if (edit2.length() <= 10) {
+-                            button1.setEnabled(false);
+-                            button1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
+-                            button1.setTextColor(getResources().getColor(R.color.TextGray));
+-                        }
+-                        if (edit1.equals("") || edit1 == null) {
+-                            button1.setEnabled(false);
+-                            button1.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+-                            button1.setTextColor(getResources().getColor(R.color.TextColor1));
+-                        }
+-                    }
++        @Override
++        public void onTextChanged(CharSequence s, int start, int before, int count) {
++            String edit2 = binding.findPwPhonenumber.getText().toString();
++            String edit1 = binding.findPwName.getText().toString();
++
++            if (edit2.length() <= 10 || (edit1.equals("") || edit1 == null)) {
++                binding.findPwButton1.setEnabled(false);
++                binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
++                binding.findPwButton1.setTextColor(getResources().getColor(R.color.TextGray));
++            } else {
++                binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
++                binding.findPwButton1.setTextColor(getResources().getColor(R.color.colorBlack));
++                binding.findPwButton1.setEnabled(true);
++            }
++
++        }
+ 
+-                    @Override
+-                    public void afterTextChanged(Editable s) {
+-                    }
+-                });
+-                button1.setOnClickListener(new View.OnClickListener() {
+-                    @Override
+-                    public void onClick(View view) {
+-                        editText3.setVisibility(View.VISIBLE);
+-                        text2.setVisibility(View.VISIBLE);
+-                        countDownTimer();
+-                        countDownTimer.start();
+-                        String phone_no = editText2.getText().toString();
+-                        Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
+-                        FindingPasswordDTO findingPasswordDTO = new FindingPasswordDTO(phone_no);
+-                        Call<ResponseBody> valid_phone = retrofitAPI2.requestfindpassword(findingPasswordDTO);
+-                        valid_phone.enqueue(new Callback<ResponseBody>() {
+-                            @Override
+-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+-                                switch (response.code()) {
+-                                    case 200:
+-                                        Toast.makeText(FindPasswordActivity.this, "전송된 인증번호 반환", Toast.LENGTH_SHORT).show();
+-                                        try {
+-                                            confirm_number2 = response.body().string();
+-                                        } catch (IOException e) {
+-                                            e.printStackTrace();
+-                                        }
+-                                        break;
++        @Override
++        public void afterTextChanged(Editable s) {
++
++        }
++    };
++    private final TextWatcher textWatcher03 = new TextWatcher() {
++
++        @Override
++        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
++
++        }
++
++        @Override
++        public void onTextChanged(CharSequence s, int start, int before, int count) {
++            String edit1 = binding.findPwName.getText().toString();
++            String edit2 = binding.findPwPhonenumber.getText().toString();
++            if (edit2.length() <= 10 || (edit1.equals("") || edit1 == null)) {
++                binding.findPwButton1.setEnabled(false);
++                binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
++                binding.findPwButton1.setTextColor(getResources().getColor(R.color.TextGray));
++            } else {
++                binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
++                binding.findPwButton1.setTextColor(getResources().getColor(R.color.colorBlack));
++                binding.findPwButton1.setEnabled(true);
++            }
++        }
++
++        @Override
++        public void afterTextChanged(Editable s) {
++
++        }
++    };
++
++    private void onBtnEvent() {
++        binding.findPwButton1.setOnClickListener(onClickListener);
++        binding.findPwButton2.setOnClickListener(onClickListener);
++        binding.findPwImage.setOnClickListener(onClickListener);
++    }
++
++    private final View.OnClickListener onClickListener = new View.OnClickListener() {
++        @Override
++        public void onClick(View v) {
++            switch (v.getId()) {
++                case R.id.find_pw_button1:
++                    binding.findPwNumber.setVisibility(View.VISIBLE);
++                    binding.findPwTextview1.setVisibility(View.VISIBLE);
++                    countDownTimer();
++                    countDownTimer.start();
++                    String phone_no = binding.findPwPhonenumber.getText().toString();
++                    Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
++                    FindingPasswordDTO findingPasswordDTO = new FindingPasswordDTO(phone_no);
++                    Call<ResponseBody> valid_phone = retrofitAPI2.requestfindpassword(findingPasswordDTO);
++                    valid_phone.enqueue(new Callback<ResponseBody>() {
++                        @Override
++                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
++                            switch (response.code()) {
++                                case 200:
++                                    Toast.makeText(FindPasswordActivity.this, "전송된 인증번호 반환", Toast.LENGTH_SHORT).show();
++                                    try {
++                                        confirm_number2 = response.body().string();
++                                    } catch (IOException e) {
++                                        e.printStackTrace();
++                                    }
++                                    break;
+ 
+-                                    case 400:
+-                                        Toast.makeText(FindPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_SHORT).show();
+-                                        break;
++                                case 400:
++                                    Toast.makeText(FindPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_SHORT).show();
++                                    break;
+ 
+-                                    case 500:
+-                                        Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_SHORT).show();
+-                                        break;
+-                                }
+-                            }
++                                case 500:
++                                    Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_SHORT).show();
++                                    break;
++                            }
++                        }
+ 
+-                            @Override
+-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+-                            }
+-                        });
+-
+-                        editText3.addTextChangedListener(new TextWatcher() {
+-                            @Override
+-                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+-                            }
+-
+-                            @Override
+-                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+-                                String edit3 = editText3.getText().toString();
+-                                if (edit3.equals(confirm_number2)) {
+-                                    button2.setEnabled(true);
+-                                    button2.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+-                                    button2.setTextColor(getResources().getColor(R.color.colorBlack));
+-                                } else {
+-                                    button2.setEnabled(false);
+-                                    button2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
+-                                    button2.setTextColor(getResources().getColor(R.color.TextGray));
+-                                }
+-                            }
+-
+-                            @Override
+-                            public void afterTextChanged(Editable editable) {
+-                            }
+-                        });
+-                    }
+-                });
+-            }
+-
+-            @Override
+-            public void afterTextChanged(Editable s) {
+-            }
+-        });
++                        @Override
++                        public void onFailure(Call<ResponseBody> call, Throwable t) {
++                        }
++                    });
++                    break;
+ 
+-        imageView.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View view) {
+-                Intent intent = new Intent(FindPasswordActivity.this, SignUpActivity.class);
+-                startActivity(intent);
+-            }
+-        });
+-
+-
+-        button2.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View view) {
+-                String edit1 = editText1.getText().toString();
+-                String edit2 = editText2.getText().toString();
+-                Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
+-                NewPasswordDTO userInfo = new NewPasswordDTO(edit1, edit2);
+-                Call<ResponseBody> loginCall = retrofitAPI.requestnewpassword(userInfo);
+-                loginCall.enqueue(new Callback<ResponseBody>() {
+-                    @Override
+-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+-                        switch (response.code()) {
+-                            case 200:
+-                                Toast.makeText(FindPasswordActivity.this, "새 비밀번호 발급 후 전송 완료", Toast.LENGTH_LONG).show();
+-                                Intent intent = new Intent(FindPasswordActivity.this, GetPasswrodActivity.class);
+-                                isSemiPassword = true;
+-                                SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
+-                                SharedPreferences.Editor edit = pref.edit();
+-                                edit.putBoolean("semipassword", isSemiPassword);
+-                                edit.apply();
+-                                intent.putExtra("name3", edit1);
+-                                startActivity(intent);
+-                                break;
++                case R.id.find_pw_button2:
++                    String edit1 = binding.findPwName.getText().toString();
++                    String edit2 = binding.findPwPhonenumber.getText().toString();
++                    Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
++                    NewPasswordDTO userInfo = new NewPasswordDTO(edit1, edit2);
++                    Call<ResponseBody> loginCall = retrofitAPI.requestnewpassword(userInfo);
++                    loginCall.enqueue(new Callback<ResponseBody>() {
++                        @Override
++                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
++                            switch (response.code()) {
++                                case 200:
++                                    Toast.makeText(FindPasswordActivity.this, "새 비밀번호 발급 후 전송 완료", Toast.LENGTH_LONG).show();
++                                    Intent intent = new Intent(FindPasswordActivity.this, GetPasswrodActivity.class);
++                                    isSemiPassword = true;
++                                    SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
++                                    SharedPreferences.Editor edit = pref.edit();
++                                    edit.putBoolean("semipassword", isSemiPassword);
++                                    edit.apply();
++                                    intent.putExtra("name3", edit1);
++                                    startActivity(intent);
++                                    break;
+ 
+-                            case 400:
+-                                Toast.makeText(FindPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
+-                                break;
++                                case 400:
++                                    Toast.makeText(FindPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
++                                    break;
+ 
+-                            case 404:
+-                                Toast.makeText(FindPasswordActivity.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+-                                break;
++                                case 404:
++                                    Toast.makeText(FindPasswordActivity.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
++                                    break;
+ 
+-                            case 500:
+-                                Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_LONG).show();
+-                                break;
+-                        }
+-                    }
++                                case 500:
++                                    Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_LONG).show();
++                                    break;
++                            }
++                        }
+ 
+-                    @Override
+-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+-                        Log.e("##########", "Fail", t);
+-                    }
+-                });
++                        @Override
++                        public void onFailure(Call<ResponseBody> call, Throwable t) {
++                            Log.e("##########", "Fail", t);
++                        }
++                    });
+ 
++                    break;
++
++                case R.id.find_pw_image:
++                    Intent intent = new Intent(FindPasswordActivity.this, SignUpActivity.class);
++                    startActivity(intent);
++                    break;
+             }
+-        });
+-    }
++        }
++    };
+ 
+     public void countDownTimer() {
+         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
+             public void onTick(long millisUntilFinished) {
+                 long emailAuthCount = millisUntilFinished / 1000;
+                 if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) {//초가 10보다 크면 그냥 출력
+-                    text1.setText((emailAuthCount / 60) + " : " + (emailAuthCount - ((emailAuthCount / 60) * 60)));
++                    binding.findPwTimer.setText((emailAuthCount / 60) + " : " + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                 } else { //초가 10보다 작으면 앞에 '0' 붙여서 같이 출력. ex) 02,03,04...
+-                    text1.setText((emailAuthCount / 60) + " : 0" + (emailAuthCount - ((emailAuthCount / 60) * 60)));
++                    binding.findPwTimer.setText((emailAuthCount / 60) + " : 0" + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                 }
+             }
+ 
+             public void onFinish() {
+-                text1.setText(String.valueOf(""));
+-                button2.setEnabled(false);
+-                button2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
+-                button2.setTextColor(getResources().getColor(R.color.TextGray));
++                binding.findPwTimer.setText(String.valueOf(""));
++                binding.findPwButton2.setEnabled(false);
++                binding.findPwButton2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
++                binding.findPwButton2.setTextColor(getResources().getColor(R.color.TextGray));
+             }
+         };
+     }
+@@ -254,3 +271,5 @@
+         countDownTimer = null;
+     }
+ }
++
++
+Index: app/src/main/java/com/example/android/Activites/SplashActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.android.Activites;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.os.Handler;\r\n\r\nimport com.example.android.Activites.UserAccount.LoginActivity;\r\nimport com.example.android.R;\r\n\r\npublic class SplashActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_splash);\r\n        Handler hd = new Handler();\r\n        hd.postDelayed(new splashhandler(), 3000); // 1초 후에 hd handler 실행  3000ms = 3초\r\n    }\r\n\r\n    private class splashhandler implements Runnable{\r\n        public void run() {\r\n            startActivity(new Intent(SplashActivity.this, LoginActivity.class));\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void onBackPressed() {\r\n        //초반 플래시 화면에서 넘어갈때 뒤로가기 버튼 못누르게 함\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/android/Activites/SplashActivity.java	(revision 30ed851b8d1938372083c7bd38ee84586e99bc65)
++++ app/src/main/java/com/example/android/Activites/SplashActivity.java	(date 1611802109405)
+@@ -5,6 +5,7 @@
+ import android.content.Intent;
+ import android.os.Bundle;
+ import android.os.Handler;
++import android.os.Looper;
+ 
+ import com.example.android.Activites.UserAccount.LoginActivity;
+ import com.example.android.R;
+@@ -15,7 +16,7 @@
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_splash);
+-        Handler hd = new Handler();
++        Handler hd = new Handler(Looper.getMainLooper()); //Looper.getMainLooper()를 사용하면 어디서든 메인 Looper를 가져올 수 있다.
+         hd.postDelayed(new splashhandler(), 3000); // 1초 후에 hd handler 실행  3000ms = 3초
+     }
+ 

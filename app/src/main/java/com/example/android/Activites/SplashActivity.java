@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
 //        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        Handler hd = new Handler();
+        Handler hd = new Handler(Looper.getMainLooper());
         hd.postDelayed(new splashhandler(), 1000); // 1초 후에 hd handler 실행  3000ms = 3초
     }
 
@@ -62,6 +63,7 @@ public class SplashActivity extends AppCompatActivity {
                 try {
                     switch (response.code()) {
                         case 200:
+                            assert response.body() != null;
                             if(response.body().string().equals("true")) {
                                 startActivity(new Intent(SplashActivity.this, QRCodeAcitivty.class));
                             } else {

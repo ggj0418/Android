@@ -25,6 +25,9 @@ import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
 import com.example.android.Utils.Preference.PreferenceManager;
+import com.example.android.databinding.ActivityFindPwBinding;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -38,196 +41,212 @@ public class FindPasswordActivity extends AppCompatActivity {
     private static final int MILLISINFUTURE = 181 * 1000;
     private static final int COUNT_DOWN_INTERVAL = 1000;
     private CountDownTimer countDownTimer;
-    EditText editText1, editText2, editText3;
-    Button button1, button2;
-    TextView text1, text2;
-    ImageView imageView;
     String confirm_number2 = null;
     Boolean isSemiPassword = false;
+    private ActivityFindPwBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_pw);
+        binding = ActivityFindPwBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+        settings();
+        textEvent();
+        onBtnEvent();
+    }
 
-        editText1 = findViewById(R.id.find_pw_name);
-        editText2 = findViewById(R.id.find_pw_phonenumber);
-        editText3 = findViewById(R.id.find_pw_number);
-        button1 = findViewById(R.id.find_pw_button1);
-        button2 = findViewById(R.id.find_pw_button2);
-        text1 = findViewById(R.id.find_pw_timer);
-        text2 = findViewById(R.id.find_pw_textview1);
-        imageView = findViewById(R.id.find_pw_image);
-        button2.setEnabled(false);
-        editText3.setVisibility(View.INVISIBLE);
-        text2.setVisibility(View.INVISIBLE);
 
-        editText1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private void settings() {
+        binding.findPwButton1.setEnabled(false);
+        binding.findPwNumber.setVisibility(View.INVISIBLE);
+        binding.findPwTextview1.setVisibility(View.INVISIBLE);
+    }
+
+    private void textEvent() {
+        binding.findPwName.addTextChangedListener(textWatcher01);
+        binding.findPwPhonenumber.addTextChangedListener(textWatcher02);
+        binding.findPwNumber.addTextChangedListener(textWatcher03);
+    }
+
+    private final TextWatcher textWatcher01 = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String edit2 = binding.findPwPhonenumber.getText().toString();
+            String edit1 = binding.findPwName.getText().toString();
+            if (edit2.length() <= 10 || edit1.equals("")) {
+                binding.findPwButton1.setEnabled(false);
+                binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
+                binding.findPwButton1.setTextColor(getResources().getColor(R.color.TextGray));
+
+            } else {
+                binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+                binding.findPwButton1.setTextColor(getResources().getColor(R.color.colorBlack));
+                binding.findPwButton1.setEnabled(true);
             }
+        }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                editText2.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    }
+        @Override
+        public void afterTextChanged(Editable s) {
 
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        String edit2 = editText2.getText().toString();
-                        String edit1 = editText1.getText().toString();
-                        if (edit2.length() > 10) {
-                            button1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
-                            button1.setTextColor(getResources().getColor(R.color.colorBlack));
-                            button1.setEnabled(true);
+        }
+    };
+    private final TextWatcher textWatcher02 = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String edit2 = binding.findPwPhonenumber.getText().toString();
+            String edit1 = binding.findPwName.getText().toString();
+            if (edit2.length() <= 10 || edit1.equals("")) {
+                binding.findPwButton1.setEnabled(false);
+                binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
+                binding.findPwButton1.setTextColor(getResources().getColor(R.color.TextGray));
+            } else {
+                binding.findPwButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+                binding.findPwButton1.setTextColor(getResources().getColor(R.color.colorBlack));
+                binding.findPwButton1.setEnabled(true);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+    private final TextWatcher textWatcher03 = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String edit3 = binding.findPwNumber.getText().toString();
+            if (edit3.equals(confirm_number2)) {
+                binding.findPwButton2.setEnabled(true);
+                binding.findPwButton2.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+                binding.findPwButton2.setTextColor(getResources().getColor(R.color.colorBlack));
+            } else {
+                binding.findPwButton2.setEnabled(false);
+                binding.findPwButton2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
+                binding.findPwButton2.setTextColor(getResources().getColor(R.color.TextGray));
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    void onBtnEvent() {
+        binding.findPwButton1.setOnClickListener(onClickListener);
+        binding.findPwButton2.setOnClickListener(onClickListener);
+        binding.findPwImage.setOnClickListener(onClickListener);
+    }
+
+    private final View.OnClickListener onClickListener = new View.OnClickListener() {
+        @SuppressLint("NonConstantResourceId")
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.find_pw_button1:
+                    binding.findPwNumber.setVisibility(View.VISIBLE);
+                    binding.findPwTextview1.setVisibility(View.VISIBLE);
+                    countDownTimer();
+                    countDownTimer.start();
+                    String phone_no = binding.findPwPhonenumber.getText().toString();
+                    Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
+                    FindingPasswordDTO findingPasswordDTO = new FindingPasswordDTO(phone_no);
+                    Call<ResponseBody> valid_phone = retrofitAPI2.requestfindpassword(findingPasswordDTO);
+                    valid_phone.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                            switch (response.code()) {
+                                case 200:
+                                    Toast.makeText(FindPasswordActivity.this, "전송된 인증번호 반환", Toast.LENGTH_SHORT).show();
+                                    try {
+                                        confirm_number2 = response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+
+                                case 400:
+                                    Toast.makeText(FindPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_SHORT).show();
+                                    break;
+
+                                case 500:
+                                    Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
                         }
-                        if (edit2.length() <= 10) {
-                            button1.setEnabled(false);
-                            button1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
-                            button1.setTextColor(getResources().getColor(R.color.TextGray));
+
+                        @Override
+                        public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
                         }
-                        if (edit1.equals("") || edit1 == null) {
-                            button1.setEnabled(false);
-                            button1.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-                            button1.setTextColor(getResources().getColor(R.color.TextColor1));
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-                });
-                button1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        editText3.setVisibility(View.VISIBLE);
-                        text2.setVisibility(View.VISIBLE);
-                        countDownTimer();
-                        countDownTimer.start();
-                        String phone_no = editText2.getText().toString();
-                        Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
-                        FindingPasswordDTO findingPasswordDTO = new FindingPasswordDTO(phone_no);
-                        Call<ResponseBody> valid_phone = retrofitAPI2.requestfindpassword(findingPasswordDTO);
-                        valid_phone.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                switch (response.code()) {
-                                    case 200:
-                                        Toast.makeText(FindPasswordActivity.this, "전송된 인증번호 반환", Toast.LENGTH_SHORT).show();
-                                        try {
-                                            confirm_number2 = response.body().string();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-
-                                    case 400:
-                                        Toast.makeText(FindPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_SHORT).show();
-                                        break;
-
-                                    case 500:
-                                        Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_SHORT).show();
-                                        break;
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            }
-                        });
-
-                        editText3.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                                String edit3 = editText3.getText().toString();
-                                if (edit3.equals(confirm_number2)) {
-                                    button2.setEnabled(true);
-                                    button2.setBackgroundColor(getResources().getColor(R.color.colorYellow));
-                                    button2.setTextColor(getResources().getColor(R.color.colorBlack));
-                                } else {
-                                    button2.setEnabled(false);
-                                    button2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
-                                    button2.setTextColor(getResources().getColor(R.color.TextGray));
-                                }
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable editable) {
-                            }
-                        });
-                    }
-                });
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(FindPasswordActivity.this, SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @EverythingIsNonNull
-            @Override
-            public void onClick(View view) {
-                String edit1 = editText1.getText().toString();
-                String edit2 = editText2.getText().toString();
-                Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
-                NewPasswordDTO userInfo = new NewPasswordDTO(edit1, edit2);
-                Call<ResponseBody> loginCall = retrofitAPI.requestnewpassword(userInfo);
-                loginCall.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        switch (response.code()) {
-                            case 200:
-                                Toast.makeText(FindPasswordActivity.this, "새 비밀번호 발급 후 전송 완료", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(FindPasswordActivity.this, GetPasswrodActivity.class);
-                                isSemiPassword = true;
-                                PreferenceManager.setBoolean(getApplicationContext(), "semipassword", isSemiPassword);
+                    });
+                    break;
+                case R.id.find_pw_button2:
+                    String edit1 = binding.findPwName.getText().toString();
+                    String edit2 = binding.findPwPhonenumber.getText().toString();
+                    Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
+                    NewPasswordDTO userInfo = new NewPasswordDTO(edit1, edit2);
+                    Call<ResponseBody> loginCall = retrofitAPI.requestnewpassword(userInfo);
+                    loginCall.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                            switch (response.code()) {
+                                case 200:
+                                    Toast.makeText(FindPasswordActivity.this, "새 비밀번호 발급 후 전송 완료", Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(FindPasswordActivity.this, GetPasswrodActivity.class);
+                                    isSemiPassword = true;
+                                    PreferenceManager.setBoolean(getApplicationContext(), "semipassword", isSemiPassword);
 //                                SharedPreferences pref = getSharedPreferences("key", MODE_PRIVATE);
 //                                SharedPreferences.Editor edit = pref.edit();
 //                                edit.putBoolean("semipassword", isSemiPassword);
 //                                edit.apply();
-                                intent.putExtra("name3", edit1);
-                                startActivity(intent);
-                                break;
+                                    intent.putExtra("name3", edit1);
+                                    startActivity(intent);
+                                    break;
 
-                            case 400:
-                                Toast.makeText(FindPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
-                                break;
+                                case 400:
+                                    Toast.makeText(FindPasswordActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
+                                    break;
 
-                            case 404:
-                                Toast.makeText(FindPasswordActivity.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
-                                break;
+                                case 404:
+                                    Toast.makeText(FindPasswordActivity.this, "일치하는 회원이 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                                    break;
 
-                            case 500:
-                                Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_LONG).show();
-                                break;
+                                case 500:
+                                    Toast.makeText(FindPasswordActivity.this, "메세지 전송 실패", Toast.LENGTH_LONG).show();
+                                    break;
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e("##########", "Fail", t);
-                    }
-                });
+                        @Override
+                        public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
+                            Log.e("##########", "Fail", t);
+                        }
+                    });
 
+                    break;
+                case R.id.find_pw_image:
+                    Intent intent = new Intent(FindPasswordActivity.this, SignUpActivity.class);
+                    startActivity(intent);
+                    break;
             }
-        });
-    }
+        }
+    };
 
     public void countDownTimer() {
         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
@@ -235,17 +254,17 @@ public class FindPasswordActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 long emailAuthCount = millisUntilFinished / 1000;
                 if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) {//초가 10보다 크면 그냥 출력
-                    text1.setText((emailAuthCount / 60) + " : " + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                    binding.findPwTimer.setText((emailAuthCount / 60) + " : " + (emailAuthCount - ((emailAuthCount / 60) * 60)));
                 } else { //초가 10보다 작으면 앞에 '0' 붙여서 같이 출력. ex) 02,03,04...
-                    text1.setText((emailAuthCount / 60) + " : 0" + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                    binding.findPwTimer.setText((emailAuthCount / 60) + " : 0" + (emailAuthCount - ((emailAuthCount / 60) * 60)));
                 }
             }
 
             public void onFinish() {
-                text1.setText("");
-                button2.setEnabled(false);
-                button2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
-                button2.setTextColor(getResources().getColor(R.color.TextGray));
+                binding.findPwTimer.setText("");
+                binding.findPwButton2.setEnabled(false);
+                binding.findPwButton2.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
+                binding.findPwButton2.setTextColor(getResources().getColor(R.color.TextGray));
             }
         };
     }

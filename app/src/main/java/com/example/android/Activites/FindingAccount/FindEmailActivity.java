@@ -1,6 +1,7 @@
 package com.example.android.Activites.FindingAccount;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,11 +15,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.android.Activites.UserAccount.InputPasswordActivity;
 import com.example.android.Activites.UserAccount.LoginActivity;
+import com.example.android.Activites.UserAccount.SignUpActivity;
 import com.example.android.DTOS.FindingEmailDTO;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
+import com.example.android.databinding.ActivityFindEmailBinding;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -29,76 +35,85 @@ import retrofit2.Response;
 
 
 public class FindEmailActivity extends AppCompatActivity {
-    ImageView imageView;
-    EditText editText1, editText2;
-    Button button;
-
+    private ActivityFindEmailBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        binding = ActivityFindEmailBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_email);
+        setContentView(view);
+        textEvent();
+        onBtnEvent();
+    }
 
-        imageView = findViewById(R.id.find_email_image);
-        editText1 = findViewById(R.id.find_email_name);
-        editText2 = findViewById(R.id.find_email_phone);
-        button = findViewById(R.id.find_email_button1);
+    private void textEvent() {
+        binding.findEmailPhone.addTextChangedListener(textWatcher01);
+    }
 
-        editText2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private final TextWatcher textWatcher01 = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
 
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String edit2 = binding.findEmailPhone.getText().toString();
+            String edit1 = binding.findEmailName.getText().toString();
+            if (edit2.length() > 10) {
+                binding.findEmailButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+                binding.findEmailButton1.setTextColor(getResources().getColor(R.color.colorBlack));
+                binding.findEmailButton1.setEnabled(true);
+            } else {
+                binding.findEmailButton1.setEnabled(false);
+                binding.findEmailButton1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
+                binding.findEmailButton1.setTextColor(getResources().getColor(R.color.TextGray));
             }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String edit2 = editText2.getText().toString();
-                String edit1 = editText1.getText().toString();
-                if (edit2.length() > 10) {
-                    button.setBackgroundColor(getResources().getColor(R.color.colorYellow));
-                    button.setTextColor(getResources().getColor(R.color.colorBlack));
-                    button.setEnabled(true);
-                } else {
-                    button.setEnabled(false);
-                    button.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
-                    button.setTextColor(getResources().getColor(R.color.TextGray));
-                }
-
-                if (edit1.equals("") || edit1 == null) {
-                    button.setEnabled(false);
-                    button.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-                    button.setTextColor(getResources().getColor(R.color.TextColor1));
-                }
+            if (edit1.equals("")) {
+                binding.findEmailButton1.setEnabled(false);
+                binding.findEmailButton1.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                binding.findEmailButton1.setTextColor(getResources().getColor(R.color.TextColor1));
             }
+        }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
 
-            }
-        });
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String edit1 = editText1.getText().toString();
-                String edit2 = editText2.getText().toString();
-                Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
-                FindingEmailDTO userInfo = new FindingEmailDTO(edit1, edit2);
-                Call<ResponseBody> loginCall = retrofitAPI.requestfindemail(userInfo);
-                loginCall.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        switch (response.code()) {
-                            case 200:
-                                Toast.makeText(FindEmailActivity.this, "OK", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(FindEmailActivity.this, GetEmailActivity.class);
-                                String email = null;
-                                try {
-                                    email = response.body().string();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                intent.putExtra("name", edit1);
-                                intent.putExtra("find_email", email);
-                                startActivity(intent);
-                                break;
+    private void onBtnEvent() {
+        binding.findEmailButton1.setOnClickListener(onClickListener);
+        binding.findEmailImage.setOnClickListener(onClickListener);
+    }
+
+    private final View.OnClickListener onClickListener = new View.OnClickListener() {
+
+        @SuppressLint("NonConstantResourceId")
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.find_email_button1: {
+                    String edit1 = binding.findEmailName.getText().toString();
+                    String edit2 = binding.findEmailPhone.getText().toString();
+                    Services retrofitAPI = RetrofitClient.getRetrofit(null).create(Services.class);
+                    FindingEmailDTO userInfo = new FindingEmailDTO(edit1, edit2);
+                    Call<ResponseBody> loginCall = retrofitAPI.requestfindemail(userInfo);
+                    loginCall.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                            switch (response.code()) {
+                                case 200:
+                                    Toast.makeText(FindEmailActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(FindEmailActivity.this, GetEmailActivity.class);
+                                    String email = null;
+                                    try {
+                                        email = response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    intent.putExtra("name", edit1);
+                                    intent.putExtra("find_email", email);
+                                    startActivity(intent);
+                                    break;
 
                                 case 400:
                                     Toast.makeText(FindEmailActivity.this, "유효한 입력값이 아닙니다.", Toast.LENGTH_LONG).show();
@@ -110,20 +125,18 @@ public class FindEmailActivity extends AppCompatActivity {
                             }
                         }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e("##########", "Fail", t);
-                    }
-                });
-
+                        @Override
+                        public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
+                            Log.e("##########", "Fail", t);
+                        }
+                    });
+                }
+                break;
+                case R.id.find_email_image:
+                    Intent intent = new Intent(FindEmailActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    break;
             }
-        });
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(FindEmailActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        }
+    };
     }
-}

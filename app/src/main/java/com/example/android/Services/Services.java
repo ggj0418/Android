@@ -18,7 +18,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -51,7 +50,7 @@ public interface Services {
      * TODO 응답값 반환 매핑 클래스를 지정할 필요가 없으므로 ResponseBody로 바꿔야 함
      */
     @POST("users/signup")
-    Call<SignupDTO> requestSignup(@Body SignupDTO signupDTO);
+    Call<ResponseBody> requestSignup(@Body SignupDTO signupDTO);
 
     /**
      * 회원가입 시, 휴대폰 본인인증 api
