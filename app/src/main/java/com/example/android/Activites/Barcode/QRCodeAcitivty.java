@@ -25,19 +25,17 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.DTOS.CartItemDTO;
 import com.example.android.R;
-import com.example.android.Retrofit.RetrofitClient;
-import com.example.android.Services.Services;
 import com.example.android.Utils.Barcode.BarcodeGraphic;
 import com.example.android.Utils.Barcode.BarcodeGraphicTracker;
 import com.example.android.Utils.Barcode.BarcodeTrackerFactory;
 import com.example.android.Utils.Camera.CameraSource;
 import com.example.android.Utils.Camera.CameraSourcePreview;
 import com.example.android.Utils.Camera.GraphicOverlay;
-import com.example.android.Utils.Preference.PreferenceManager;
 import com.example.android.Utils.RecyclerView.CartClickListener;
 import com.example.android.Utils.RecyclerView.MyCartAdapter;
 import com.example.android.Utils.RecyclerView.RecyclerViewMethod;
@@ -52,14 +50,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.internal.EverythingIsNonNull;
+import java.util.Random;
 
 public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicTracker.BarcodeUpdateListener {
     private List<CartItemDTO> cartItemList = new ArrayList<>();
@@ -94,8 +86,8 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private RecyclerView recyclerView;
     private MyCartAdapter myCartAdapter;
+    public TextView wholeCountTextView;
 
-    private Services retrofitAPI2;
     private RecyclerViewMethod recyclerViewMethod;
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -106,13 +98,12 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
 //        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);     // 타이틀바 제거
         setContentView(R.layout.activity_qr_activity);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);     // 상태바 제거
-
-        retrofitAPI2 = RetrofitClient.getRetrofit(PreferenceManager.getString(getApplicationContext(), "accessToken")).create(Services.class);
-
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
+
+        wholeCountTextView = findViewById(R.id.activity_barcode_whole_count_tv);
 
         recyclerView = findViewById(R.id.rv_map);
         slidingUpPanelLayout = findViewById(R.id.slide_up);
@@ -150,7 +141,7 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        recyclerViewMethod = new RecyclerViewMethod(getApplicationContext(), cartItemList, myCartAdapter);
+        recyclerViewMethod = new RecyclerViewMethod(this, cartItemList, myCartAdapter);
         recyclerViewMethod.showCartList();
     }
 
@@ -474,17 +465,42 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
 
     @Override
     public void onBarcodeDetected(Barcode barcode) {
+        //do something with barcode data returned
         runOnUiThread(new Runnable() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 vibrator.vibrate(100);
                 mPreview.stop();
-                recyclerViewMethod.setCartItem(11111);
+                recyclerViewMethod.setCartItem(getRandomBarcode());
+                
                 startCameraSource();
             }
         });
-        //do something with barcode data returned
-        // TODO 바코드가 캡처되면 여기에서 바코드 코드로 서버에서 상품 정보를 얻어온 다음 ,recyclerview에 뿌려주기
+    }
+
+    public int getRandomBarcode() {
+        Random random = new Random();
+        int barcode = 0;
+
+        switch (random.nextInt(4)) {
+            case 0:
+                barcode = 11111;
+                break;
+            case 1:
+                barcode = 22222;
+                break;
+            case 2:
+                barcode = 33333;
+                break;
+            case 3:
+                barcode = 44444;
+                break;
+            default:
+                break;
+        }
+
+        return barcode;
     }
 
     @Override

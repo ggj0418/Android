@@ -1,13 +1,18 @@
 package com.example.android.Utils.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.Activites.Barcode.QRCodeAcitivty;
 import com.example.android.DTOS.CartItemDTO;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
 import com.example.android.Utils.Preference.PreferenceManager;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +36,22 @@ public class RecyclerViewMethod {
         retrofitAPI2 = RetrofitClient.getRetrofit(PreferenceManager.getString(mContext, "accessToken")).create(Services.class);
     }
 
+    @SuppressLint("SetTextI18n")
+    public void setTextView(TextView textView, int wholeCount) {
+        DecimalFormat decimalFormat = new DecimalFormat("###,###");
+        String totalPrice = decimalFormat.format(wholeCount);
+        textView.setText(totalPrice + " 원");
+    }
+
+    public int getWholeCount() {
+        int wholeCount = 0;
+        for(CartItemDTO cartItemDTO : cartItemList) {
+            wholeCount += (cartItemDTO.getCount() * cartItemDTO.getProductPrice());
+        }
+
+        return wholeCount;
+    }
+
     public void showCartList() {
         Call<List<CartItemDTO>> getCartListCall = retrofitAPI2.getCartList();
         getCartListCall.enqueue(new Callback<List<CartItemDTO>>() {
@@ -42,6 +63,7 @@ public class RecyclerViewMethod {
                         Toast.makeText(mContext, "장바구니 리스트업 성공", Toast.LENGTH_SHORT).show();
                         cartItemList.clear();
                         cartItemList.addAll(Objects.requireNonNull(response.body()));
+                        setTextView(((QRCodeAcitivty) mContext).wholeCountTextView, getWholeCount());
                         myCartAdapter.notifyDataSetChanged();
                         break;
                     case 401:

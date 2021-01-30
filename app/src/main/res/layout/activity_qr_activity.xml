@@ -9,7 +9,7 @@
     android:gravity="bottom"
     app:umanoDragView="@id/activity_barcode_capture_slidelayout"
     app:umanoScrollableView="@id/rv_map"
-    app:umanoPanelHeight="100dp"
+    app:umanoPanelHeight="150dp"
     app:umanoShadowHeight="0dp"
     app:umanoOverlay="true"
     tools:context=".Activites.Barcode.QRCodeAcitivty">
@@ -48,6 +48,16 @@
             app:srcCompat="@drawable/ic_vic_slideup_up"/>
 
         <TextView
+            android:layout_marginTop="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="장바구니"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="25sp"/>
+
+        <TextView
+            android:id="@+id/activity_barcode_whole_count_tv"
             android:layout_marginTop="12sp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
