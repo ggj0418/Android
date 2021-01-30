@@ -18,6 +18,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -119,7 +120,8 @@ public interface Services {
      * @param map 상품 바코드번호 매핑 변수
      * @return 단순 응답 바디를 반환값으로 받는 Call
      */
-    @DELETE("carts")
+    @HTTP(method = "DELETE", path = "carts", hasBody = true)
+//    @DELETE("carts")
     Call<ResponseBody> deleteCartItem(@Body HashMap<String, Integer> map);
 
     /**

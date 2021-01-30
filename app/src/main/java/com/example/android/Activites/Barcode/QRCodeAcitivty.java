@@ -125,11 +125,13 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
             public void onPositionClicked(int position, String value) {
                 switch (value) {
                     case "delete":
-//                        recyclerViewMethod.deleteCartItem(cartItemList.get(position).);
+                        recyclerViewMethod.deleteCartItem(cartItemList.get(position).getProductNo());
                         break;
                     case "plus":
+                        recyclerViewMethod.addCartItemCount(cartItemList.get(position).getProductNo());
                         break;
                     case "minus":
+                        recyclerViewMethod.subCartItemCount(cartItemList.get(position).getProductNo());
                         break;
                 }
             }

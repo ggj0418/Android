@@ -10,6 +10,7 @@ import com.example.android.Utils.Preference.PreferenceManager;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -40,7 +41,7 @@ public class RecyclerViewMethod {
                     case 200:
                         Toast.makeText(mContext, "장바구니 리스트업 성공", Toast.LENGTH_SHORT).show();
                         cartItemList.clear();
-                        cartItemList.addAll(response.body());
+                        cartItemList.addAll(Objects.requireNonNull(response.body()));
                         myCartAdapter.notifyDataSetChanged();
                         break;
                     case 401:
@@ -113,7 +114,7 @@ public class RecyclerViewMethod {
         HashMap<String, Integer> map = new HashMap<>();
         map.put("productNo", productNo);
 
-        Call<ResponseBody> setCartItemCall = retrofitAPI2.setCartItem(map);
+        Call<ResponseBody> setCartItemCall = retrofitAPI2.deleteCartItem(map);
         setCartItemCall.enqueue(new Callback<ResponseBody>() {
             @EverythingIsNonNull
             @Override
