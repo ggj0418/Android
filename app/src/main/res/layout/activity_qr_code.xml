@@ -9,7 +9,7 @@
     android:gravity="bottom"
     app:umanoDragView="@id/activity_barcode_capture_slidelayout"
     app:umanoScrollableView="@id/rv_map"
-    app:umanoPanelHeight="150dp"
+    app:umanoPanelHeight="200dp"
     app:umanoShadowHeight="0dp"
     app:umanoOverlay="true"
     tools:context=".Activites.Barcode.QRCodeActivity">
@@ -65,6 +65,16 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp"/>
+
+        <Button
+            android:id="@+id/activity_barcode_payment_button"
+            android:layout_marginBottom="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="결제하기"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="20sp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_map"

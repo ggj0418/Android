@@ -14,7 +14,16 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".Activites.Payment.InicisActivity"/>
+        <activity android:name=".Activites.Payment.InicisActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="iamporttest" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Dialog.CustomNotiActivity"
             android:screenOrientation="portrait"

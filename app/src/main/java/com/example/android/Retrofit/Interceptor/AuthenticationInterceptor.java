@@ -1,4 +1,4 @@
-package com.example.android.Retrofit;
+package com.example.android.Retrofit.Interceptor;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,6 +1,7 @@
 package com.example.android.Activites.Barcode;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -25,9 +26,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.Activites.Payment.InicisActivity;
 import com.example.android.DTOS.CartItemDTO;
 import com.example.android.R;
 import com.example.android.Utils.Barcode.BarcodeGraphic;
@@ -59,6 +62,7 @@ public class QRCodeActivity extends AppCompatActivity implements BarcodeGraphicT
     private static final String TAG = "Barcode-reader";
 
     private long backKeyPressedTime = 0;
+    private static final int INICIS_REQUEST_CODE = 9876;
 
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
@@ -87,6 +91,7 @@ public class QRCodeActivity extends AppCompatActivity implements BarcodeGraphicT
     private RecyclerView recyclerView;
     private MyCartAdapter myCartAdapter;
     public TextView wholeCountTextView;
+    private Button paymentButton;
 
     private RecyclerViewMethod recyclerViewMethod;
     /**
@@ -104,6 +109,13 @@ public class QRCodeActivity extends AppCompatActivity implements BarcodeGraphicT
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
 
         wholeCountTextView = findViewById(R.id.activity_barcode_whole_count_tv);
+        paymentButton = findViewById(R.id.activity_barcode_payment_button);
+        paymentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(QRCodeActivity.this, InicisActivity.class), INICIS_REQUEST_CODE);
+            }
+        });
 
         recyclerView = findViewById(R.id.rv_map);
         slidingUpPanelLayout = findViewById(R.id.slide_up);
@@ -467,6 +479,17 @@ public class QRCodeActivity extends AppCompatActivity implements BarcodeGraphicT
         @Override
         public void onScaleEnd(ScaleGestureDetector detector) {
             mCameraSource.doZoom(detector.getScaleFactor());
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == INICIS_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(), "결제 성공", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

@@ -1,0 +1,90 @@
+package com.example.android.Retrofit.WebViewClient;
+
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import java.net.URISyntaxException;
+
+// TODO 결제 완료 후 리다이렉트 페이지로 네이버로 들어가는데 그 부분을 제어하고 싶은데 어디로 들어가는지 찾아야함
+public class InicisWebViewClient extends WebViewClient {
+    private final Activity activity;
+
+    public InicisWebViewClient(Activity activity) {
+        this.activity = activity;
+    }
+
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        if(url.endsWith("html")) {
+            String impUrl = "javascript:inicis_script.get_inicis_webview("
+                    + "'card',"
+                    + "'꼬북칩',"
+                    + 100 + ","
+                    + "'ggj0418@naver.com',"
+                    + "'이현준',"
+//                    + "'010-1234-5678'"
+                    + ")";
+
+            view.loadUrl(impUrl);
+        }
+    }
+
+    // 외부 앱 실행을 위한 Native Code 처리 수행
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        String url = request.getUrl().toString();
+
+        if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("javascript:")) {
+            Intent intent = null;
+
+            try {
+                intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME); //IntentURI처리
+                Uri uri = Uri.parse(intent.getDataString());
+
+                activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                return true;
+            } catch (URISyntaxException ex) {
+                return false;
+            } catch (ActivityNotFoundException e) {
+                if (intent == null) return false;
+
+                if (handleNotFoundPaymentScheme(intent.getScheme())) return true;
+
+                String packageName = intent.getPackage();
+                if (packageName != null) {
+                    activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param scheme
+     * @return 해당 scheme에 대해 처리를 직접 하는지 여부
+     * <p>
+     * 결제를 위한 3rd-party 앱이 아직 설치되어있지 않아 ActivityNotFoundException이 발생하는 경우 처리합니다.
+     * 여기서 handler되지않은 scheme에 대해서는 intent로부터 Package정보 추출이 가능하다면 다음에서 packageName으로 market이동합니다.
+     */
+    protected boolean handleNotFoundPaymentScheme(String scheme) {
+        //PG사에서 호출하는 url에 package정보가 없어 ActivityNotFoundException이 난 후 market 실행이 안되는 경우
+        if (PaymentScheme.ISP.equalsIgnoreCase(scheme)) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + PaymentScheme.PACKAGE_ISP)));
+            return true;
+        } else if (PaymentScheme.BANKPAY.equalsIgnoreCase(scheme)) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + PaymentScheme.PACKAGE_BANKPAY)));
+            return true;
+        }
+
+        return false;
+    }
+}
