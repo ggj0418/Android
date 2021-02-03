@@ -114,15 +114,22 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
         myCartAdapter = new MyCartAdapter(getApplicationContext(), cartItemList, new CartClickListener() {
             @Override
             public void onPositionClicked(int position, String value) {
+                int productNo = cartItemList.get(position).getProductNo();
+
                 switch (value) {
                     case "delete":
-                        recyclerViewMethod.deleteCartItem(cartItemList.get(position).getProductNo());
+                        recyclerViewMethod.deleteCartItem(productNo);
                         break;
                     case "plus":
-                        recyclerViewMethod.addCartItemCount(cartItemList.get(position).getProductNo());
+                        recyclerViewMethod.addCartItemCount(productNo);
                         break;
                     case "minus":
-                        recyclerViewMethod.subCartItemCount(cartItemList.get(position).getProductNo());
+                        int count = cartItemList.get(position).getCount();
+                        if(count > 1) {
+                            recyclerViewMethod.subCartItemCount(productNo);
+                        } else {
+                            recyclerViewMethod.deleteCartItem(productNo);
+                        }
                         break;
                 }
             }

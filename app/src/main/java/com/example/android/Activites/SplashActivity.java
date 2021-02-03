@@ -72,9 +72,11 @@ public class SplashActivity extends AppCompatActivity {
                             break;
                         case 404:
                             Toast.makeText(getApplicationContext(), "잘못된 요청입니다", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                             break;
                         default:
                             Toast.makeText(getApplicationContext(), "서버 내부 오류입니다", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                             break;
                     }
                 } catch (IOException e) {
