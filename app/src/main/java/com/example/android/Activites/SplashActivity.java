@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.example.android.Activites.Barcode.QRCodeAcitivty;
-import com.example.android.Activites.UserAccount.InputPasswordActivity;
+import com.example.android.Activites.Barcode.QRCodeActivity;
 import com.example.android.Activites.UserAccount.LoginActivity;
-import com.example.android.Activites.UserAccount.SignUpActivity;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
@@ -65,7 +62,7 @@ public class SplashActivity extends AppCompatActivity {
                         case 200:
                             assert response.body() != null;
                             if(response.body().string().equals("true")) {
-                                startActivity(new Intent(SplashActivity.this, QRCodeAcitivty.class));
+                                startActivity(new Intent(SplashActivity.this, QRCodeActivity.class));
                             } else {
                                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                             }

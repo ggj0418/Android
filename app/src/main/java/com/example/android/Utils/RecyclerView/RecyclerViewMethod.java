@@ -1,12 +1,11 @@
 package com.example.android.Utils.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.Activites.Barcode.QRCodeAcitivty;
+import com.example.android.Activites.Barcode.QRCodeActivity;
 import com.example.android.DTOS.CartItemDTO;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
@@ -63,7 +62,7 @@ public class RecyclerViewMethod {
                         Toast.makeText(mContext, "장바구니 리스트업 성공", Toast.LENGTH_SHORT).show();
                         cartItemList.clear();
                         cartItemList.addAll(Objects.requireNonNull(response.body()));
-                        setTextView(((QRCodeAcitivty) mContext).wholeCountTextView, getWholeCount());
+                        setTextView(((QRCodeActivity) mContext).wholeCountTextView, getWholeCount());
                         myCartAdapter.notifyDataSetChanged();
                         break;
                     case 401:

@@ -12,7 +12,7 @@
     app:umanoPanelHeight="150dp"
     app:umanoShadowHeight="0dp"
     app:umanoOverlay="true"
-    tools:context=".Activites.Barcode.QRCodeAcitivty">
+    tools:context=".Activites.Barcode.QRCodeActivity">
 
     <LinearLayout
         android:id="@+id/topLayout"

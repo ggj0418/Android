@@ -10,13 +10,9 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.Activites.Barcode.QRCodeAcitivty;
+import com.example.android.Activites.Barcode.QRCodeActivity;
 import com.example.android.DTOS.AccessTokenDTO;
 import com.example.android.DTOS.ChangePasswordDTO;
 import com.example.android.DTOS.UserInfoDTO;
@@ -34,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.internal.EverythingIsNonNull;
 
 public class InputPasswordActivity extends AppCompatActivity {
     private ActivityInputPwBinding binding;
@@ -80,7 +75,7 @@ public class InputPasswordActivity extends AppCompatActivity {
                                     assert response.body() != null;
                                     PreferenceManager.setString(getApplicationContext(), "accessToken", response.body().getAccessToken());
                                     Toast.makeText(InputPasswordActivity.this, "정상적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(InputPasswordActivity.this, QRCodeAcitivty.class);
+                                    Intent intent = new Intent(InputPasswordActivity.this, QRCodeActivity.class);
                                     startActivity(intent);
                                     finish();
                                     break;

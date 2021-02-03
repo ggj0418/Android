@@ -53,7 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicTracker.BarcodeUpdateListener {
+public class QRCodeActivity extends AppCompatActivity implements BarcodeGraphicTracker.BarcodeUpdateListener {
     private List<CartItemDTO> cartItemList = new ArrayList<>();
 
     private static final String TAG = "Barcode-reader";
@@ -96,7 +96,7 @@ public class QRCodeAcitivty extends AppCompatActivity implements BarcodeGraphicT
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);     // 타이틀바 제거
-        setContentView(R.layout.activity_qr_activity);
+        setContentView(R.layout.activity_qr_code);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);     // 상태바 제거
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
