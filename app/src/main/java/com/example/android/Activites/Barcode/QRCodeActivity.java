@@ -60,6 +60,7 @@ public class QRCodeActivity extends AppCompatActivity implements BarcodeGraphicT
     private List<CartItemDTO> cartItemList = new ArrayList<>();
 
     private static final String TAG = "Barcode-reader";
+    private int cartNo;
 
     private long backKeyPressedTime = 0;
     private static final int INICIS_REQUEST_CODE = 9876;
@@ -113,7 +114,9 @@ public class QRCodeActivity extends AppCompatActivity implements BarcodeGraphicT
         paymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(QRCodeActivity.this, InicisActivity.class), INICIS_REQUEST_CODE);
+                Intent toInicisActivity = new Intent(QRCodeActivity.this, InicisActivity.class);
+                toInicisActivity.putExtra("cartNo", recyclerViewMethod.getCartNo());
+                startActivityForResult(toInicisActivity, INICIS_REQUEST_CODE);
             }
         });
 
@@ -487,8 +490,22 @@ public class QRCodeActivity extends AppCompatActivity implements BarcodeGraphicT
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == INICIS_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(), "결제 성공", Toast.LENGTH_SHORT).show();
+            switch (resultCode) {
+                case 200:
+                    Toast.makeText(getApplicationContext(), "결제 성공", Toast.LENGTH_SHORT).show();
+                    break;
+                case 400:
+                    Toast.makeText(getApplicationContext(), "결제 실패", Toast.LENGTH_SHORT).show();
+                    break;
+                case 401:
+                    Toast.makeText(getApplicationContext(), "토큰 만료", Toast.LENGTH_SHORT).show();
+                    break;
+                case 403:
+                    Toast.makeText(getApplicationContext(), "유저만 접근 가능", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(getApplicationContext(), "서버 내부 에러입니다", Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
     }

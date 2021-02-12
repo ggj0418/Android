@@ -6,6 +6,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.Activites.Barcode.QRCodeActivity;
+import com.example.android.DTOS.CartDTO;
 import com.example.android.DTOS.CartItemDTO;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
@@ -27,12 +28,21 @@ public class RecyclerViewMethod {
     private final List<CartItemDTO> cartItemList;
     private final MyCartAdapter myCartAdapter;
     private final Services retrofitAPI2;
+    public int cartNo;
 
     public RecyclerViewMethod(Context mContext, List<CartItemDTO> cartItemList, MyCartAdapter myCartAdapter) {
         this.mContext = mContext;
         this.cartItemList = cartItemList;
         this.myCartAdapter = myCartAdapter;
         retrofitAPI2 = RetrofitClient.getRetrofit(PreferenceManager.getString(mContext, "accessToken")).create(Services.class);
+    }
+
+    public int getCartNo() {
+        return cartNo;
+    }
+
+    public void setCartNo(int cartNo) {
+        this.cartNo = cartNo;
     }
 
     @SuppressLint("SetTextI18n")
@@ -42,27 +52,30 @@ public class RecyclerViewMethod {
         textView.setText(totalPrice + " 원");
     }
 
-    public int getWholeCount() {
-        int wholeCount = 0;
-        for(CartItemDTO cartItemDTO : cartItemList) {
-            wholeCount += (cartItemDTO.getCount() * cartItemDTO.getProductPrice());
-        }
-
-        return wholeCount;
-    }
+//    public int getWholeCount() {
+//        int wholeCount = 0;
+//        for(CartItemDTO cartItemDTO : cartItemList) {
+//            wholeCount += (cartItemDTO.getCount() * cartItemDTO.getProductPrice());
+//        }
+//
+//        return wholeCount;
+//    }
 
     public void showCartList() {
-        Call<List<CartItemDTO>> getCartListCall = retrofitAPI2.getCartList();
-        getCartListCall.enqueue(new Callback<List<CartItemDTO>>() {
+        Call<CartDTO> getCartListCall = retrofitAPI2.getCartList();
+        getCartListCall.enqueue(new Callback<CartDTO>() {
             @EverythingIsNonNull
             @Override
-            public void onResponse(Call<List<CartItemDTO>> call, Response<List<CartItemDTO>> response) {
+            public void onResponse(Call<CartDTO> call, Response<CartDTO> response) {
                 switch (response.code()) {
                     case 200:
                         Toast.makeText(mContext, "장바구니 리스트업 성공", Toast.LENGTH_SHORT).show();
+
+                        CartDTO cartDTO = response.body();
                         cartItemList.clear();
-                        cartItemList.addAll(Objects.requireNonNull(response.body()));
-                        setTextView(((QRCodeActivity) mContext).wholeCountTextView, getWholeCount());
+                        cartItemList.addAll(cartDTO.getCartItems());
+                        setTextView(((QRCodeActivity) mContext).wholeCountTextView, cartDTO.getTotalPrice());
+                        setCartNo(cartDTO.getCartNo());
                         myCartAdapter.notifyDataSetChanged();
                         break;
                     case 401:
@@ -82,7 +95,7 @@ public class RecyclerViewMethod {
 
             @EverythingIsNonNull
             @Override
-            public void onFailure(Call<List<CartItemDTO>> call, Throwable t) {
+            public void onFailure(Call<CartDTO> call, Throwable t) {
                 Toast.makeText(mContext, "통신 에러입니다", Toast.LENGTH_SHORT).show();
             }
         });

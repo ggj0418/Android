@@ -3,41 +3,74 @@ package com.example.android.Retrofit.WebViewClient;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
+import com.example.android.Retrofit.RetrofitClient;
+import com.example.android.Services.Services;
+import com.example.android.Utils.Preference.PreferenceManager;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+import okhttp3.ResponseBody;
+import okhttp3.internal.http.HttpHeaders;
+import okhttp3.internal.http2.Header;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.internal.EverythingIsNonNull;
 
 // TODO 결제 완료 후 리다이렉트 페이지로 네이버로 들어가는데 그 부분을 제어하고 싶은데 어디로 들어가는지 찾아야함
 public class InicisWebViewClient extends WebViewClient {
     private final Activity activity;
+    private final int cartNo;
+    private boolean isPaymentEnd = false;
 
-    public InicisWebViewClient(Activity activity) {
+    public InicisWebViewClient(Activity activity, int cartNo) {
         this.activity = activity;
+        this.cartNo = cartNo;
+    }
+
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        if(url.startsWith("http://52.78.123.79")) {
+            view.loadUrl("file:///android_asset/inicis_wait.html");
+        }
     }
 
     @Override
     public void onPageFinished(WebView view, String url) {
         if(url.endsWith("html")) {
-            String impUrl = "javascript:inicis_script.get_inicis_webview("
-                    + "'card',"
-                    + "'꼬북칩',"
-                    + 100 + ","
-                    + "'ggj0418@naver.com',"
-                    + "'이현준',"
-//                    + "'010-1234-5678'"
-                    + ")";
-
-            view.loadUrl(impUrl);
+            WebViewClientMethod method = new WebViewClientMethod(activity);
+            method.getHashUid(view, "merchant_" + System.currentTimeMillis());
         }
+        Log.d("ggj0418", url);
     }
 
     // 외부 앱 실행을 위한 Native Code 처리 수행
+    // return 값이 true면 새로운 웹 브라우저 앱이 실행
+    // return 값이 false면 현재 WebView에서 링크가 이동됨
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
+        Log.d("ggj0418", url);
 
         if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("javascript:")) {
             Intent intent = null;
@@ -63,6 +96,70 @@ public class InicisWebViewClient extends WebViewClient {
 
                 return false;
             }
+        } else if(url.startsWith("http://52.78.123.79")) {
+            Map<String, String> map = new HashMap<>();
+            int pos1= url.indexOf("?");
+
+            if (pos1>=0) {
+                url = url.substring(pos1+1);
+            }
+
+            String[] params = url.split("&");
+            for (String param : params) {
+                String name = param.split("=")[0];
+                String value = param.split("=")[1];
+                map.put(name, value);
+            }
+
+            boolean impSuccess = Boolean.parseBoolean(map.get("imp_success"));
+            String impUid = map.get("imp_uid");
+
+            // TODO 서버에서 merchant_uid를 = 그대로 인식하는지 URL 인코딩해서 인식하는지 알아야 함
+            String merchantUid = map.get("merchant_uid");
+//            merchantUid = Objects.requireNonNull(merchantUid).replaceAll("%3D", "=");
+
+            Services retrofitAPI2 = RetrofitClient.getRetrofit(PreferenceManager.getString(activity, "accessToken")).create(Services.class);
+            Call<ResponseBody> certifyPaymentCall = retrofitAPI2.certifyPayment(cartNo, impSuccess, impUid, merchantUid);
+            certifyPaymentCall.enqueue(new Callback<ResponseBody>() {
+                @EverythingIsNonNull
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    switch (response.code()) {
+                        case 200:
+                            try {
+                                boolean isCerified = Boolean.parseBoolean(response.body().string());
+                                if(isCerified) {
+                                    activity.setResult(200);
+                                } else {
+                                    activity.setResult(400);
+                                }
+                            } catch (IOException e) {
+                                activity.setResult(500);
+                                e.printStackTrace();
+                            }
+                            break;
+                        case 401:
+                            activity.setResult(401);
+                            break;
+                        case 403:
+                            activity.setResult(403);
+                            break;
+                        default:
+                            activity.setResult(500);
+                            break;
+                    }
+                    activity.finish();
+                }
+
+                @EverythingIsNonNull
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    activity.setResult(500);
+                    activity.finish();
+                }
+            });
+
+            return false;
         }
 
         return false;

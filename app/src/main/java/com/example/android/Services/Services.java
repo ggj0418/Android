@@ -1,6 +1,7 @@
 package com.example.android.Services;
 
 import com.example.android.DTOS.AccessTokenDTO;
+import com.example.android.DTOS.CartDTO;
 import com.example.android.DTOS.CartItemDTO;
 import com.example.android.DTOS.ChangePasswordDTO;
 import com.example.android.DTOS.FindingEmailDTO;
@@ -105,7 +106,7 @@ public interface Services {
      * @return 장바구니에 있는 상품 리스트를 반환값으로 받는 Call
      */
     @GET("carts/list")
-    Call<List<CartItemDTO>> getCartList();
+    Call<CartDTO> getCartList();
 
     /**
      * 장바구니 상품 추가 api
@@ -139,4 +140,15 @@ public interface Services {
      */
     @PUT("carts/sub/{productNo}")
     Call<ResponseBody> subCartItemCount(@Path("productNo") int productNo);
+
+    /**
+     * 사용자별로 고유한 merchant_uid를 발급받는 api
+     * @param map merchant_new Date().now
+     * @return hash값이 추가된 merchant_new Date().now
+     */
+    @POST("payment/merchant/me")
+    Call<ResponseBody> getHashUid(@Body HashMap<String, String> map);
+
+    @GET("payment/certification")
+    Call<ResponseBody> certifyPayment(@Query("cartNo") int cartNo, @Query("imp_success") boolean imp_success, @Query("imp_uid") String imp_uid, @Query("merchant_uid") String merchant_uid);
 }
