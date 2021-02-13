@@ -107,13 +107,10 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.BasketView
 
             if(view.getId() == this.delete.getId()) {
                 value = "delete";
-//                Log.d("MyBasketAdapter", "해당 상품이 제외되었습니다");
             } else if(view.getId() == this.plus.getId()) {
                 value = "plus";
-//                Log.d("MyBasketAdapter", "상품 개수가 1개 추가되었습니다");
             } else if(view.getId() == this.minus.getId()) {
                 value = "minus";
-//                Log.d("MyBasketAdapter", "상품 개수가 1개 감소하였습니다");
             } else {
                 value = "item";
             }

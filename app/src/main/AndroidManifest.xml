@@ -3,21 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- network 상태를 미리 체크하여 연결 안된 경우 다이얼로그를 보여주려면 아래 permission 추가 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- android test 돌릴 때 화면 lock 풀어야 로그인 touch 가능 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-
     <application
         android:allowBackup="false"
         android:fullBackupContent="@xml/backup_descriptor"
@@ -29,23 +14,33 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
+        <activity android:name=".Activites.Payment.InicisActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <activity android:name=".Activites.Barcode.QRCodeAcitivty"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
+                <data android:scheme="iamporttest" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Dialog.CustomNotiActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".Activites.Barcode.QRCodeActivity" />
         <activity android:name=".Activites.FindingAccount.GetPasswrodActivity" />
         <activity android:name=".Activites.FindingAccount.FindPasswordActivity" />
         <activity android:name=".Activites.FindingAccount.GetEmailActivity" />
         <activity android:name=".Activites.FindingAccount.FindEmailActivity" />
-
         <activity android:name=".Activites.UserAccount.PhoneAuthActivity" />
         <activity android:name=".Activites.UserAccount.SignUpActivity" />
         <activity android:name=".Activites.UserAccount.InputPasswordActivity" />
         <activity android:name=".Activites.UserAccount.LoginActivity" />
-
         <activity
             android:name=".Activites.SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,4 +52,19 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_native_key" />
     </application>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- network 상태를 미리 체크하여 연결 안된 경우 다이얼로그를 보여주려면 아래 permission 추가 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- android test 돌릴 때 화면 lock 풀어야 로그인 touch 가능 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
 </manifest>

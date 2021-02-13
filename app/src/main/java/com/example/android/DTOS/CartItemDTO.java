@@ -3,6 +3,8 @@ package com.example.android.DTOS;
 import com.google.gson.annotations.SerializedName;
 
 public class CartItemDTO {
+    @SerializedName("productNo")
+    private int productNo;
     @SerializedName("categoryName")
     private String categoryName;
     @SerializedName("productName")
@@ -13,6 +15,14 @@ public class CartItemDTO {
     private int productCode;
     @SerializedName("productPrice")
     private int productPrice;
+
+    public int getProductNo() {
+        return productNo;
+    }
+
+    public void setProductNo(int productNo) {
+        this.productNo = productNo;
+    }
 
     public String getCategoryName() {
         return categoryName;
