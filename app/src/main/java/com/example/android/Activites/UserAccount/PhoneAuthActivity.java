@@ -48,11 +48,16 @@ public class PhoneAuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(view);
 
+        settings();
+        textEvent();
+        onBtnEvent();
+        ;
+    }
+
+    private void settings() {
         binding.confirmButton2.setEnabled(false);
         binding.confirmNumber.setVisibility(View.INVISIBLE);
         binding.confirmTextview1.setVisibility(View.INVISIBLE);
-        onBtnEvent();
-        textEvent();
     }
 
     private void textEvent() {
@@ -61,6 +66,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
         binding.confirmName.addTextChangedListener(textWatcher03);
     }
 
+    //문자로 받은 5자리 숫자를 입력했을 경우 버튼을 enable 시켜줌
     private final TextWatcher textWatcher01 = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -87,6 +93,8 @@ public class PhoneAuthActivity extends AppCompatActivity {
         }
     };
 
+    //핸드폰 번호를 11자리 입력, 이름을 입력 둘중에 하나라도 입력 안하면 인증 요청 버튼 enable x
+    //핸드폰 번호를 기준으로 textwatcher
     private final TextWatcher textWatcher02 = new TextWatcher() {
 
         @Override
@@ -99,18 +107,18 @@ public class PhoneAuthActivity extends AppCompatActivity {
             String edit1 = binding.confirmName.getText().toString();
             if (edit2.length() > 10) {
                 binding.confirmButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
-                binding.confirmButton1.setTextColor(getResources().getColor(R.color.colorBlack));
+                binding.confirmText.setTextColor(getResources().getColor(R.color.colorBlack));
                 binding.confirmButton1.setEnabled(true);
             }
-            if (edit2.length() <= 10) {
+           else if (edit2.length() <= 10) {
                 binding.confirmButton1.setEnabled(false);
                 binding.confirmButton1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
-                binding.confirmButton1.setTextColor(getResources().getColor(R.color.TextGray));
+                binding.confirmText.setTextColor(getResources().getColor(R.color.TextGray));
             }
-            if (edit1.equals("")) {
+           else if (edit1.equals("")) {
                 binding.confirmButton1.setEnabled(false);
                 binding.confirmButton1.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-                binding.confirmButton1.setTextColor(getResources().getColor(R.color.TextColor1));
+                binding.confirmText.setTextColor(getResources().getColor(R.color.TextColor1));
             }
         }
 
@@ -118,7 +126,8 @@ public class PhoneAuthActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {
         }
     };
-
+    //핸드폰 번호를 11자리 입력, 이름을 입력 둘중에 하나라도 입력 안하면 인증 요청 버튼 enable x
+    //이름을 번호를 기준으로 textwatcher
     private final TextWatcher textWatcher03 = new TextWatcher() {
 
         @Override
@@ -132,18 +141,18 @@ public class PhoneAuthActivity extends AppCompatActivity {
             String edit1 = binding.confirmName.getText().toString();
             if (edit2.length() > 10) {
                 binding.confirmButton1.setBackgroundColor(getResources().getColor(R.color.colorYellow));
-                binding.confirmButton1.setTextColor(getResources().getColor(R.color.colorBlack));
+                binding.confirmText.setTextColor(getResources().getColor(R.color.colorBlack));
                 binding.confirmButton1.setEnabled(true);
             }
             if (edit2.length() <= 10) {
                 binding.confirmButton1.setEnabled(false);
                 binding.confirmButton1.setBackgroundColor(getResources().getColor(R.color.ButtonGray));
-                binding.confirmButton1.setTextColor(getResources().getColor(R.color.TextGray));
+                binding.confirmText.setTextColor(getResources().getColor(R.color.TextGray));
             }
             if (edit1.equals("")) {
                 binding.confirmButton1.setEnabled(false);
                 binding.confirmButton1.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-                binding.confirmButton1.setTextColor(getResources().getColor(R.color.TextColor1));
+                binding.confirmText.setTextColor(getResources().getColor(R.color.TextColor1));
             }
         }
 

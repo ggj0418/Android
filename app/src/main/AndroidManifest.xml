@@ -30,11 +30,6 @@
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
 
-        <activity
-            android:name=".Dialog.CustomNotiActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Dialog"/>
-
         <activity android:name=".Activites.Barcode.QRCodeAcitivty"/>
 
         <activity android:name=".Activites.FindingAccount.GetPasswrodActivity" />

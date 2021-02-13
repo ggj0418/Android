@@ -23,28 +23,20 @@
 
     <TextView
         android:id="@+id/signup_text"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/applesdgothicneob"
         android:text="본인확인이 필요합니다."
         android:textColor="#232328"
         android:textSize="20sp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.508"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.0316"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toTopOf="@id/top_guideline" />
 
     <TextView
-        android:layout_width="0sp"
-        android:layout_height="0sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="14sp"
         android:fontFamily="@font/applesdgothicneom"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.1333"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.0223"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toTopOf ="@id/top_guideline3"
         android:text="이름"
@@ -67,14 +59,10 @@
         app:layout_constraintTop_toTopOf="@id/top_guideline4" />
 
     <TextView
-        android:layout_width="0sp"
-        android:layout_height="0sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="14sp"
         android:fontFamily="@font/applesdgothicneom"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent= "0.2"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.0223"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toTopOf ="@id/top_guideline6"
         android:text="휴대폰 번호"
@@ -97,26 +85,46 @@
         android:maxLength="11"
         />
 
-    <Button
+<!--    <Button-->
+<!--        android:id="@+id/confirm_button1"-->
+<!--        android:layout_width="0sp"-->
+<!--        android:layout_height="0sp"-->
+<!--        app:layout_constraintWidth_default="percent"-->
+<!--        app:layout_constraintWidth_percent="0.133"-->
+<!--        app:layout_constraintHeight_default="percent"-->
+<!--        app:layout_constraintHeight_percent="0.0289"-->
+<!--        app:layout_constraintTop_toTopOf="@id/top_guideline8"-->
+<!--        app:layout_constraintStart_toStartOf="@id/start_guideline3"-->
+<!--        android:fontFamily="@font/applesdgothicneom"-->
+<!--        android:text="인증요청"-->
+<!--        android:textSize="11sp"-->
+<!--        android:paddingLeft="5sp"-->
+<!--        android:paddingRight="5sp"-->
+<!--        android:paddingTop="5sp"-->
+<!--        android:paddingBottom="4sp"-->
+<!--        android:background="#efefef"-->
+<!--        android:textColor="#A7A7A9"-->
+<!--        />-->
+    <androidx.cardview.widget.CardView
         android:id="@+id/confirm_button1"
-        android:layout_width="0sp"
-        android:layout_height="0sp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.133"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.0289"
+        android:layout_width="48dp"
+        android:layout_height="22dp"
         app:layout_constraintTop_toTopOf="@id/top_guideline8"
         app:layout_constraintStart_toStartOf="@id/start_guideline3"
-        android:fontFamily="@font/applesdgothicneom"
-        android:text="인증요청"
-        android:textSize="11sp"
-        android:paddingLeft="5sp"
-        android:paddingRight="5sp"
-        android:paddingTop="5sp"
-        android:paddingBottom="4sp"
-        android:background="#efefef"
-        android:textColor="#A7A7A9"
-        />
+        android:backgroundTint="#efefef"
+        >
+        <TextView
+            android:id="@+id/confirm_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:text="인증요청"
+            android:textColor="#a7a7a9"
+            android:fontFamily="@font/applesdgothicneom"
+            android:layout_gravity="center"/>
+
+    </androidx.cardview.widget.CardView>
+
 
     <Button
         android:id="@+id/confirm_button2"
@@ -137,14 +145,10 @@
 
     <TextView
         android:id="@+id/confirm_textview1"
-        android:layout_width="0sp"
-        android:layout_height="0sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="14sp"
         android:fontFamily="@font/applesdgothicneom"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent= "0.13"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.021"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toTopOf ="@id/top_guideline9"
         android:text="인증번호"
@@ -171,6 +175,7 @@
         android:id="@+id/confirm_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="11sp"
         app:layout_constraintStart_toStartOf="@id/start_guideline4"
         app:layout_constraintTop_toTopOf="@id/top_guideline11"
         />

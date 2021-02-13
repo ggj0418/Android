@@ -22,27 +22,21 @@
 
     <TextView
         android:id="@+id/get_email_text1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/applesdgothicneob"
         android:text="~~~님의 이메일은"
         android:textColor="#232328"
         android:textSize="20sp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.558"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.0316"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toTopOf="@id/top_guideline" />
 
     <TextView
         android:id="@+id/get_email_text2"
         android:layout_width="wrap_content"
-        android:layout_height="0sp"
+        android:layout_height="wrap_content"
         android:textSize="20sp"
         android:fontFamily="@font/applesdgothicneom"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.0423"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toTopOf ="@id/top_guideline3"
         android:text="~~~~~@~~~~~.com 입니다."
@@ -67,16 +61,12 @@
 
     <TextView
         android:id="@+id/get_email_text3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/applesdgothicneob"
         android:text="비밀번호찾기"
         android:textColor="#A7A7A9"
         android:textSize="13sp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.189"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.021"
         app:layout_constraintStart_toStartOf="@id/start_guideline3"
         app:layout_constraintTop_toTopOf="@id/top_guideline7" />
 

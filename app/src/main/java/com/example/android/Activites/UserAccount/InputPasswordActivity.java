@@ -38,7 +38,7 @@ import retrofit2.internal.EverythingIsNonNull;
 
 public class InputPasswordActivity extends AppCompatActivity {
     private ActivityInputPwBinding binding;
-
+    public OptionCodeTypeDialog octDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +96,7 @@ public class InputPasswordActivity extends AppCompatActivity {
                                 case 428:
                                     Toast.makeText(InputPasswordActivity.this, "비밀번호를 변경해야 합니다.", Toast.LENGTH_SHORT).show();
 
-                                    OptionCodeTypeDialog octDialog = new OptionCodeTypeDialog(InputPasswordActivity.this, new CustomDialogClickListener() {
+                                    octDialog = new OptionCodeTypeDialog(InputPasswordActivity.this, new CustomDialogClickListener() {
                                         @Override
                                         public void onPositiveClick(String pw1, String pw2) {
                                             Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
@@ -147,18 +147,7 @@ public class InputPasswordActivity extends AppCompatActivity {
                                             startActivity(intent);
                                         }
                                     });
-
-                                    Display display = getWindowManager().getDefaultDisplay();  // in Activity
-                                    Point size = new Point();
-                                    display.getRealSize(size); // or getSize(size)
-                                    int width = (int) (size.x * 0.9444f);
-                                    int height = (int) (size.y * 0.46f);
-                                    octDialog.setCanceledOnTouchOutside(true);
-                                    octDialog.setCancelable(true);
-
-                                    octDialog.show();
-                                    Window window = octDialog.getWindow();
-                                    window.setLayout(width, height);
+                                    DialogSetting();
                                     break;
                             }
                         }
@@ -175,4 +164,16 @@ public class InputPasswordActivity extends AppCompatActivity {
             }
         }
     };
+    private void DialogSetting(){
+        Display display = getWindowManager().getDefaultDisplay();  // in Activity
+        Point size = new Point();
+        display.getRealSize(size); // or getSize(size)
+        int width = (int) (size.x * 0.9444f);
+        int height = (int) (size.y * 0.46f);
+        octDialog.setCanceledOnTouchOutside(true);
+        octDialog.setCancelable(true);
+        octDialog.show();
+        Window window = octDialog.getWindow();
+        window.setLayout(width, height);
+    }
 }

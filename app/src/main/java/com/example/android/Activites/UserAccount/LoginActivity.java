@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         onBtnEvent();
     }
 
-    void textEvent() {
+    private void textEvent() {
         binding.loginEdit1.addTextChangedListener(textWatcher01);
     }
 
@@ -71,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    void changeText(Boolean check) {
+    private void changeText(Boolean check) {
         if (check) {
             binding.loginText2.setText("올바른 형식입니다.");
             binding.loginText2.setTextColor(getResources().getColor(R.color.TextGray));
@@ -87,10 +88,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    void onBtnEvent() {
+    private void onBtnEvent() {
         binding.loginButton1.setOnClickListener(onClickListener);
         binding.loginFindPw.setOnClickListener(onClickListener);
         binding.loginFindEmail.setOnClickListener(onClickListener);
+        binding.loginNaver.setOnClickListener(onClickListener);
+        binding.loginKakao.setOnClickListener(onClickListener);
+        binding.loginGoogle.setOnClickListener(onClickListener);
     }
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -130,13 +134,29 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                     break;
+
                 case R.id.login_find_email:
                     Intent intent = new Intent(LoginActivity.this, FindEmailActivity.class);
                     startActivity(intent);
                     break;
+
                 case R.id.login_find_pw:
                     Intent intent2 = new Intent(LoginActivity.this, FindPasswordActivity.class);
                     startActivity(intent2);
+                    break;
+
+                case R.id.login_naver:
+                    Intent naverintent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/naver"));
+                    startActivity(naverintent);
+                    break;
+
+                case R.id.login_kakao:
+                    Intent kakaointent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/kakao"));
+                    startActivity(kakaointent);
+                    break;
+                case R.id.login_google:
+                    Intent googleintent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/google"));
+                    startActivity(googleintent);
                     break;
             }
         }

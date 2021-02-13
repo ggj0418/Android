@@ -6,12 +6,8 @@
 
     <TextView
         android:id="@+id/login_text1"
-        android:layout_width="0sp"
-        android:layout_height="0sp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.372"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.0276"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/applesdgothicneob"
         android:text="결제가 편한 마켓"
         android:textSize="18dp"
@@ -35,12 +31,8 @@
 
     <TextView
         android:id="@+id/login_text3"
-        android:layout_width="0sp"
-        android:layout_height="0sp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.336"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.025"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="이메일을 입력하세요"
         android:textSize="15sp"
         android:textColor="#232328"
@@ -75,9 +67,6 @@
         app:layout_constraintTop_toTopOf="@id/top_guideline10"
         />
 
-
-
-
     <Button
         android:id="@+id/login_button1"
         android:layout_width="0sp"
@@ -97,12 +86,8 @@
         <!--guide라인 값 수정 필요, 작대기 맞는지..?-->
         <TextView
             android:id="@+id/login_find_email"
-            android:layout_width="0sp"
-            android:layout_height="0sp"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.155"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.021"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:fontFamily="@font/applesdgothicneob"
             app:layout_constraintTop_toTopOf="@id/top_guideline6"
@@ -112,9 +97,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="0sp"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.021"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:fontFamily="@font/applesdgothicneob"
             app:layout_constraintStart_toStartOf="@id/start_guideline5"
@@ -124,12 +107,8 @@
 
         <TextView
             android:id="@+id/login_find_pw"
-            android:layout_width="0sp"
-            android:layout_height="0sp"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.189"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.021"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:fontFamily="@font/applesdgothicneob"
             app:layout_constraintStart_toStartOf="@id/start_guideline6"
@@ -149,12 +128,9 @@
 
     <TextView
         android:id="@+id/login_text4"
-        android:layout_width="0sp"
-        android:layout_height="0sp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.188"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.0212"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
         android:fontFamily="@font/applesdgothicneob"
         app:layout_constraintTop_toTopOf="@id/top_guideline7"
         app:layout_constraintStart_toStartOf="@+id/start_guideline7"
@@ -172,19 +148,21 @@
         app:layout_constraintTop_toTopOf="@id/top_guideline9"
         />
 
-        <ImageView
-            android:layout_width="0sp"
-            android:layout_height="0sp"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.134"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.0658"
-            android:src="@drawable/naver_logo"
-            app:layout_constraintStart_toStartOf="@id/start_guideline3"
-            app:layout_constraintTop_toTopOf="@id/top_guideline8"
-            />
+    <ImageView
+        android:id="@+id/login_naver"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/naver_logo"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.0658"
+        app:layout_constraintStart_toStartOf="@id/start_guideline3"
+        app:layout_constraintTop_toTopOf="@id/top_guideline8"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.134" />
 
-        <ImageView
+    <ImageView
+            android:id="@+id/login_kakao"
             android:layout_width="0sp"
             android:layout_height="0sp"
             app:layout_constraintWidth_default="percent"
@@ -196,6 +174,7 @@
             app:layout_constraintStart_toStartOf="@id/start_guideline8"
             />
         <ImageView
+            android:id="@+id/login_google"
             android:layout_width="0sp"
             android:layout_height="0sp"
             app:layout_constraintWidth_default="percent"
@@ -247,7 +226,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.536" />
+        app:layout_constraintGuide_percent="0.605" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideline7"

@@ -67,8 +67,6 @@ public class PreferenceManager {
         editor.putBoolean(key, value);
         editor.apply();
     }
-
-
     /**
      * int 값 저장
      * @param context
@@ -82,7 +80,6 @@ public class PreferenceManager {
         editor.apply();
         Log.d("ddd", "ddd");
     }
-
 
 
     /**
