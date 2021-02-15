@@ -97,15 +97,12 @@ public class InputPasswordActivity extends AppCompatActivity {
                                 case 428:
                                     assert response.errorBody() != null;
                                     Gson gson = new Gson();
-                                    AccessTokenDTO array = null;
                                     try {
-                                        array = gson.fromJson(response.errorBody().string(), AccessTokenDTO.class);
+                                        AccessTokenDTO accessTokenDTO = gson.fromJson(response.errorBody().string(), AccessTokenDTO.class);
+                                        PreferenceManager.setString(getApplicationContext(), "accessToken", accessTokenDTO.getAccessToken());
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    Log.d("array",array.toString());
-                                    List<AccessTokenDTO> list = Arrays.asList(array);
-                                    PreferenceManager.setString(getApplicationContext(), "accessToken", list.get(0).getAccessToken());
                                     Toast.makeText(InputPasswordActivity.this, "비밀번호를 변경해야 합니다.", Toast.LENGTH_SHORT).show();
 
                                     octDialog = new OptionCodeTypeDialog(InputPasswordActivity.this, new CustomDialogClickListener() {
