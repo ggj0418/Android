@@ -146,19 +146,19 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent2);
                     break;
 
-//                case R.id.login_naver:
-//                    Intent naverintent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/naver"));
-//                    startActivity(naverintent);
+                  case R.id.login_naver:
+                    Intent naverintent = new Intent(LoginActivity.this,SocialLogin.class);
+                    startActivity(naverintent);
 //                    break;
 
 //                case R.id.login_kakao:
 //                    Intent kakaointent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/kakao"));
 //                    startActivity(kakaointent);
 //                    break;
-                case R.id.login_google:
-                    Intent googleintent = new Intent(LoginActivity.this, SocialLogin.class);
-                    startActivity(googleintent);
-                    break;
+//                case R.id.login_google:
+//                    Intent googleintent = new Intent(LoginActivity.this, SocialLogin.class);
+//                    startActivity(googleintent);
+//                    break;
             }
         }
     };

@@ -24,9 +24,14 @@ import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
 import com.example.android.Utils.Preference.PreferenceManager;
 import com.example.android.databinding.ActivityInputPwBinding;
+import com.google.gson.Gson;
 
 //wkdtwiklvqit
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -90,17 +95,26 @@ public class InputPasswordActivity extends AppCompatActivity {
                                     break;
 
                                 case 428:
-                                    assert response.body() != null;
-                                    PreferenceManager.setString(getApplicationContext(), "accessToken", response.body().getAccessToken());
+                                    assert response.errorBody() != null;
+                                    Gson gson = new Gson();
+                                    AccessTokenDTO array = null;
+                                    try {
+                                        array = gson.fromJson(response.errorBody().string(), AccessTokenDTO.class);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Log.d("array",array.toString());
+                                    List<AccessTokenDTO> list = Arrays.asList(array);
+                                    PreferenceManager.setString(getApplicationContext(), "accessToken", list.get(0).getAccessToken());
                                     Toast.makeText(InputPasswordActivity.this, "비밀번호를 변경해야 합니다.", Toast.LENGTH_SHORT).show();
 
                                     octDialog = new OptionCodeTypeDialog(InputPasswordActivity.this, new CustomDialogClickListener() {
                                         @Override
                                         public void onPositiveClick(String pw1, String pw2) {
-                                            Services retrofitAPI2 = RetrofitClient.getRetrofit(PreferenceManager.getString(InputPasswordActivity.this, "accessToken")).create(Services.class);
+                                            Services retrofitAPI3 = RetrofitClient.getRetrofit(PreferenceManager.getString(InputPasswordActivity.this, "accessToken")).create(Services.class);
                                             ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO(pw1);
 
-                                            Call<AccessTokenDTO> newpassCall = retrofitAPI2.requestchange(changePasswordDTO);
+                                            Call<AccessTokenDTO> newpassCall = retrofitAPI3.requestchange(changePasswordDTO);
 
                                             newpassCall.enqueue(new Callback<AccessTokenDTO>() {
                                                 @Override
