@@ -25,6 +25,7 @@ import com.example.android.Services.Services;
 import com.example.android.Utils.Preference.PreferenceManager;
 import com.example.android.databinding.ActivityInputPwBinding;
 
+//wkdtwiklvqit
 import org.jetbrains.annotations.NotNull;
 
 import retrofit2.Call;
@@ -89,30 +90,33 @@ public class InputPasswordActivity extends AppCompatActivity {
                                     break;
 
                                 case 428:
+                                    assert response.body() != null;
+                                    PreferenceManager.setString(getApplicationContext(), "accessToken", response.body().getAccessToken());
                                     Toast.makeText(InputPasswordActivity.this, "비밀번호를 변경해야 합니다.", Toast.LENGTH_SHORT).show();
 
                                     octDialog = new OptionCodeTypeDialog(InputPasswordActivity.this, new CustomDialogClickListener() {
                                         @Override
                                         public void onPositiveClick(String pw1, String pw2) {
-                                            Services retrofitAPI2 = RetrofitClient.getRetrofit(null).create(Services.class);
+                                            Services retrofitAPI2 = RetrofitClient.getRetrofit(PreferenceManager.getString(InputPasswordActivity.this, "accessToken")).create(Services.class);
                                             ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO(pw1);
-                                            Call<ChangePasswordDTO> newpassCall = retrofitAPI2.requestchange(changePasswordDTO);
 
-                                            newpassCall.enqueue(new Callback<ChangePasswordDTO>() {
+                                            Call<AccessTokenDTO> newpassCall = retrofitAPI2.requestchange(changePasswordDTO);
+
+                                            newpassCall.enqueue(new Callback<AccessTokenDTO>() {
                                                 @Override
-                                                public void onResponse(@NotNull Call<ChangePasswordDTO> call, @NotNull Response<ChangePasswordDTO> response) {
+                                                public void onResponse(@NotNull Call<AccessTokenDTO> call, @NotNull Response<AccessTokenDTO> response) {
                                                     switch (response.code()) {
                                                         case 200:
                                                             Toast.makeText(InputPasswordActivity.this, "OK", Toast.LENGTH_SHORT).show();
-                                                            Intent intent = new Intent(InputPasswordActivity.this, LoginActivity.class);
-                                                            startActivity(intent);
-                                                            finish();
                                                             break;
 
                                                         case 201:
+                                                            assert response.body() != null;
+                                                            PreferenceManager.setString(getApplicationContext(), "accessToken", response.body().getAccessToken());
                                                             Toast.makeText(InputPasswordActivity.this, "정상적으로 비밀번호를 변경, 새로운 토큰을 발급", Toast.LENGTH_LONG).show();
-                                                            Intent intent2 = new Intent(InputPasswordActivity.this, LoginActivity.class);
+                                                            Intent intent2 = new Intent(InputPasswordActivity.this, QRCodeActivity.class);
                                                             startActivity(intent2);
+                                                            finish();
                                                             break;
 
                                                         case 400:
@@ -130,7 +134,7 @@ public class InputPasswordActivity extends AppCompatActivity {
                                                 }
 
                                                 @Override
-                                                public void onFailure(@NotNull Call<ChangePasswordDTO> call, @NotNull Throwable t) {
+                                                public void onFailure(@NotNull Call<AccessTokenDTO> call, @NotNull Throwable t) {
                                                     Log.e("##########", "Fail", t);
                                                 }
                                             });

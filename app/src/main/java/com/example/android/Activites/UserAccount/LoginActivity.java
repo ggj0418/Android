@@ -21,6 +21,7 @@ import com.example.android.Activites.FindingAccount.FindPasswordActivity;
 import com.example.android.R;
 import com.example.android.Retrofit.RetrofitClient;
 import com.example.android.Services.Services;
+import com.example.android.SocialLogin.SocialLogin;
 import com.example.android.databinding.ActivityLogin2Binding;
 
 import org.jetbrains.annotations.NotNull;
@@ -145,17 +146,17 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent2);
                     break;
 
-                case R.id.login_naver:
-                    Intent naverintent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/naver"));
-                    startActivity(naverintent);
-                    break;
+//                case R.id.login_naver:
+//                    Intent naverintent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/naver"));
+//                    startActivity(naverintent);
+//                    break;
 
-                case R.id.login_kakao:
-                    Intent kakaointent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/kakao"));
-                    startActivity(kakaointent);
-                    break;
+//                case R.id.login_kakao:
+//                    Intent kakaointent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/kakao"));
+//                    startActivity(kakaointent);
+//                    break;
                 case R.id.login_google:
-                    Intent googleintent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.automart.ml/oauth2/authorization/google"));
+                    Intent googleintent = new Intent(LoginActivity.this, SocialLogin.class);
                     startActivity(googleintent);
                     break;
             }

@@ -91,8 +91,8 @@ public interface Services {
      * @param changePasswordDTO
      * @return
      */
-    @POST("users/change/password")
-    Call<ChangePasswordDTO> requestchange(@Body ChangePasswordDTO changePasswordDTO);
+    @PUT("users/me/password")
+    Call<AccessTokenDTO> requestchange(@Body ChangePasswordDTO changePasswordDTO);
 
     /**
      * accessToken 인증 api
